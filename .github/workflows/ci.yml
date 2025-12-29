@@ -1,0 +1,31 @@
+name: Build APT Repository Index
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Packages Index
+        run: |
+          dpkg-scanpackages -m ./debs > Packages
+          bzip2 -c Packages > Packages.bz2
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Packages.bz2
+          path: Packages.bz2
