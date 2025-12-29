@@ -17,15 +17,26 @@ jobs:
   job:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Generate Packages Index
         run: |
           dpkg-scanpackages -m ./debs > Packages
+
+          sed -i 's/Section: Packaging/Section: 应用程序/g' Packages
+          sed -i 's/Section: Tweak Injection/Section: 插件/g' Packages
+
+          sed -i 's#./debs/#https://gitee.com/RemotePro/RemotePro/releases/download/v1/#g' Packages
+
           bzip2 -c Packages > Packages.bz2
-      
-      - uses: actions/upload-artifact@v4
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          name: Packages.bz2
-          path: Packages.bz2
+          file_pattern: Packages.bz2
+      
+          

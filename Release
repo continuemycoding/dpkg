@@ -1,0 +1,15 @@
+Origin: 远控Pro-软件源
+Suite: stable
+Version: 1.0
+Codename: ios
+Architectures: iphoneos-arm iphoneos-arm64 iphoneos-arm64e
+Components: main
+Description: 全场景设备智控方案
+
+极速连接： USB/Wi-Fi 双模接入，支持多机并发、跨组管理。
+
+极效交互： 键鼠直控，支持多国语言输入与 Ctrl+Space 快速切法。
+
+无缝同步： 电脑手机剪贴板双向互通（文本/图片），一键撤销重做。
+
+全能管理： 文件深度管控，多媒体一键导入，支持脚本自动化录制。
