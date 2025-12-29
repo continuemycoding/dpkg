@@ -29,8 +29,9 @@ jobs:
 
           sed -i 's/Section: Packaging/Section: 应用程序/g' Packages
           sed -i 's/Section: Tweak Injection/Section: 插件/g' Packages
+          sed -i 's/Author: YKP/Author: 全场景设备智控方案/g' Packages
 
-          sed -i 's#./debs/#https://gitee.com/RemotePro/RemotePro/releases/download/v1/#g' Packages
+          # sed -i 's#./debs/#https://gitee.com/RemotePro/RemotePro/releases/download/v1/#g' Packages
 
           bzip2 -c Packages > Packages.bz2
 
