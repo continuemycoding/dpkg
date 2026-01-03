@@ -32,6 +32,7 @@ jobs:
           sed -i 's/Author: YKP/Author: 全场景设备智控方案/g' Packages
 
           # sed -i 's#./debs/#https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/#g' Packages
+          sed -i 's#./debs/#debs/#g' Packages
 
           bzip2 -c Packages > Packages.bz2
 
