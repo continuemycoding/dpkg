@@ -36,9 +36,12 @@ jobs:
 
           bzip2 -c Packages > Packages.bz2
 
+          awk -v RS="" '/Filename: .*iphoneos-arm\.deb/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
+
+          cat Packages
+
       - name: Commit changes
+        if: false
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: Packages.bz2
-      
-          
