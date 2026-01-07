@@ -36,7 +36,7 @@ jobs:
 
           bzip2 -c Packages > Packages.bz2
 
-          awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
+          awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm\n/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
 
           cat Packages
 
