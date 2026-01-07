@@ -38,10 +38,10 @@ jobs:
 
           awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm\n/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
 
-          cat Packages
+          bzip2 -c Packages > Packages.bz2
 
       - name: Commit changes
-        if: false
+        # if: false
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: Packages.bz2
