@@ -9,27 +9,46 @@ const cos = new COS({
     SecretKey: TENCENTCLOUD_SECRET_KEY
 });
 
-function uploadToCOS(filePath: string) {
-    console.log("uploadToCOS", filePath);
-
-    if (!fs.existsSync(filePath)) {
-        console.error(`错误: 文件不存在 -> ${filePath}`);
+/**
+ * 上传文件到 COS
+ * @param localFilePath 本地文件路径 (例如: "debs/package.deb")
+ * @param targetKey (可选) COS上的目标路径 (例如: "debs/package.deb")。如果不传，默认放在Bucket根目录。
+ */
+function uploadToCOS(localFilePath: string, targetKey?: string) {
+    if (!fs.existsSync(localFilePath)) {
+        console.error(`错误: 文件不存在 -> ${localFilePath}`);
         return;
     }
 
-    const fileName = path.basename(filePath);
+    const key = targetKey || localFilePath;
+
+    console.log(`准备上传: ${localFilePath} -> ${key}`);
 
     cos.putObject({
         Bucket: COS_BUCKET!,
         Region: COS_REGION,
-        Key: fileName,
-        Body: fs.createReadStream(filePath)
+        Key: key,
+        Body: fs.createReadStream(localFilePath)
     }, function (err, data) {
         if (err)
-            console.error(fileName, '上传失败', err);
+            console.error(key, '上传失败', err);
         else
-            console.log(fileName, '已上传到COS', data.Location);
+            console.log(key, '已上传到COS', data.Location);
     });
 }
 
-uploadToCOS(process.argv[2]);
+uploadToCOS("Packages.bz2");
+
+const debsDir = "debs";
+
+const files = fs.readdirSync(debsDir);
+
+files.forEach(file => {
+    const localPath = path.join(debsDir, file);
+
+    // 确保是文件而不是子文件夹，并忽略隐藏文件（如 .DS_Store）
+    if (fs.statSync(localPath).isFile() && !file.startsWith('.')) {
+        const remoteKey = `debs/${file}`;
+        uploadToCOS(localPath, remoteKey);
+    }
+});

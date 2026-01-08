@@ -20,11 +20,20 @@ jobs:
     permissions:
       contents: write
 
+    env:
+      COS_REGION: guangzhou
+      TENCENTCLOUD_SECRET_ID: ${{ secrets.TENCENTCLOUD_SECRET_ID }}
+      TENCENTCLOUD_SECRET_KEY: ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate Packages Index
+      - name: Sileo
+        env:
+          COS_BUCKET: sileo2-1302990626
         run: |
+          npm run build
+
           dpkg-scanpackages -m ./debs > Packages
 
           sed -i 's/Section: Packaging/Section: 应用程序/g' Packages
@@ -36,12 +45,22 @@ jobs:
 
           bzip2 -c Packages > Packages.bz2
 
-          awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm\n/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
+          node app.js
+
+      - name: Cydia
+        env:
+          COS_BUCKET: cydia2-1302990626
+        run: |
+          # awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm\n/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
+
+          find debs/ -type f ! -name "*iphoneos-arm.deb" -delete
 
           bzip2 -c Packages > Packages.bz2
 
+          node app.js
+
       - name: Commit changes
-        # if: false
+        if: false
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: Packages.bz2
