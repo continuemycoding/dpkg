@@ -54,7 +54,7 @@ jobs:
         run: |
           # awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm\n/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
 
-          find debs/ -type f ! -name "*iphoneos-arm.deb" -delete
+          find debs/ -type f ! -name "com.sky.ykpro_*_iphoneos-arm.deb" -delete
 
           bzip2 -c Packages > Packages.bz2
 
