@@ -32,6 +32,7 @@ jobs:
         env:
           COS_BUCKET: sileo2-1302990626
         run: |
+          npm install --omit=dev
           npm run build
 
           dpkg-scanpackages -m ./debs > Packages
