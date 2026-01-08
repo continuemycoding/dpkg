@@ -21,7 +21,7 @@ jobs:
       contents: write
 
     env:
-      COS_REGION: guangzhou
+      COS_REGION: ap-guangzhou
       TENCENTCLOUD_SECRET_ID: ${{ secrets.TENCENTCLOUD_SECRET_ID }}
       TENCENTCLOUD_SECRET_KEY: ${{ secrets.TENCENTCLOUD_SECRET_KEY }}
 
