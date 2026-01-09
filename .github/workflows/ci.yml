@@ -30,7 +30,7 @@ jobs:
 
       - name: Sileo
         env:
-          COS_BUCKET: sileo2-1302990626
+          COS_BUCKET: sileo-1302990626
         run: |
           npm install --omit=dev
           npm run build
@@ -50,7 +50,7 @@ jobs:
 
       - name: Cydia
         env:
-          COS_BUCKET: cydia2-1302990626
+          COS_BUCKET: cydia-1302990626
         run: |
           # awk -v RS="" '/Package: com\.sky\.ykpro/ && /Architecture: iphoneos-arm\n/ {print $0 "\n"}' Packages > Packages.tmp && mv Packages.tmp Packages
 

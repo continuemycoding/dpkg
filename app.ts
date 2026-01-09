@@ -37,8 +37,6 @@ function uploadToCOS(localFilePath: string, targetKey?: string) {
     });
 }
 
-uploadToCOS("Packages.bz2");
-
 const debsDir = "debs";
 
 const files = fs.readdirSync(debsDir);
@@ -52,3 +50,5 @@ files.forEach(file => {
         uploadToCOS(localPath, remoteKey);
     }
 });
+
+uploadToCOS("Packages.bz2");
