@@ -11,44 +11,66 @@ const cos = new COS({
 
 /**
  * 上传文件到 COS
- * @param localFilePath 本地文件路径 (例如: "debs/package.deb")
- * @param targetKey (可选) COS上的目标路径 (例如: "debs/package.deb")。如果不传，默认放在Bucket根目录。
+ * @param localFilePath 本地文件路径
+ * @param targetKey COS上的目标路径
  */
-function uploadToCOS(localFilePath: string, targetKey?: string) {
-    if (!fs.existsSync(localFilePath)) {
-        console.error(`错误: 文件不存在 -> ${localFilePath}`);
-        return;
-    }
+function uploadToCOS(localFilePath: string, targetKey?: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!fs.existsSync(localFilePath)) {
+            const errMsg = `错误: 文件不存在 -> ${localFilePath}`;
+            console.error(errMsg);
+            return reject(new Error(errMsg));
+        }
 
-    const key = targetKey || localFilePath;
+        const key = targetKey || localFilePath;
+        console.log(`准备上传: ${localFilePath} -> ${key}`);
 
-    console.log(`准备上传: ${localFilePath} -> ${key}`);
-
-    cos.putObject({
-        Bucket: COS_BUCKET!,
-        Region: COS_REGION,
-        Key: key,
-        Body: fs.createReadStream(localFilePath)
-    }, function (err, data) {
-        if (err)
-            console.error(key, '上传失败', err);
-        else
-            console.log(key, '已上传到COS', data.Location);
+        cos.putObject({
+            Bucket: COS_BUCKET!,
+            Region: COS_REGION,
+            Key: key,
+            Body: fs.createReadStream(localFilePath)
+        }, function (err, data) {
+            if (err) {
+                console.error(key, '上传失败', err);
+                reject(err);
+            } else {
+                console.log(key, '已上传到COS', data.Location);
+                resolve();
+            }
+        });
     });
 }
 
-const debsDir = "debs";
+(async () => {
+    const debsDir = "debs";
 
-const files = fs.readdirSync(debsDir);
-
-files.forEach(file => {
-    const localPath = path.join(debsDir, file);
-
-    // 确保是文件而不是子文件夹，并忽略隐藏文件（如 .DS_Store）
-    if (fs.statSync(localPath).isFile() && !file.startsWith('.')) {
-        const remoteKey = `debs/${file}`;
-        uploadToCOS(localPath, remoteKey);
+    if (!fs.existsSync(debsDir)) {
+        console.error(`目录不存在: ${debsDir}`);
+        process.exit(1);
     }
-});
 
-uploadToCOS("Packages.bz2");
+    const files = fs.readdirSync(debsDir);
+
+    try {
+        for (const file of files) {
+            const localPath = path.join(debsDir, file);
+
+            // 确保是文件而不是子文件夹，并忽略隐藏文件
+            if (fs.statSync(localPath).isFile() && !file.startsWith('.')) {
+                const remoteKey = `debs/${file}`;
+                await uploadToCOS(localPath, remoteKey);
+            }
+        }
+
+        await uploadToCOS("Packages.bz2");
+
+        console.log("所有文件上传完成！");
+
+    } catch (error) {
+        console.error("------------------------------------------------");
+        console.error("检测到上传过程中发生错误，程序即将退出。");
+        console.error("错误详情:", error);
+        process.exit(1);
+    }
+})();
