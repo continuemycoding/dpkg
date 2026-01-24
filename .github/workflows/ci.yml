@@ -35,7 +35,7 @@ jobs:
           npm install --omit=dev
           npm run build
 
-          dpkg-scanpackages -m ./debs > Packages
+          dpkg-scanpackages -m debs > Packages
 
           sed -i 's/Section: Packaging/Section: 应用程序/g' Packages
           sed -i 's/Section: Tweak Injection/Section: 插件/g' Packages
@@ -58,7 +58,7 @@ jobs:
 
           find debs/ -type f ! -name "com.sky.ykpro_*_iphoneos-arm.deb" -delete
 
-          dpkg-scanpackages -m ./debs > Packages
+          dpkg-scanpackages -m debs > Packages
 
           sed -i 's/Section: Packaging/Section: 应用程序/g' Packages
           sed -i 's/Section: Tweak Injection/Section: 插件/g' Packages
