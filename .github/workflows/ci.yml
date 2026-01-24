@@ -51,7 +51,9 @@ jobs:
         env:
           COS_BUCKET: cydia-1302990626
         run: |
-          awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/' Packages
+          awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages
+
+          cat -n Packages
 
           bzip2 -c Packages > Packages.bz2
 
