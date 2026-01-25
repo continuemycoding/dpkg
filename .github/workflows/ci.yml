@@ -43,23 +43,30 @@ jobs:
 
           # sed -i 's#debs/#https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/#g' Packages
 
-          bzip2 -c Packages > Packages.bz2
           zstd -c19 Packages > Packages.zst
 
-          node app.js
-
-      - name: Cydia
-        env:
-          COS_BUCKET: cydia-1302990626
-        run: |
+          
           awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.cydia
 
-          bzip2 -c Packages.cydia > Packages.cydia.bz2
+          bzip2 -c9 Packages.cydia > Packages.cydia.bz2
 
-          # node app.js
-
-      - name: Commit changes
-        if: false
-        uses: stefanzweifel/git-auto-commit-action@v5
+          
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          file_pattern: Packages.bz2
+          username: remotepro
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            remotepro/repo:latest
+
+      # - name: Commit changes
+      #   if: false
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     file_pattern: Packages.bz2
