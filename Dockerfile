@@ -1,11 +1,11 @@
-FROM nginx:alpine
+FROM caddy:alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY Caddyfile /etc/caddy/Caddyfile
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /usr/share/caddy
 
 # COPY debs ./debs
 
 COPY Release Packages* ./
 
-EXPOSE 80 443
+EXPOSE 80 443 443/udp

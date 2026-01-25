@@ -1,0 +1,25 @@
+(myqcloud_redir) {
+    route /debs/* {
+        @debs path_regexp deb ^/debs/(.*\.deb)$
+        redir @debs https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/{re.deb.1} 302
+    }
+}
+
+remotepro.cn {
+    root * /usr/share/caddy
+
+    import myqcloud_redir
+
+    file_server
+}
+
+cydia.remotepro.cn {
+    root * /usr/share/caddy
+    
+    rewrite /Packages.bz2 /Packages.cydia.bz2
+    # rewrite /Release /Release.cydia
+
+    import myqcloud_redir
+    
+    file_server
+}
