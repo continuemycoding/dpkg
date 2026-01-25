@@ -1,14 +1,27 @@
-(myqcloud_redir) {
-    route /debs/* {
-        @debs path_regexp deb ^/debs/(.*\.deb)$
-        redir @debs https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/{re.deb.1} 302
+(cdn_redir) {
+    vars cdn_url https://debs-1302990626.cos.ap-guangzhou.myqcloud.com
+    
+    handle /debs/*.deb {
+        # 定义正则匹配器，捕获文件名部分
+        @deb_capture path_regexp deb ^/debs/(.*\.deb)$
+        
+        redir @deb_capture {vars.cdn_url}/{re.deb.1} 302
+    }
+
+    handle {
+        @should_redirect {
+            not path /Packages* /Release* /CydiaIcon* /favicon.ico
+        }
+
+        # 这里的 {uri} 会保留原始目录结构
+        redir @should_redirect {vars.cdn_url}{uri} 302
     }
 }
 
 remotepro.cn {
     root * /usr/share/caddy
 
-    import myqcloud_redir
+    import cdn_redir
 
     file_server
 }
@@ -19,7 +32,7 @@ cydia.remotepro.cn {
     rewrite /Packages.bz2 /Packages.cydia.bz2
     # rewrite /Release /Release.cydia
 
-    import myqcloud_redir
+    import cdn_redir
     
     file_server
 }
