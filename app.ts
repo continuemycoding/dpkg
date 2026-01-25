@@ -121,7 +121,8 @@ async function uploadToCOS(localFilePath: string, targetKey?: string): Promise<v
             }
         }
 
-        await uploadToCOS("Packages.bz2");
+        // await uploadToCOS("Packages.bz2");
+        await uploadToCOS("Packages.zst");
         await uploadToCOS("Packages");
 
         console.log("所有任务处理完成！");
