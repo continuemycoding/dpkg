@@ -108,6 +108,7 @@ async function uploadToCOS(localFilePath: string, targetKey?: string): Promise<v
     const files = fs.readdirSync(debsDir);
 
     try {
+        await uploadToCOS("CydiaIcon@3x.png");
         await uploadToCOS("CydiaIcon.png");
         await uploadToCOS("Release");
 
