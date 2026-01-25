@@ -1,10 +1,7 @@
 services:
-  repo:
-    image: remotepro/repo:latest
-    restart: always
-
   caddy:
-    image: caddy:alpine
+    # image: caddy:alpine
+    image: remotepro/repo:latest
     restart: always
     cap_add:
       - NET_ADMIN
