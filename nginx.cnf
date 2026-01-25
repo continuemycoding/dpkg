@@ -1,0 +1,26 @@
+server {
+    listen 80;
+    server_name remotepro.cn cydia.remotepro.cn;
+    root /usr/share/nginx/html;
+
+    # 务必加上 MIME，否则 Sileo 可能会下载 Packages 而不解析
+    types {
+        application/x-bzip2  bz2;
+        application/zstd     zst;
+    }
+
+    location / {
+        if ($host = "cydia.remotepro.cn") {
+            rewrite ^/Packages\.bz2$ /Packages.cydia.bz2 break;
+        }
+
+        try_files $uri $uri/ =404;
+    }
+
+    location /debs/ {
+        if ($request_filename ~* \.deb$) {
+            # $1 将捕获文件名，例如 "example.deb"
+            rewrite ^/debs/(.*)$ https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/$1 redirect;
+        }
+    }
+}
