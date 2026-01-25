@@ -6,6 +6,6 @@ WORKDIR /usr/share/caddy
 
 # COPY debs ./debs
 
-COPY Release Packages* ./
+COPY Release Packages* CydiaIcon* ./
 
 EXPOSE 80 443 443/udp
