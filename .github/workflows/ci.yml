@@ -46,7 +46,9 @@ jobs:
           zstd -c19 Packages > Packages.zst
 
           
-          awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.cydia
+          awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/ && $0 ~ /(^|\n)Package: com.sky.ykpro(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.cydia
+
+          cat -n Packages.cydia
 
           bzip2 -c9 Packages.cydia > Packages.bz2
 
