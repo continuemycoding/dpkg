@@ -30,7 +30,7 @@ remotepro.cn {
 cydia.remotepro.cn {
     root * /usr/share/caddy
     
-    rewrite /Packages.bz2 /Packages.cydia.bz2
+    # rewrite /Packages.bz2 /Packages.cydia.bz2
     # rewrite /Release /Release.cydia
 
     import cdn_redir

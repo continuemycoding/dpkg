@@ -48,7 +48,7 @@ jobs:
           
           awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.cydia
 
-          bzip2 -c9 Packages.cydia > Packages.cydia.bz2
+          bzip2 -c9 Packages.cydia > Packages.bz2
 
           
       - name: Login to Docker Hub
