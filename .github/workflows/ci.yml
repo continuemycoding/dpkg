@@ -41,7 +41,7 @@ jobs:
           # sed -i 's#debs/#https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/#g' Packages
 
           zstd -c19 Packages > Packages.zst
-
+          xz -c9 Packages > Packages.xz
           
           awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/ && $0 ~ /(^|\n)Package: com.sky.ykpro(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.cydia
 
@@ -61,7 +61,7 @@ jobs:
           EOF
 
           # 生成 Release 文件 (自动计算所有哈希值)
-          apt-ftparchive -c apt-release.conf release . > Release
+          # apt-ftparchive -c apt-release.conf release . > Release
 
           cat -n Release
           
