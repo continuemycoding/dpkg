@@ -17,9 +17,6 @@ jobs:
   job:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     env:
       COS_REGION: ap-guangzhou
       TENCENTCLOUD_SECRET_ID: ${{ secrets.TENCENTCLOUD_SECRET_ID }}
@@ -67,8 +64,110 @@ jobs:
           tags: |
             remotepro/repo:latest
 
-      # - name: Commit changes
-      #   if: false
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     file_pattern: Packages.bz2
+      - name: Install sing-box
+        run: |
+          set -e
+          VERSION=1.8.6
+          curl -L -o sing-box.tar.gz \
+            https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-amd64.tar.gz
+          tar -xzf sing-box.tar.gz
+          sudo mv sing-box-${VERSION}-linux-amd64/sing-box /usr/local/bin/sing-box
+          sing-box version
+
+      - name: Start trojan proxy
+        run: |
+          cat > config.json << 'EOF'
+          {
+            "log": {
+              "level": "info"
+            },
+            "inbounds": [
+              {
+                "type": "socks",
+                "tag": "socks-in",
+                "listen": "127.0.0.1",
+                "listen_port": 1080
+              }
+            ],
+            "outbounds": [
+              {
+                "type": "trojan",
+                "tag": "trojan-out",
+                "server": "f533f9b2-c69a-4dd0-bc63-f2ab94dd5f53.f1eb10ae-1d82-4c6a-b4dd-bd9525520956.com",
+                "server_port": 10101,
+                "password": "${{ secrets.TROJAN_PASSWORD }}",
+                "tls": {
+                  "enabled": true,
+                  "server_name": "sni.eos-suzhou-4.cmecloud.cn"
+                }
+              }
+            ],
+            "route": {
+              "rules": [
+                {
+                  "inbound": "socks-in",
+                  "outbound": "trojan-out"
+                }
+              ]
+            }
+          }
+          EOF
+          
+          nohup sing-box run -c config.json > sing-box.log 2>&1 &
+          sleep 5
+
+          # 动态注入环境变量，对后续所有 step 生效
+          echo "ALL_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "HTTP_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "HTTPS_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
+
+      - name: Create Gitee Release
+        shell: python
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_REPO: RemotePro/RemotePro
+          PYTHONIOENCODING: utf-8
+        run: |
+          import os
+          import requests
+          import glob
+          import sys
+
+          token = os.environ.get('GITEE_TOKEN')
+          repo = os.environ.get('GITEE_REPO')
+          tag_name = 'v1'
+
+          get_resp = requests.get(f"https://gitee.com/api/v5/repos/{repo}/releases/tags/{tag_name}", params={"access_token": token})
+          
+          if get_resp.status_code != 200:
+              print(f"Failed to find release: {get_resp.text}")
+              sys.exit(1)
+
+          release_data = get_resp.json()
+          release_id = release_data['id']
+          
+          existing_assets = {asset['name']: asset['id'] for asset in release_data.get('assets', [])}
+          
+          upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
+          files_to_upload = glob.glob('debs/*')
+          files_to_upload.extend(['Packages.zst', 'Packages.bz2', 'Packages'])
+          print(files_to_upload)
+
+          for file_path in files_to_upload:
+              filename = os.path.basename(file_path)
+              
+              if filename in existing_assets:
+                  print(f"[跳过] {filename} 已存在")
+                  continue
+
+              print(f"[上传] {filename}...")
+              try:
+                  with open(file_path, 'rb') as f:
+                      files = {'file': (filename, f)}
+                      up_resp = requests.post(upload_url, params={'access_token': token}, files=files)
+                      if up_resp.status_code == 201:
+                          print(f"[上传成功] {filename}")
+                      else:
+                          print(f"[上传失败] {filename} : {up_resp.text}")
+              except Exception as e:
+                  print(f"[异常] {filename}: {e}")
