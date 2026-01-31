@@ -152,7 +152,7 @@ jobs:
           print(json.dumps(release_data, indent=4, ensure_ascii=False))
           release_id = release_data['id']
           
-          existing_assets = {asset['name']: asset['id'] for asset in release_data.get('assets', [])}
+          existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
           
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
           files_to_upload = glob.glob('debs/*')
