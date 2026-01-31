@@ -121,7 +121,12 @@ jobs:
           echo "HTTP_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
           echo "HTTPS_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
 
-      - name: Create Gitee Release
+      - name: Install dependencies
+        run: |
+          # python -m pip install --upgrade pip
+          pip install requests[socks]
+
+      - name: 🚀 Upload Debian Packages to Gitee Release
         shell: python
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
