@@ -122,6 +122,10 @@ jobs:
           echo "HTTPS_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
 
       - name: Install Dependencies Locally
+        env:
+          ALL_PROXY: ""
+          HTTP_PROXY: ""
+          HTTPS_PROXY: ""
         run: |
           pip install --target=. --upgrade --ignore-installed requests PySocks urllib3
 
