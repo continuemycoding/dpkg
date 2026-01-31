@@ -134,6 +134,7 @@ jobs:
         run: |
           import os
           import requests
+          import json
           import glob
           import sys
 
@@ -148,7 +149,7 @@ jobs:
               sys.exit(1)
 
           release_data = get_resp.json()
-          print(release_data)
+          print(json.dumps(release_data, indent=4, ensure_ascii=False))
           release_id = release_data['id']
           
           existing_assets = {asset['name']: asset['id'] for asset in release_data.get('assets', [])}
