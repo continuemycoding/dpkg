@@ -83,8 +83,8 @@ jobs:
             },
             "inbounds": [
               {
-                "type": "socks",
-                "tag": "socks-in",
+                "type": "mixed", 
+                "tag": "mixed-in",
                 "listen": "127.0.0.1",
                 "listen_port": 1080
               }
@@ -98,14 +98,18 @@ jobs:
                 "password": "${{ secrets.TROJAN_PASSWORD }}",
                 "tls": {
                   "enabled": true,
-                  "server_name": "sni.eos-suzhou-4.cmecloud.cn"
+                  "server_name": "sni.eos-suzhou-4.cmecloud.cn",
+                  "utls": {
+                    "enabled": true,
+                    "fingerprint": "chrome"
+                  }
                 }
               }
             ],
             "route": {
               "rules": [
                 {
-                  "inbound": "socks-in",
+                  "inbound": "mixed-in",
                   "outbound": "trojan-out"
                 }
               ]
@@ -117,9 +121,9 @@ jobs:
           sleep 5
 
           # 动态注入环境变量，对后续所有 step 生效
-          echo "ALL_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
-          echo "HTTP_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
-          echo "HTTPS_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "ALL_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "HTTP_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "HTTPS_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
 
       - name: Install Dependencies Locally
         # env:
