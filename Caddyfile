@@ -9,6 +9,14 @@
         redir @deb_capture {vars.cdn_url}/{re.deb.1} 302
     }
 
+    handle /Packages.bz2 {
+        @not_cydia {
+            not header User-Agent *Cydia*
+        }
+        
+        respond @not_cydia "Not Found" 404
+    }
+
     handle {
         @should_redirect {
             not path /Release /Packages* /CydiaIcon* /favicon.ico
