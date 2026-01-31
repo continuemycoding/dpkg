@@ -153,7 +153,8 @@ jobs:
           release_id = release_data['id']
           
           existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
-          
+          print(existing_assets)
+
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
           files_to_upload = glob.glob('debs/*')
           files_to_upload.extend(['Packages.zst', 'Packages.bz2', 'Packages'])
