@@ -157,13 +157,13 @@ jobs:
 
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
           files_to_upload = glob.glob('debs/*')
-          files_to_upload.extend(['Packages.zst', 'Packages.bz2', 'Packages'])
+          # files_to_upload.extend(['Packages.zst', 'Packages.bz2', 'Packages'])
           print(files_to_upload)
 
           for file_path in files_to_upload:
               filename = os.path.basename(file_path)
               
-              if filename in existing_assets and filename not in ['Packages.zst', 'Packages.bz2', 'Packages']:
+              if filename in existing_assets:
                   print(f"[跳过] {filename} 已存在")
                   continue
 
