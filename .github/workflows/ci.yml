@@ -121,13 +121,9 @@ jobs:
           echo "HTTP_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
           echo "HTTPS_PROXY=socks5h://127.0.0.1:1080" >> $GITHUB_ENV
 
-      - name: Setup Virtual Env
+      - name: Install Dependencies Locally
         run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          pip install requests PySocks
-
-          echo "$GITHUB_WORKSPACE/venv/bin" >> $GITHUB_PATH
+          pip install --target=. --upgrade --ignore-installed requests PySocks urllib3
 
       - name: 🚀 Upload Debian Packages to Gitee Release
         shell: python
@@ -135,6 +131,7 @@ jobs:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           GITEE_REPO: RemotePro/RemotePro
           PYTHONIOENCODING: utf-8
+          PYTHONPATH: .
         run: |
           import os
           import requests
