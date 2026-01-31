@@ -125,22 +125,12 @@ jobs:
           echo "HTTP_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
           echo "HTTPS_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
 
-      - name: Install Dependencies Locally
-        # env:
-        #   ALL_PROXY: ""
-        #   HTTP_PROXY: ""
-        #   HTTPS_PROXY: ""
-        run: |
-          curl https://ipinfo.io
-          pip install --target=. --upgrade --ignore-installed requests PySocks urllib3
-
       - name: 🚀 Upload Debian Packages to Gitee Release
         shell: python
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           GITEE_REPO: RemotePro/RemotePro
           PYTHONIOENCODING: utf-8
-          PYTHONPATH: .
         run: |
           import os
           import requests
