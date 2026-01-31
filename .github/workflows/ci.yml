@@ -124,11 +124,10 @@ jobs:
       - name: Setup Virtual Env
         run: |
           python3 -m venv venv
-          echo "$GITHUB_WORKSPACE/venv/bin" >> $GITHUB_PATH
-
-      - name: Install Libraries
-        run: |
+          source venv/bin/activate
           pip install requests PySocks
+
+          echo "$GITHUB_WORKSPACE/venv/bin" >> $GITHUB_PATH
 
       - name: 🚀 Upload Debian Packages to Gitee Release
         shell: python
