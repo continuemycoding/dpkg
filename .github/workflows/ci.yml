@@ -163,7 +163,7 @@ jobs:
           for file_path in files_to_upload:
               filename = os.path.basename(file_path)
               
-              if filename in existing_assets:
+              if filename in existing_assets and filename not in ['Packages.zst', 'Packages.bz2', 'Packages']:
                   print(f"[跳过] {filename} 已存在")
                   continue
 
