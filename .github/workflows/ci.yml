@@ -48,6 +48,7 @@ jobs:
           # cat -n Packages.cydia
 
           bzip2 -c9 Packages.cydia > Packages.bz2
+          rm Packages.cydia
 
           cat > apt-release.conf <<EOF
           APT::FTPArchive::Release::Origin "远控Pro官方源";
