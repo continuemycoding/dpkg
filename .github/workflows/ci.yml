@@ -52,7 +52,7 @@ jobs:
 
           cat > apt-release.conf <<EOF
           APT::FTPArchive::Release::Origin "远控Pro官方源";
-          APT::FTPArchive::Release::Label "远控Pro";
+          APT::FTPArchive::Release::Label "远控Pro官方源";
           APT::FTPArchive::Release::Suite "stable";
           APT::FTPArchive::Release::Codename "ios";
           APT::FTPArchive::Release::Architectures "iphoneos-arm iphoneos-arm64 iphoneos-arm64e";
@@ -61,7 +61,7 @@ jobs:
           EOF
 
           # 生成 Release 文件 (自动计算所有哈希值)
-          # apt-ftparchive -c apt-release.conf release . > Release
+          apt-ftparchive -c apt-release.conf release . > Release
 
           cat -n Release
           
