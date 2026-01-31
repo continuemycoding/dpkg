@@ -45,10 +45,24 @@ jobs:
           
           awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Architecture: iphoneos-arm(\n|$)/ && $0 ~ /(^|\n)Package: com.sky.ykpro(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.cydia
 
-          cat -n Packages.cydia
+          # cat -n Packages.cydia
 
           bzip2 -c9 Packages.cydia > Packages.bz2
 
+          cat > apt-release.conf <<EOF
+          APT::FTPArchive::Release::Origin "远控Pro官方源";
+          APT::FTPArchive::Release::Label "远控Pro";
+          APT::FTPArchive::Release::Suite "stable";
+          APT::FTPArchive::Release::Codename "ios";
+          APT::FTPArchive::Release::Architectures "iphoneos-arm iphoneos-arm64 iphoneos-arm64e";
+          APT::FTPArchive::Release::Components "main";
+          APT::FTPArchive::Release::Description "全场景设备智控方案";
+          EOF
+
+          # 生成 Release 文件 (自动计算所有哈希值)
+          apt-ftparchive -c apt-release.conf release . > Release
+
+          cat -n Release
           
       - name: Login to Docker Hub
         uses: docker/login-action@v3
