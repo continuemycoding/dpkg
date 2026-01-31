@@ -148,6 +148,7 @@ jobs:
               sys.exit(1)
 
           release_data = get_resp.json()
+          print(release_data)
           release_id = release_data['id']
           
           existing_assets = {asset['name']: asset['id'] for asset in release_data.get('assets', [])}
