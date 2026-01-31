@@ -173,7 +173,7 @@ jobs:
                       files = {'file': (filename, f)}
                       up_resp = requests.post(upload_url, params={'access_token': token}, files=files)
                       if up_resp.status_code == 201:
-                          print(f"[上传成功] {filename}")
+                          print(f"[上传成功] {filename} : {up_resp.text}")
                       else:
                           print(f"[上传失败] {filename} : {up_resp.text}")
               except Exception as e:
