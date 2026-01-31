@@ -124,7 +124,7 @@ jobs:
       - name: Install dependencies
         run: |
           # python -m pip install --upgrade pip
-          pip install PySocks requests
+          pip install PySocks
 
       - name: 🚀 Upload Debian Packages to Gitee Release
         shell: python
