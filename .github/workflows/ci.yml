@@ -154,6 +154,7 @@ jobs:
           import glob
           import sys
           import time
+          import re
 
           token = os.environ.get('GITEE_TOKEN')
           repo = os.environ.get('GITEE_REPO')
@@ -171,6 +172,24 @@ jobs:
           existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
           files_to_upload = glob.glob('debs/*')
+
+          for filename in existing_assets:
+              if filename.endswith(".deb") and f'debs/{filename}' not in files_to_upload:
+                  print(f"[删除] {filename}")
+                  url = f"https://gitee.com/{repo}/releases/download/v1/{filename}"
+                  response = requests.head(url, allow_redirects=False)
+                  target_url = response.headers.get('Location', '')
+                  print(f"跳转目标: {target_url}")
+                  match = re.search(r'/(\d+)/', target_url)
+                  asset_id = match.group(1)
+                  delete_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files/{asset_id}"
+                  print(delete_url)
+                  del_response = requests.delete(delete_url, params={"access_token": token})
+
+                  if del_response.status_code == 204:
+                      print(f"成功删除附件: {filename} (ID: {asset_id})")
+                  else:
+                      print(f"删除失败: {del_response.status_code}, {del_response.text}")
 
           print(f"准备上传 {len(files_to_upload)} 个文件...")
 
