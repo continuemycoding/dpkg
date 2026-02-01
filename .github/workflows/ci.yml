@@ -146,34 +146,33 @@ jobs:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           GITEE_REPO: RemotePro/RemotePro
           PYTHONIOENCODING: utf-8
+          PYTHONUNBUFFERED: 1
         run: |
           import os
           import requests
           import json
           import glob
           import sys
+          import time
 
           token = os.environ.get('GITEE_TOKEN')
           repo = os.environ.get('GITEE_REPO')
           tag_name = 'v1'
 
           get_resp = requests.get(f"https://gitee.com/api/v5/repos/{repo}/releases/tags/{tag_name}", params={"access_token": token})
-          
+
           if get_resp.status_code != 200:
               print(f"Failed to find release: {get_resp.text}")
               sys.exit(1)
 
           release_data = get_resp.json()
-          print(json.dumps(release_data, indent=4, ensure_ascii=False))
           release_id = release_data['id']
-          
-          existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
-          print(existing_assets)
 
+          existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
-          files_to_upload = glob.glob('debs/*')
-          # files_to_upload.extend(['Packages.zst', 'Packages.bz2', 'Packages'])
-          print(files_to_upload)
+          files_to_upload = glob.glob('debs/*') + glob.glob('Packages*') + ["Release"]
+
+          print(f"准备上传 {len(files_to_upload)} 个文件...")
 
           for file_path in files_to_upload:
               filename = os.path.basename(file_path)
@@ -182,14 +181,17 @@ jobs:
                   print(f"[跳过] {filename} 已存在")
                   continue
 
-              print(f"[上传] {filename}...")
-              try:
-                  with open(file_path, 'rb') as f:
-                      files = {'file': (filename, f)}
-                      up_resp = requests.post(upload_url, params={'access_token': token}, files=files)
-                      if up_resp.status_code == 201:
-                          print(f"[上传成功] {filename} : {up_resp.text}")
-                      else:
-                          print(f"[上传失败] {filename} : {up_resp.text}")
-              except Exception as e:
-                  print(f"[异常] {filename}: {e}")
+              print(f"[上传] {filename}...", end=" ")
+              
+              start_time = time.time()
+              
+              with open(file_path, 'rb') as f:
+                  files = {'file': (filename, f)}
+                  up_resp = requests.post(upload_url, params={'access_token': token}, files=files)
+              
+              duration = time.time() - start_time
+              
+              status_label = "成功" if up_resp.status_code == 201 else "失败"
+              print(f"[{status_label}] 耗时: {duration:.2f}s | 响应: {up_resp.text}")
+
+          print("处理完毕。")
