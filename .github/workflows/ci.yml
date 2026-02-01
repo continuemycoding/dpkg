@@ -170,7 +170,8 @@ jobs:
 
           existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
-          files_to_upload = glob.glob('debs/*') + glob.glob('Packages*') + ["Release"]
+          repo_indices = glob.glob('Packages*') + ["Release"]
+          files_to_upload = glob.glob('debs/*') + repo_indices
 
           print(f"准备上传 {len(files_to_upload)} 个文件...")
 
@@ -178,8 +179,11 @@ jobs:
               filename = os.path.basename(file_path)
               
               if filename in existing_assets:
-                  print(f"[跳过] {filename} 已存在")
-                  continue
+                  if filename in repo_indices:
+                      # 删除文件
+                  else:
+                      print(f"[跳过] {filename} 已存在")
+                      continue
 
               print(f"[上传] {filename}...", end=" ")
               
