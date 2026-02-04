@@ -493,8 +493,10 @@
 
         const platform = window.navigator.userAgent.toLowerCase();
         
+        // 配置两个独立的 Gitee 仓库
         const GITEE_OWNER = 'RemotePro';
-        const GITEE_REPO = platform.indexOf('mac') == -1 ? 'RemotePro-windows' : 'RemotePro-macos';
+        const GITEE_REPO_WIN = 'RemotePro-windows';
+        const GITEE_REPO_MAC = 'RemotePro-macos'; 
 
         // 获取 DOM 元素
         const heroBtnWin = document.getElementById('hero-btn-win');
@@ -509,15 +511,34 @@
 
         async function fetchGiteeReleases() {
             try {
-                // 调用 Gitee API (每页20条)
-                const apiUrl = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO}/releases?direction=desc&page=1&per_page=10`;
-                const response = await fetch(apiUrl);
+                // 构建两个仓库的 API 地址
+                const apiWin = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO_WIN}/releases?direction=desc&page=1&per_page=10`;
+                const apiMac = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO_MAC}/releases?direction=desc&page=1&per_page=10`;
+
+                // 使用 Promise.allSettled 并行请求两个仓库
+                // 这样即使其中一个失败（如仓库不存在或网络问题），另一个也能正常显示
+                const [resultWin, resultMac] = await Promise.allSettled([
+                    fetch(apiWin),
+                    fetch(apiMac)
+                ]);
                 
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const releases = await response.json();
-                
-                if (releases.length === 0) {
+                // 处理 Windows 数据
+                let releasesWin = [];
+                if (resultWin.status === 'fulfilled' && resultWin.value.ok) {
+                    releasesWin = await resultWin.value.json();
+                } else {
+                    console.warn('Windows release fetch failed or repo not found.');
+                }
+
+                // 处理 Mac 数据
+                let releasesMac = [];
+                if (resultMac.status === 'fulfilled' && resultMac.value.ok) {
+                    releasesMac = await resultMac.value.json();
+                } else {
+                    console.warn('Mac release fetch failed or repo not found.');
+                }
+
+                if (releasesWin.length === 0 && releasesMac.length === 0) {
                     heroTextWin.innerText = "暂无下载";
                     heroTextMac.innerText = "暂无下载";
                     modalListWin.innerHTML = '<div class="text-gray-500 text-sm text-center">暂无版本历史</div>';
@@ -526,10 +547,10 @@
                 }
 
                 // 处理最新版本 (Hero Section)
-                updateHeroSection(releases);
+                updateHeroSection(releasesWin, releasesMac);
 
                 // 处理历史版本列表 (Modal)
-                updateHistoryModal(releases);
+                updateHistoryModal(releasesWin, releasesMac);
 
             } catch (error) {
                 console.error("Fetch Error:", error);
@@ -541,36 +562,46 @@
             }
         }
 
-        // 更新首页 Hero 按钮
-        function updateHeroSection(releases) {
-            let latestWinFound = false;
-            let latestMacFound = false;
-
-            // 遍历查找最新的 Win 和 Mac 资源
-            // Gitee 返回的通常是按时间倒序，所以找到的第一个就是最新的
-            for (const release of releases) {
-                if (latestWinFound && latestMacFound) break;
-
-                const assets = release.assets || [];
-                
-                // 查找 Windows 资源
-                if (!latestWinFound) {
-                    const winAsset = assets.find(a => a.name.endsWith('.exe') || a.name.endsWith('.zip'));
-                    if (winAsset) {
-                        heroBtnWin.href = winAsset.browser_download_url;
-                        heroTextWin.innerText = `最新版本 ${release.tag_name}`;
-                        latestWinFound = true;
-                    }
+        // 辅助函数：查找符合条件的资源文件
+        function findAsset(assets, type) {
+            if (!assets || assets.length === 0) return null;
+            
+            return assets.find(a => {
+                const name = a.name.toLowerCase();
+                if (type === 'win') {
+                    return name.endsWith('.exe') || name.endsWith('.zip') || name.endsWith('.7z') || name.endsWith('.msi');
+                } else if (type === 'mac') {
+                    return name.endsWith('.dmg') || name.endsWith('.pkg') || name.endsWith('.zip') || name.endsWith('.tar.gz');
                 }
+                return false;
+            });
+        }
 
-                // 查找 Mac 资源
-                if (!latestMacFound) {
-                    const macAsset = assets.find(a => a.name.endsWith('.dmg') || a.name.endsWith('.pkg'));
-                    if (macAsset) {
-                        heroBtnMac.href = macAsset.browser_download_url;
-                        heroTextMac.innerText = `最新版本 ${release.tag_name}`;
-                        latestMacFound = true;
-                    }
+        // 更新首页 Hero 按钮
+        function updateHeroSection(releasesWin, releasesMac) {
+            // 处理 Windows 按钮
+            let latestWinFound = false;
+            if (releasesWin.length > 0) {
+                const latest = releasesWin[0];
+                const winAsset = findAsset(latest.assets, 'win');
+                
+                if (winAsset) {
+                    heroBtnWin.href = winAsset.browser_download_url;
+                    heroTextWin.innerText = `最新版本 ${latest.tag_name}`;
+                    latestWinFound = true;
+                }
+            }
+
+            // 处理 Mac 按钮
+            let latestMacFound = false;
+            if (releasesMac.length > 0) {
+                const latest = releasesMac[0];
+                const macAsset = findAsset(latest.assets, 'mac');
+                
+                if (macAsset) {
+                    heroBtnMac.href = macAsset.browser_download_url;
+                    heroTextMac.innerText = `最新版本 ${latest.tag_name}`;
+                    latestMacFound = true;
                 }
             }
 
@@ -579,22 +610,25 @@
         }
 
         // 更新历史版本模态框
-        function updateHistoryModal(releases) {
+        function updateHistoryModal(releasesWin, releasesMac) {
             let winHtml = '';
             let macHtml = '';
 
-            releases.forEach(release => {
+            // 生成 Windows 列表
+            releasesWin.forEach(release => {
                 const date = new Date(release.created_at).toLocaleDateString('zh-CN');
-                const assets = release.assets || [];
-
-                // 筛选 Windows 资源
-                const winAsset = assets.find(a => a.name.endsWith('.exe') || a.name.endsWith('.zip'));
+                const winAsset = findAsset(release.assets, 'win');
+                
                 if (winAsset) {
                     winHtml += createHistoryItem(release.tag_name, date, winAsset.browser_download_url, 'blue');
                 }
+            });
 
-                // 筛选 Mac 资源
-                const macAsset = assets.find(a => a.name.endsWith('.dmg') || a.name.endsWith('.pkg'));
+            // 生成 Mac 列表
+            releasesMac.forEach(release => {
+                const date = new Date(release.created_at).toLocaleDateString('zh-CN');
+                const macAsset = findAsset(release.assets, 'mac');
+                
                 if (macAsset) {
                     macHtml += createHistoryItem(release.tag_name, date, macAsset.browser_download_url, 'gray');
                 }
