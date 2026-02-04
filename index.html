@@ -314,7 +314,7 @@
                                     <!-- Windows 列表 -->
                                     <div>
                                         <h4 class="text-blue-400 font-bold mb-3 border-b border-gray-700 pb-2"><i class="fa-brands fa-windows mr-2"></i>Windows 版本</h4>
-                                        <div id="modal-list-win" class="space-y-3 modal-scroll max-h-[40vh] overflow-y-auto pr-2">
+                                        <div id="modal-list-win" class="space-y-4 modal-scroll max-h-[60vh] overflow-y-auto pr-2">
                                             <div class="text-gray-500 text-sm text-center py-4">正在加载版本列表...</div>
                                         </div>
                                     </div>
@@ -322,7 +322,7 @@
                                     <!-- Mac 列表 -->
                                     <div>
                                         <h4 class="text-gray-200 font-bold mb-3 border-b border-gray-700 pb-2"><i class="fa-brands fa-apple mr-2"></i>macOS 版本</h4>
-                                        <div id="modal-list-mac" class="space-y-3 modal-scroll max-h-[40vh] overflow-y-auto pr-2">
+                                        <div id="modal-list-mac" class="space-y-4 modal-scroll max-h-[60vh] overflow-y-auto pr-2">
                                             <div class="text-gray-500 text-sm text-center py-4">正在加载版本列表...</div>
                                         </div>
                                     </div>
@@ -577,6 +577,18 @@
             });
         }
 
+        // 辅助函数：时间格式化 yyyy-MM-dd HH:mm
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const hh = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+        }
+
         // 更新首页 Hero 按钮
         function updateHeroSection(releasesWin, releasesMac) {
             // 处理 Windows 按钮
@@ -616,21 +628,21 @@
 
             // 生成 Windows 列表
             releasesWin.forEach(release => {
-                const date = new Date(release.created_at).toLocaleDateString('zh-CN');
+                const date = formatDate(release.created_at);
                 const winAsset = findAsset(release.assets, 'win');
                 
                 if (winAsset) {
-                    winHtml += createHistoryItem(release.tag_name, date, winAsset.browser_download_url, 'blue');
+                    winHtml += createHistoryItem(release.tag_name, date, winAsset.browser_download_url, 'blue', release.body);
                 }
             });
 
             // 生成 Mac 列表
             releasesMac.forEach(release => {
-                const date = new Date(release.created_at).toLocaleDateString('zh-CN');
+                const date = formatDate(release.created_at);
                 const macAsset = findAsset(release.assets, 'mac');
                 
                 if (macAsset) {
-                    macHtml += createHistoryItem(release.tag_name, date, macAsset.browser_download_url, 'gray');
+                    macHtml += createHistoryItem(release.tag_name, date, macAsset.browser_download_url, 'gray', release.body);
                 }
             });
 
@@ -639,17 +651,23 @@
         }
 
         // 生成历史列表项 HTML 模板
-        function createHistoryItem(version, date, url, colorTheme) {
+        function createHistoryItem(version, date, url, colorTheme, description) {
             const hoverBorder = colorTheme === 'blue' ? 'hover:border-blue-500/50' : 'hover:border-gray-500/50';
             const btnBg = colorTheme === 'blue' ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600' : 'bg-gray-600/20 text-gray-300 hover:bg-gray-600';
             
+            // 处理描述文本，如果没有则显示暂无说明
+            const descText = description ? description : '暂无更新说明';
+            
             return `
-            <div class="flex justify-between items-center bg-slate-800/50 p-3 rounded-lg border border-gray-700 ${hoverBorder} transition">
-                <div>
-                    <div class="text-white font-medium">${version}</div>
-                    <div class="text-xs text-gray-500">${date} 更新</div>
+            <div class="bg-slate-800/50 p-4 rounded-lg border border-gray-700 ${hoverBorder} transition flex flex-col gap-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="text-white font-medium text-base">${version}</div>
+                        <div class="text-xs text-gray-500 mt-0.5">${date} 更新</div>
+                    </div>
+                    <a href="${url}" class="text-xs ${btnBg} hover:text-white px-3 py-1.5 rounded transition shrink-0 ml-2">下载</a>
                 </div>
-                <a href="${url}" class="text-xs ${btnBg} hover:text-white px-3 py-1.5 rounded transition">下载</a>
+                <div class="text-xs text-gray-400 border-t border-gray-700/50 pt-2 whitespace-pre-wrap leading-relaxed">${descText}</div>
             </div>
             `;
         }
