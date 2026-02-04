@@ -19,7 +19,7 @@
 
     handle {
         @should_redirect {
-            not path /index.html /Release /Packages* /CydiaIcon* /favicon.ico
+            not path / /Release /Packages* /CydiaIcon* /favicon.ico
         }
 
         # 这里的 {uri} 会保留原始目录结构
