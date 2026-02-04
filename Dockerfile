@@ -4,8 +4,9 @@ COPY Caddyfile /etc/caddy/Caddyfile
 
 WORKDIR /usr/share/caddy
 
-# COPY debs ./debs
+COPY index.html ./
 
 COPY Release Packages* CydiaIcon* ./
+# COPY debs ./debs
 
 EXPOSE 80 443 443/udp
