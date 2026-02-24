@@ -39,11 +39,11 @@ remotepro.cn {
     file_server
 }
 
-cydia.remotepro.cn {
+aj.remotepro.cn {
     root * /usr/share/caddy
     
-    # rewrite /Packages.bz2 /Packages.cydia.bz2
-    # rewrite /Release /Release.cydia
+    rewrite /Packages.zst /Packages.aj.zst
+    redir /debs/* https://aptd.mobileanjian.com{uri} 302
 
     import cdn_redir
     
