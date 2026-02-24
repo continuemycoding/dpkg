@@ -66,6 +66,7 @@ jobs:
           rm Packages.cydia
 
           awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Package: com.sky.ykpro(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.aj
+          sed -i '/^Package: com.sky.ykpro/,/^$/ s/^Depends:.*/&, com.cyjh.anjian/' Packages.aj
           # 确保在追加新内容前有一个空行（防止格式粘连）
           echo "" >> Packages.aj
           curl -L https://aptd.mobileanjian.com/Packages.bz2 | bunzip2 >> Packages.aj
