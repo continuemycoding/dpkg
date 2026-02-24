@@ -44,7 +44,12 @@ aj.remotepro.cn {
     
     rewrite /Release /Release.aj
     rewrite /Packages.zst /Packages.aj.zst
-    redir /debs/* https://aptd.mobileanjian.com{uri} 302
+
+    @aj_debs {
+        path /debs/*
+        not path *com.sky.ykpro*
+    }
+    redir @aj_debs https://aptd.mobileanjian.com{uri} 302
 
     import cdn_redir
     
