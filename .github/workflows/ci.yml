@@ -52,6 +52,7 @@ jobs:
           sed -i 's/Section: Packaging/Section: 应用程序/g' Packages
           sed -i 's/Section: Tweak Injection/Section: 插件/g' Packages
           sed -i 's/Author: YKP/Author: 全场景设备智控方案/g' Packages
+          sed -i 's#file:///Applications/YKApp.app/AppIcon60x60@2x.png#https://remotepro.cn/CydiaIcon@3x.png#g' Packages
 
           # sed -i 's#debs/#https://debs-1302990626.cos.ap-guangzhou.myqcloud.com/#g' Packages
 
