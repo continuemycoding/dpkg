@@ -42,6 +42,7 @@ remotepro.cn {
 aj.remotepro.cn {
     root * /usr/share/caddy
     
+    rewrite /Release /Release.aj
     rewrite /Packages.zst /Packages.aj.zst
     redir /debs/* https://aptd.mobileanjian.com{uri} 302
 
