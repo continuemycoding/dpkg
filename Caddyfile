@@ -2,9 +2,8 @@
     # vars cdn_url https://debs-1302990626.cos.ap-guangzhou.myqcloud.com
     vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
 
-    redir /TrollRestore https://gitee.com/RemotePro/RemotePro/releases/download/v3/TrollRestore 302
-    redir /rootless https://gitee.com/RemotePro/RemotePro/releases/download/v3/Dopamine.tipa 302
-    redir /roothide https://gitee.com/RemotePro/RemotePro/releases/download/v3/Dopamine2.tipa 302
+    redir /rootless /Dopamine.tipa 302
+    redir /roothide /Dopamine2.tipa 302
 
     handle /debs/*.deb {
         # 定义正则匹配器，捕获文件名部分
