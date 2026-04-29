@@ -121,7 +121,7 @@
             </p>
             
             <!-- 下载按钮组 -->
-            <div class="flex flex-col sm:flex-row gap-5 justify-center items-center" id="download-hero">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 justify-center items-center max-w-3xl mx-auto" id="download-hero">
                 <a href="#" id="hero-btn-win" class="download-btn bg-blue-600 hover:bg-blue-500 text-white text-lg font-semibold rounded-xl px-8 py-4 flex items-center min-w-[200px] justify-center gap-3">
                     <i class="fa-brands fa-windows text-2xl"></i>
                     <div class="text-left">
@@ -135,6 +135,22 @@
                     <div class="text-left">
                         <div class="text-xs opacity-80">macOS 版</div>
                         <div class="leading-none" id="hero-text-mac">检测中...</div>
+                    </div>
+                </a>
+
+                <a href="#" id="hero-btn-android" class="download-btn bg-emerald-700 hover:bg-emerald-600 border border-emerald-600/40 text-white text-lg font-semibold rounded-xl px-8 py-4 flex items-center min-w-[200px] justify-center gap-3">
+                    <i class="fa-brands fa-android text-2xl"></i>
+                    <div class="text-left">
+                        <div class="text-xs opacity-80">Android 版</div>
+                        <div class="leading-none" id="hero-text-android">立即下载</div>
+                    </div>
+                </a>
+
+                <a href="#" id="hero-btn-iphone" class="download-btn bg-slate-800 hover:bg-slate-700 border border-slate-600/60 text-white text-lg font-semibold rounded-xl px-8 py-4 flex items-center min-w-[200px] justify-center gap-3">
+                    <i class="fa-brands fa-app-store-ios text-2xl"></i>
+                    <div class="text-left">
+                        <div class="text-xs opacity-80">iPhone 版</div>
+                        <div class="leading-none" id="hero-text-iphone">立即下载</div>
                     </div>
                 </a>
             </div>
@@ -239,7 +255,7 @@
                         支持安卓手机吗？
                     </h3>
                     <p class="text-gray-400 ml-8 text-sm leading-relaxed">
-                        暂不支持。目前远控Pro专注于iOS系统的底层优化，以提供最极致的流畅度和稳定性。
+                        现已支持。Android 与 iPhone 版本均可在首页下载入口获取，建议下载最新版本以获得最佳兼容性。
                     </p>
                 </div>
 
@@ -309,7 +325,7 @@
                             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                 <h3 class="text-xl font-semibold leading-6 text-white" id="modal-title">历史版本下载</h3>
                                 
-                                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 text-left">
                                     
                                     <!-- Windows 列表 -->
                                     <div>
@@ -323,6 +339,22 @@
                                     <div>
                                         <h4 class="text-gray-200 font-bold mb-3 border-b border-gray-700 pb-2"><i class="fa-brands fa-apple mr-2"></i>macOS 版本</h4>
                                         <div id="modal-list-mac" class="space-y-4 modal-scroll max-h-[60vh] overflow-y-auto pr-2">
+                                            <div class="text-gray-500 text-sm text-center py-4">正在加载版本列表...</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Android 列表 -->
+                                    <div>
+                                        <h4 class="text-emerald-400 font-bold mb-3 border-b border-gray-700 pb-2"><i class="fa-brands fa-android mr-2"></i>Android 版本</h4>
+                                        <div id="modal-list-android" class="space-y-4 modal-scroll max-h-[60vh] overflow-y-auto pr-2">
+                                            <div class="text-gray-500 text-sm text-center py-4">正在加载版本列表...</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- iPhone 列表 -->
+                                    <div>
+                                        <h4 class="text-slate-200 font-bold mb-3 border-b border-gray-700 pb-2"><i class="fa-brands fa-app-store-ios mr-2"></i>iPhone 版本</h4>
+                                        <div id="modal-list-iphone" class="space-y-4 modal-scroll max-h-[60vh] overflow-y-auto pr-2">
                                             <div class="text-gray-500 text-sm text-center py-4">正在加载版本列表...</div>
                                         </div>
                                     </div>
@@ -497,29 +529,47 @@
         const GITEE_OWNER = 'RemotePro';
         const GITEE_REPO_WIN = 'RemotePro-windows';
         const GITEE_REPO_MAC = 'RemotePro-macos'; 
+        const GITEE_REPO_ANDROID = 'RemotePro-android';
+        const GITEE_REPO_IPHONE = 'RemotePro-iphone';
+        const ANDROID_DOWNLOAD_URL = 'https://remotepro.cn/download/android';
+        const IPHONE_DOWNLOAD_URL = 'https://remotepro.cn/download/iphone';
 
         // 获取 DOM 元素
         const heroBtnWin = document.getElementById('hero-btn-win');
         const heroTextWin = document.getElementById('hero-text-win');
         const heroBtnMac = document.getElementById('hero-btn-mac');
         const heroTextMac = document.getElementById('hero-text-mac');
+        const heroBtnAndroid = document.getElementById('hero-btn-android');
+        const heroBtnIphone = document.getElementById('hero-btn-iphone');
+        const heroTextAndroid = document.getElementById('hero-text-android');
+        const heroTextIphone = document.getElementById('hero-text-iphone');
         const modalListWin = document.getElementById('modal-list-win');
         const modalListMac = document.getElementById('modal-list-mac');
+        const modalListAndroid = document.getElementById('modal-list-android');
+        const modalListIphone = document.getElementById('modal-list-iphone');
 
         // 初始化
         document.addEventListener('DOMContentLoaded', fetchGiteeReleases);
+
+        // 移动端下载入口为固定链接
+        heroBtnAndroid.href = ANDROID_DOWNLOAD_URL;
+        heroBtnIphone.href = IPHONE_DOWNLOAD_URL;
 
         async function fetchGiteeReleases() {
             try {
                 // 构建两个仓库的 API 地址
                 const apiWin = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO_WIN}/releases?direction=desc&page=1&per_page=10`;
                 const apiMac = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO_MAC}/releases?direction=desc&page=1&per_page=10`;
+                const apiAndroid = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO_ANDROID}/releases?direction=desc&page=1&per_page=10`;
+                const apiIphone = `https://gitee.com/api/v5/repos/${GITEE_OWNER}/${GITEE_REPO_IPHONE}/releases?direction=desc&page=1&per_page=10`;
 
                 // 使用 Promise.allSettled 并行请求两个仓库
                 // 这样即使其中一个失败（如仓库不存在或网络问题），另一个也能正常显示
-                const [resultWin, resultMac] = await Promise.allSettled([
+                const [resultWin, resultMac, resultAndroid, resultIphone] = await Promise.allSettled([
                     fetch(apiWin),
-                    fetch(apiMac)
+                    fetch(apiMac),
+                    fetch(apiAndroid),
+                    fetch(apiIphone)
                 ]);
                 
                 // 处理 Windows 数据
@@ -538,17 +588,33 @@
                     console.warn('Mac release fetch failed or repo not found.');
                 }
 
-                if (releasesWin.length === 0 && releasesMac.length === 0) {
+                // 处理 Android 数据
+                let releasesAndroid = [];
+                if (resultAndroid.status === 'fulfilled' && resultAndroid.value.ok) {
+                    releasesAndroid = await resultAndroid.value.json();
+                } else {
+                    console.warn('Android release fetch failed or repo not found.');
+                }
+
+                // 处理 iPhone 数据
+                let releasesIphone = [];
+                if (resultIphone.status === 'fulfilled' && resultIphone.value.ok) {
+                    releasesIphone = await resultIphone.value.json();
+                } else {
+                    console.warn('iPhone release fetch failed or repo not found.');
+                }
+
+                if (releasesWin.length === 0 && releasesMac.length === 0 && releasesAndroid.length === 0 && releasesIphone.length === 0) {
                     heroTextWin.innerText = heroTextMac.innerText = "网络异常";
-                    modalListWin.innerHTML = modalListMac.innerHTML = '<div class="text-gray-500 text-sm text-center">网络异常</div>';
+                    modalListWin.innerHTML = modalListMac.innerHTML = modalListAndroid.innerHTML = modalListIphone.innerHTML = '<div class="text-gray-500 text-sm text-center">网络异常</div>';
                     return;
                 }
 
                 // 处理最新版本 (Hero Section)
-                updateHeroSection(releasesWin, releasesMac);
+                updateHeroSection(releasesWin, releasesMac, releasesAndroid, releasesIphone);
 
                 // 处理历史版本列表 (Modal)
-                updateHistoryModal(releasesWin, releasesMac);
+                updateHistoryModal(releasesWin, releasesMac, releasesAndroid, releasesIphone);
 
             } catch (error) {
                 console.error("Fetch Error:", error);
@@ -557,6 +623,8 @@
                 heroTextMac.innerText = "下载不可用";
                 modalListWin.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
                 modalListMac.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
+                modalListAndroid.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
+                modalListIphone.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
             }
         }
 
@@ -570,25 +638,28 @@
                     return name.endsWith('.exe') || name.endsWith('.zip') || name.endsWith('.7z') || name.endsWith('.msi');
                 } else if (type === 'mac') {
                     return name.endsWith('.dmg') || name.endsWith('.pkg') || name.endsWith('.zip') || name.endsWith('.tar.gz');
+                } else if (type === 'android') {
+                    return name.endsWith('.apk') || name.endsWith('.aab') || name.endsWith('.xapk') || name.endsWith('.zip');
+                } else if (type === 'iphone') {
+                    return name.endsWith('.ipa') || name.endsWith('.tipa') || name.endsWith('.zip');
                 }
                 return false;
             });
         }
 
-        // 辅助函数：时间格式化 yyyy-MM-dd HH:mm
+        // 辅助函数：时间格式化 MM.dd HH:mm（紧凑展示）
         function formatDate(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
-            const yyyy = date.getFullYear();
             const mm = String(date.getMonth() + 1).padStart(2, '0');
             const dd = String(date.getDate()).padStart(2, '0');
             const hh = String(date.getHours()).padStart(2, '0');
             const min = String(date.getMinutes()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+            return `${mm}.${dd} ${hh}:${min}`;
         }
 
         // 更新首页 Hero 按钮
-        function updateHeroSection(releasesWin, releasesMac) {
+        function updateHeroSection(releasesWin, releasesMac, releasesAndroid, releasesIphone) {
             // 处理 Windows 按钮
             let latestWinFound = false;
             if (releasesWin.length > 0) {
@@ -617,12 +688,20 @@
 
             if (!latestWinFound) heroTextWin.innerText = "敬请期待";
             if (!latestMacFound) heroTextMac.innerText = "敬请期待";
+            if (releasesAndroid.length > 0) {
+                heroTextAndroid.innerText = `最新版本 ${releasesAndroid[0].tag_name}`;
+            }
+            if (releasesIphone.length > 0) {
+                heroTextIphone.innerText = `最新版本 ${releasesIphone[0].tag_name}`;
+            }
         }
 
         // 更新历史版本模态框
-        function updateHistoryModal(releasesWin, releasesMac) {
+        function updateHistoryModal(releasesWin, releasesMac, releasesAndroid, releasesIphone) {
             let winHtml = '';
             let macHtml = '';
+            let androidHtml = '';
+            let iphoneHtml = '';
 
             // 生成 Windows 列表
             releasesWin.forEach(release => {
@@ -644,28 +723,66 @@
                 }
             });
 
+            // 生成 Android 列表
+            releasesAndroid.forEach(release => {
+                const date = formatDate(release.created_at);
+                const androidAsset = findAsset(release.assets, 'android');
+                
+                if (androidAsset) {
+                    androidHtml += createHistoryItem(release.tag_name, date, androidAsset.browser_download_url, 'emerald', release.body);
+                }
+            });
+
+            // 生成 iPhone 列表
+            releasesIphone.forEach(release => {
+                const date = formatDate(release.created_at);
+                const iphoneAsset = findAsset(release.assets, 'iphone');
+                
+                if (iphoneAsset) {
+                    iphoneHtml += createHistoryItem(release.tag_name, date, iphoneAsset.browser_download_url, 'slate', release.body);
+                }
+            });
+
             modalListWin.innerHTML = winHtml || '<div class="text-gray-500 text-sm text-center">暂无历史版本</div>';
             modalListMac.innerHTML = macHtml || '<div class="text-gray-500 text-sm text-center">暂无历史版本</div>';
+            modalListAndroid.innerHTML = androidHtml || '<div class="text-gray-500 text-sm text-center">暂无历史版本</div>';
+            modalListIphone.innerHTML = iphoneHtml || '<div class="text-gray-500 text-sm text-center">暂无历史版本</div>';
         }
 
         // 生成历史列表项 HTML 模板
         function createHistoryItem(version, date, url, colorTheme, description) {
-            const hoverBorder = colorTheme === 'blue' ? 'hover:border-blue-500/50' : 'hover:border-gray-500/50';
-            const btnBg = colorTheme === 'blue' ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600' : 'bg-gray-600/20 text-gray-300 hover:bg-gray-600';
+            const hoverBorderMap = {
+                blue: 'hover:border-blue-500/50',
+                gray: 'hover:border-gray-500/50',
+                emerald: 'hover:border-emerald-500/50',
+                slate: 'hover:border-slate-400/50'
+            };
+            const btnBgMap = {
+                blue: 'bg-blue-600/20 text-blue-400 hover:bg-blue-600',
+                gray: 'bg-gray-600/20 text-gray-300 hover:bg-gray-600',
+                emerald: 'bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600',
+                slate: 'bg-slate-600/20 text-slate-200 hover:bg-slate-600'
+            };
+            const hoverBorder = hoverBorderMap[colorTheme] || hoverBorderMap.gray;
+            const btnBg = btnBgMap[colorTheme] || btnBgMap.gray;
             
-            // 处理描述文本，如果没有则显示暂无说明
-            const descText = description ? description : '暂无更新说明';
+            // 处理描述文本：压缩多余空白，避免卡片内容过高
+            const descText = description ? description.replace(/\s+/g, ' ').trim() : '暂无更新说明';
             
             return `
-            <div class="bg-slate-800/50 p-4 rounded-lg border border-gray-700 ${hoverBorder} transition flex flex-col gap-3">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <div class="text-white font-medium text-base">${version}</div>
-                        <div class="text-xs text-gray-500 mt-0.5">${date} 更新</div>
-                    </div>
-                    <a href="${url}" class="text-xs ${btnBg} hover:text-white px-3 py-1.5 rounded transition shrink-0 ml-2">下载</a>
+            <div class="bg-slate-800/50 p-4 rounded-lg border border-gray-700 ${hoverBorder} transition flex flex-col gap-2.5">
+                <div class="text-white font-semibold text-2xl leading-none tracking-wide">${version}</div>
+                <div class="text-[11px] text-gray-500 whitespace-nowrap">
+                    <i class="fa-regular fa-clock mr-1"></i>${date}
                 </div>
-                <div class="text-xs text-gray-400 border-t border-gray-700/50 pt-2 whitespace-pre-wrap leading-relaxed">${descText}</div>
+                <div class="border-t border-gray-700/50 pt-2 min-h-[44px]">
+                    <div class="text-xs text-gray-400 leading-relaxed overflow-hidden" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">
+                        ${descText}
+                    </div>
+                </div>
+                <div class="pt-1">
+                    <a href="${url}" class="inline-flex items-center justify-center text-xs ${btnBg} hover:text-white px-3 py-1.5 rounded-md transition">下载此版本</a>
+                </div>
             </div>
             `;
         }
