@@ -121,7 +121,7 @@
             </p>
             
             <!-- 下载按钮组 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 justify-center items-center max-w-3xl mx-auto" id="download-hero">
+            <div class="flex flex-col sm:flex-row flex-wrap gap-5 justify-center items-center" id="download-hero">
                 <a href="#" id="hero-btn-win" class="download-btn bg-blue-600 hover:bg-blue-500 text-white text-lg font-semibold rounded-xl px-8 py-4 flex items-center min-w-[200px] justify-center gap-3">
                     <i class="fa-brands fa-windows text-2xl"></i>
                     <div class="text-left">
@@ -647,15 +647,16 @@
             });
         }
 
-        // 辅助函数：时间格式化 MM.dd HH:mm（紧凑展示）
+        // 辅助函数：时间格式化 yyyy-MM-dd HH:mm
         function formatDate(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
+            const yyyy = date.getFullYear();
             const mm = String(date.getMonth() + 1).padStart(2, '0');
             const dd = String(date.getDate()).padStart(2, '0');
             const hh = String(date.getHours()).padStart(2, '0');
             const min = String(date.getMinutes()).padStart(2, '0');
-            return `${mm}.${dd} ${hh}:${min}`;
+            return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
         }
 
         // 更新首页 Hero 按钮
