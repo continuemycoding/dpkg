@@ -531,8 +531,6 @@
         const GITEE_REPO_MAC = 'RemotePro-macos'; 
         const GITEE_REPO_ANDROID = 'RemotePro-android';
         const GITEE_REPO_IPHONE = 'RemotePro-iphone';
-        const ANDROID_DOWNLOAD_URL = 'https://remotepro.cn/download/android';
-        const IPHONE_DOWNLOAD_URL = 'https://remotepro.cn/download/iphone';
 
         // 获取 DOM 元素
         const heroBtnWin = document.getElementById('hero-btn-win');
@@ -550,10 +548,6 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', fetchGiteeReleases);
-
-        // 移动端下载入口为固定链接
-        heroBtnAndroid.href = ANDROID_DOWNLOAD_URL;
-        heroBtnIphone.href = IPHONE_DOWNLOAD_URL;
 
         async function fetchGiteeReleases() {
             try {
@@ -605,7 +599,7 @@
                 }
 
                 if (releasesWin.length === 0 && releasesMac.length === 0 && releasesAndroid.length === 0 && releasesIphone.length === 0) {
-                    heroTextWin.innerText = heroTextMac.innerText = "网络异常";
+                    heroTextWin.innerText = heroTextMac.innerText = heroTextAndroid.innerText = heroTextIphone.innerText = "网络异常";
                     modalListWin.innerHTML = modalListMac.innerHTML = modalListAndroid.innerHTML = modalListIphone.innerHTML = '<div class="text-gray-500 text-sm text-center">网络异常</div>';
                     return;
                 }
@@ -621,6 +615,8 @@
                 // 错误回退显示
                 heroTextWin.innerText = "下载不可用";
                 heroTextMac.innerText = "下载不可用";
+                heroTextAndroid.innerText = "下载不可用";
+                heroTextIphone.innerText = "下载不可用";
                 modalListWin.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
                 modalListMac.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
                 modalListAndroid.innerHTML = '<div class="text-red-400 text-sm text-center">获取版本列表失败，请检查网络或配置</div>';
@@ -689,12 +685,30 @@
 
             if (!latestWinFound) heroTextWin.innerText = "敬请期待";
             if (!latestMacFound) heroTextMac.innerText = "敬请期待";
+
+            let latestAndroidFound = false;
             if (releasesAndroid.length > 0) {
-                heroTextAndroid.innerText = `最新版本 ${releasesAndroid[0].tag_name}`;
+                const latest = releasesAndroid[0];
+                const androidAsset = findAsset(latest.assets, 'android');
+                if (androidAsset) {
+                    heroBtnAndroid.href = androidAsset.browser_download_url;
+                    heroTextAndroid.innerText = `最新版本 ${latest.tag_name}`;
+                    latestAndroidFound = true;
+                }
             }
+            if (!latestAndroidFound) heroTextAndroid.innerText = "敬请期待";
+
+            let latestIphoneFound = false;
             if (releasesIphone.length > 0) {
-                heroTextIphone.innerText = `最新版本 ${releasesIphone[0].tag_name}`;
+                const latest = releasesIphone[0];
+                const iphoneAsset = findAsset(latest.assets, 'iphone');
+                if (iphoneAsset) {
+                    heroBtnIphone.href = iphoneAsset.browser_download_url;
+                    heroTextIphone.innerText = `最新版本 ${latest.tag_name}`;
+                    latestIphoneFound = true;
+                }
             }
+            if (!latestIphoneFound) heroTextIphone.innerText = "敬请期待";
         }
 
         // 更新历史版本模态框
