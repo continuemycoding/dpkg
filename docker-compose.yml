@@ -2,6 +2,7 @@ services:
   caddy:
     # image: caddy:alpine
     image: remotepro/repo:latest
+    stop_grace_period: 1s
     restart: always
     cap_add:
       - NET_ADMIN
