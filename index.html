@@ -117,7 +117,7 @@
                 <span class="gradient-text">批量投屏与群控</span>
             </h1>
             <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-                专为工作室打造的高效管理工具。通过 USB 或局域网连接，在 Windows 或 Mac 上实现低延迟、高帧率的 iPhone 批量控制。
+                专为工作室打造的高效管理工具。通过 USB、局域网或广域网连接实现低延迟、高帧率的 iPhone 批量控制。
             </p>
             
             <!-- 下载按钮组 -->
@@ -182,7 +182,7 @@
                     </div>
                     <h3 class="text-lg font-bold mb-2">低延迟实时投屏</h3>
                     <p class="text-gray-400 text-sm">
-                        优化底层传输协议，支持 USB 直连与局域网 WiFi 连接，画面清晰流畅，操作响应毫秒级。
+                        优化底层传输协议，支持 USB 直连、局域网 Wi‑Fi 与广域网远程连接，画面清晰流畅，操作响应毫秒级。
                     </p>
                 </div>
 
@@ -248,22 +248,10 @@
             </div>
 
             <div class="space-y-4">
-                <!-- Question 1 -->
                 <div class="bg-slate-800/50 rounded-xl p-6 border border-gray-700">
                     <h3 class="flex items-center text-lg font-semibold text-white mb-2">
                         <i class="fa-regular fa-circle-question text-blue-500 mr-3"></i>
-                        支持安卓手机吗？
-                    </h3>
-                    <p class="text-gray-400 ml-8 text-sm leading-relaxed">
-                        现已支持。Android 与 iPhone 版本均可在首页下载入口获取，建议下载最新版本以获得最佳兼容性。
-                    </p>
-                </div>
-
-                <!-- Question 2 -->
-                <div class="bg-slate-800/50 rounded-xl p-6 border border-gray-700">
-                    <h3 class="flex items-center text-lg font-semibold text-white mb-2">
-                        <i class="fa-regular fa-circle-question text-blue-500 mr-3"></i>
-                        手机需要越狱吗？
+                        被控端手机需要越狱吗？
                     </h3>
                     <p class="text-gray-400 ml-8 text-sm leading-relaxed">
                         <strong class="text-amber-400">是的，必须越狱。</strong><br>
@@ -271,18 +259,16 @@
                     </p>
                 </div>
 
-                <!-- Question 3 -->
                 <div class="bg-slate-800/50 rounded-xl p-6 border border-gray-700">
                     <h3 class="flex items-center text-lg font-semibold text-white mb-2">
                         <i class="fa-regular fa-circle-question text-blue-500 mr-3"></i>
                         支持远程广域网控制吗？
                     </h3>
                     <p class="text-gray-400 ml-8 text-sm leading-relaxed">
-                        目前仅支持 <span class="text-blue-400 font-medium">局域网</span> 或 <span class="text-blue-400 font-medium">USB 数据线</span> 连接。广域网连接功能正在开发中，即将上线。
+                        已支持。除 <span class="text-blue-400 font-medium">USB</span> 与 <span class="text-blue-400 font-medium">局域网</span> 外，亦可使用 <span class="text-blue-400 font-medium">广域网</span> 远程连接，跨网段、跨地域管理设备。
                     </p>
                 </div>
 
-                <!-- Question 4 -->
                 <div class="bg-slate-800/50 rounded-xl p-6 border border-gray-700">
                     <h3 class="flex items-center text-lg font-semibold text-white mb-2">
                         <i class="fa-regular fa-circle-question text-blue-500 mr-3"></i>
@@ -462,10 +448,10 @@
                             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                 <h3 class="text-xl font-semibold leading-6 text-white" id="modal-title">隐私政策</h3>
                                 <div class="mt-4 text-gray-300 text-sm space-y-3 modal-scroll max-h-[60vh] overflow-y-auto pr-2 text-justify">
-                                    <p>远控Pro 高度重视您的隐私安全。由于本软件的特殊性（本地局域网控制），我们在数据处理上遵循“本地优先”原则。</p>
+                                    <p>远控Pro 高度重视您的隐私安全。本软件以本地与点对点连接为主，我们在数据处理上遵循“本地优先、最小必要”原则。</p>
                                     
                                     <h4 class="text-white font-bold mt-2">1. 数据传输机制</h4>
-                                    <p>本软件的核心功能（投屏画面、触控指令、文件传输）均通过 <strong>USB 数据线或局域网 (LAN)</strong> 直接点对点传输。这些数据<strong>不会</strong>经过我们的云端服务器，我们也无法查看您的屏幕内容。</p>
+                                    <p>本软件的核心功能（投屏画面、触控指令、文件传输）可通过 <strong>USB、局域网 (LAN)</strong> 或您启用的 <strong>广域网</strong> 链路与对端设备通信。USB 与典型局域网场景下多为直连；广域网模式下数据经互联网在您的设备之间传输。<strong>我们不会</strong>通过自有云端转发或存储您的投屏画面，也无法查看您的屏幕内容。</p>
                                     
                                     <h4 class="text-white font-bold mt-2">2. 我们收集的信息</h4>
                                     <ul class="list-disc list-inside ml-2">
