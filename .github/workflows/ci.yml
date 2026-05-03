@@ -104,23 +104,66 @@ jobs:
           tags: |
             remotepro/repo:latest
 
-      - name: Start gost proxy
+      - name: Install sing-box
         run: |
-          docker run -d --name gost \
-              -p 1080:1080 \
-              ginuerzh/gost:2.11.5 \
-              -L :1080 \
-              -F trojan://5d7b9e36-e867-4873-8b9f-bb2dfa0a6a88@f533f9b2-c69a-4dd0-bc63-f2ab94dd5f53.f1eb10ae-1d82-4c6a-b4dd-bd9525520956.com:10101?security=tls&sni=sni.eos-suzhou-4.cmecloud.cn&insecure=0&allowInsecure=0&type=tcp&headerType=none#%F0%9F%87%AD%F0%9F%87%B0%20%E9%A6%99%E6%B8%AF%2001
+          set -e
+          VERSION=1.8.6
+          curl -L -o sing-box.tar.gz \
+            https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-amd64.tar.gz
+          tar -xzf sing-box.tar.gz
+          sudo mv sing-box-${VERSION}-linux-amd64/sing-box /usr/local/bin/sing-box
+          sing-box version
 
-          sleep 2
-          docker ps --filter "name=gost"
+      - name: Start trojan proxy
+        run: |
+          cat > config.json << 'EOF'
+          {
+            "log": {
+              "level": "info"
+            },
+            "inbounds": [
+              {
+                "type": "mixed", 
+                "tag": "mixed-in",
+                "listen": "127.0.0.1",
+                "listen_port": 1080
+              }
+            ],
+            "outbounds": [
+              {
+                "type": "trojan",
+                "tag": "trojan-out",
+                "server": "f533f9b2-c69a-4dd0-bc63-f2ab94dd5f53.f1eb10ae-1d82-4c6a-b4dd-bd9525520956.com",
+                "server_port": 10101,
+                "password": "${{ secrets.TROJAN_PASSWORD }}",
+                "tls": {
+                  "enabled": true,
+                  "server_name": "sni.eos-suzhou-4.cmecloud.cn",
+                  "utls": {
+                    "enabled": true,
+                    "fingerprint": "chrome"
+                  }
+                }
+              }
+            ],
+            "route": {
+              "rules": [
+                {
+                  "inbound": "mixed-in",
+                  "outbound": "trojan-out"
+                }
+              ]
+            }
+          }
+          EOF
+          
+          nohup sing-box run -c config.json > sing-box.log 2>&1 &
+          sleep 5
 
           # 动态注入环境变量，对后续所有 step 生效
           echo "ALL_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
           echo "HTTP_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
           echo "HTTPS_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
-
-      - run: curl ipinfo.io
 
       - name: 🚀 Upload Debian Packages to Gitee Release
         shell: python
