@@ -1,6 +1,7 @@
 (cdn_redir) {
     # vars cdn_url https://debs-1302990626.cos.ap-guangzhou.myqcloud.com
     vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
+    vars tipa_url https://gitcode.com/gcw_uHaLXrdK/Dopamine/releases/download/2.4.9
 
     redir /rootless /Dopamine.tipa 302
     redir /roothide /Dopamine2.tipa 302
@@ -18,6 +19,11 @@
         }
         
         respond @not_cydia "Not Found" 404
+    }
+
+    @tipa path_regexp tipa ^/(.*\.tipa)$
+    handle @tipa {
+        redir {vars.tipa_url}/{re.tipa.1} 302
     }
 
     handle {
