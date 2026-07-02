@@ -44,6 +44,10 @@ remotepro.cn {
     file_server
 }
 
+git.remotepro.cn {
+	reverse_proxy http://120.79.253.240:3000
+}
+
 aj.remotepro.cn {
     root * /usr/share/caddy
     
