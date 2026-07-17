@@ -48,6 +48,10 @@ git.remotepro.cn {
 	reverse_proxy http://172.17.0.1:3000
 }
 
+test.remotepro.cn {
+	reverse_proxy http://172.17.0.1:3001
+}
+
 aj.remotepro.cn {
     root * /usr/share/caddy
     
