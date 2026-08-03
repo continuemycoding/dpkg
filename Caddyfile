@@ -21,7 +21,7 @@
         respond @not_cydia "Not Found" 404
     }
 
-    @release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)(?:-.*)?\.zip|PersistenceHelper_Embedded)$
+    @release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)[0-9]*\.zip|PersistenceHelper_Embedded)$
     handle @release_assets {
         redir {vars.release_url}/{re.assets.1} 302
     }
