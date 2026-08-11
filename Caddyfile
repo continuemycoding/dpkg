@@ -1,5 +1,4 @@
 (cdn_redir) {
-    # vars cdn_url https://debs-1302990626.cos.ap-guangzhou.myqcloud.com
     vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
     vars release_url https://gitcode.com/gcw_uHaLXrdK/Dopamine/releases/download/2.4.9
 
@@ -21,7 +20,7 @@
         respond @not_cydia "Not Found" 404
     }
 
-    @release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)[0-9]*\.zip|PersistenceHelper_Embedded)$
+    @release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)[0-9]*\.zip|PersistenceHelper_Embedded|plumesign-)$
     handle @release_assets {
         redir {vars.release_url}/{re.assets.1} 302
     }
