@@ -56,15 +56,6 @@ jobs:
           bzip2 -c9 Packages.cydia > Packages.bz2
           rm Packages.cydia
 
-          awk -v RS='' -v ORS='\n\n' '$0 ~ /(^|\n)Package: com.sky.ykpro(\n|$)/' Packages > Packages.tmp && mv Packages.tmp Packages.aj
-          sed -i '/^Package: com.sky.ykpro/,/^$/ s/^Depends:.*/&, com.cyjh.anjian/' Packages.aj
-          # 确保在追加新内容前有一个空行（防止格式粘连）
-          echo "" >> Packages.aj
-          curl -L https://aptd.mobileanjian.com/Packages.bz2 | bunzip2 >> Packages.aj
-          cat -n Packages.aj
-          zstd -c19 Packages.aj > Packages.aj.zst
-          rm Packages.aj
-
           cat > apt-release.conf <<EOF
           APT::FTPArchive::Release::Origin "远控Pro官方源";
           APT::FTPArchive::Release::Label "远控Pro官方源";
