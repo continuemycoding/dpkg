@@ -66,7 +66,7 @@ const items = [
         <br />
         详细逐步说明见{' '}
         <a href="/guide" style={{ color: '#93c5fd', fontWeight: 600 }}>
-          使用教程
+          脚本教程
         </a>
         。不会写代码可以看教程里的{' '}
         <a href="/guide#agent" style={{ color: '#93c5fd', fontWeight: 600 }}>

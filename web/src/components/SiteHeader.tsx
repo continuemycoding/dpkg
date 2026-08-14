@@ -5,7 +5,7 @@ import { DesktopOutlined, DownloadOutlined, MenuOutlined } from '@ant-design/ico
 const links = [
   { href: '/', label: '首页', page: 'home' as const },
   { href: '/#features', label: '核心功能' },
-  { href: '/guide', label: '使用教程', page: 'guide' as const },
+  { href: '/guide', label: '脚本教程', page: 'guide' as const },
   { href: '/#faq', label: '常见问题' },
   { href: 'https://docs.remotepro.cn/', label: 'API文档', external: true },
 ];

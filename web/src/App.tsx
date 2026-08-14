@@ -15,7 +15,7 @@ import { GuidePage } from './components/GuidePage';
 import './App.css';
 
 const HOME_TITLE = '远控Pro - 专业iOS越狱群控系统 (Win/Mac)';
-const GUIDE_TITLE = '使用教程 - 远控Pro脚本开发扩展';
+const GUIDE_TITLE = '脚本教程 - 远控Pro脚本开发扩展';
 
 function isGuidePath(pathname: string): boolean {
   return pathname.replace(/\/+$/, '') === '/guide';
