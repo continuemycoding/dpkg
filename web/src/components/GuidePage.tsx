@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Button, Tabs } from 'antd';
+import { Alert, Button, Collapse, Tabs } from 'antd';
 import {
   ApiOutlined,
   BookOutlined,
@@ -11,6 +11,7 @@ import {
   MessageOutlined,
   MobileOutlined,
   PlayCircleOutlined,
+  QuestionCircleOutlined,
   RobotOutlined,
   ToolOutlined,
 } from '@ant-design/icons';
@@ -122,6 +123,94 @@ const AGENT_PROMPT = `我用远控Pro写自动化脚本。
 function Kbd({ children }: { children: string }) {
   return <code className="kbd">{children}</code>;
 }
+
+function faqLabel(text: string) {
+  return (
+    <span>
+      <QuestionCircleOutlined style={{ color: '#60a5fa', marginRight: 10 }} />
+      {text}
+    </span>
+  );
+}
+
+const GUIDE_FAQ = [
+  {
+    key: 'vsix-market',
+    label: faqLabel('扩展视图里搜不到「远控Pro」？'),
+    children: (
+      <p>
+        正常。它目前通过 .vsix 文件安装，不会出现在 VS Code / Cursor 等扩展市场里。请用扩展视图右上角 ··· →
+        「从 VSIX 安装」。
+      </p>
+    ),
+  },
+  {
+    key: 'no-icon',
+    label: faqLabel('装完左侧没有远控Pro图标？'),
+    children: (
+      <p>
+        打开命令面板（<Kbd>Ctrl+Shift+P</Kbd> 或 Mac <Kbd>⌘⇧P</Kbd>），输入 Reload Window 并回车。
+      </p>
+    ),
+  },
+  {
+    key: 'scan',
+    label: faqLabel('扫描不到手机？'),
+    children: (
+      <p>
+        手机已装被控端且在运行；电脑关掉 VPN；双方同一 Wi‑Fi。仍不行就手动添加 IP，端口填 65322。广域网需要在手机的远程调试页面打开，并填写授权码。
+      </p>
+    ),
+  },
+  {
+    key: 'debug-env',
+    label: faqLabel('配置调试环境失败？'),
+    children: (
+      <p>
+        点卡片里的失败步骤看日志。常见原因是网络中断或工具链下载失败，点「重新检查」或再点一次「配置调试环境」。Windows 上装 C++ / Rust
+        工具链会比较久，请等它走完。
+      </p>
+    ),
+  },
+  {
+    key: 'no-script',
+    label: faqLabel('编译成功了，手机上没有脚本？'),
+    children: (
+      <p>
+        在构建列表里对该版本点「分享」或「发布」，再用手机端扫码 / 打开链接订阅。分享是这一版自己的链接，换版本链接也换；发布全项目只有一条链接，始终对应你设成发布的那个版本。
+      </p>
+    ),
+  },
+  {
+    key: 'ai-ask',
+    label: faqLabel('AI 只回文字，不改我的文件？'),
+    children: (
+      <p>
+        对话模式多半还停在 Ask / 聊天。改成 Agent（Trae 常叫 Builder，Windsurf 叫 Cascade）。同时还要打开{' '}
+        <code>remotepro-toolkit</code>，否则它查不了文档，更容易空聊。
+      </p>
+    ),
+  },
+  {
+    key: 'mcp',
+    label: faqLabel('AI 让我先开启 MCP / remotepro-toolkit？'),
+    children: (
+      <p>
+        正常。到编辑器设置里找「MCP」或「工具」，打开名字以 <code>remotepro-toolkit</code>{' '}
+        开头的那一项。要先装好远控Pro扩展并打开项目，这项才会出现。找不到就重载窗口再看一次。
+      </p>
+    ),
+  },
+  {
+    key: 'vscode-agent',
+    label: faqLabel('VS Code 能用 AI Agent 吗？'),
+    children: (
+      <p>
+        可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、Windsurf 或 Kiro，打开就能对话写代码。
+      </p>
+    ),
+  },
+];
 
 function StepList({ steps }: { steps: { title: string; body: string }[] }) {
   return (
@@ -245,6 +334,22 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
           </a>
         </div>
       </header>
+
+      <section className="guide-section" id="langs">
+        <div className="section-head">
+          <p className="section-kicker">写脚本</p>
+          <h2>可以选哪些语言</h2>
+          <p>新建项目时会让你选，不确定就先用 Python；10种语言都内置支持AI编程</p>
+        </div>
+        <div className="guide-lang-grid">
+          {LANGUAGES.map((lang) => (
+            <div className="guide-lang" key={lang.name}>
+              <strong>{lang.name}</strong>
+              <span>{lang.hint}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="guide-section" id="prep">
         <div className="section-head">
@@ -455,80 +560,18 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         </div>
       </section>
 
-      <section className="guide-section" id="langs">
-        <div className="section-head">
-          <p className="section-kicker">写脚本</p>
-          <h2>可以选哪些语言</h2>
-          <p>新建项目时会让你选。不确定就先用 Python；也可以让 AI Agent 按当前语言来写</p>
-        </div>
-        <div className="guide-lang-grid">
-          {LANGUAGES.map((lang) => (
-            <div className="guide-lang" key={lang.name}>
-              <strong>{lang.name}</strong>
-              <span>{lang.hint}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section className="guide-section" id="troubleshoot">
         <div className="section-head">
           <p className="section-kicker">卡住了</p>
           <h2>常见问题</h2>
         </div>
-        <div className="guide-faq">
-          <details open>
-            <summary>扩展视图里搜不到「远控Pro」？</summary>
-            <p>
-              正常。它目前通过 .vsix 文件安装，不会出现在 VS Code / Cursor 等扩展市场里。请用扩展视图右上角 ··· →
-              「从 VSIX 安装」。
-            </p>
-          </details>
-          <details>
-            <summary>装完左侧没有远控Pro图标？</summary>
-            <p>
-              打开命令面板（<Kbd>Ctrl+Shift+P</Kbd> 或 Mac <Kbd>⌘⇧P</Kbd>），输入 Reload Window 并回车。
-            </p>
-          </details>
-          <details>
-            <summary>扫描不到手机？</summary>
-            <p>
-              手机已装被控端且在运行；电脑关掉 VPN；双方同一 Wi‑Fi。仍不行就手动添加 IP，端口填 65322。广域网需要在手机的远程调试页面打开，并填写授权码。
-            </p>
-          </details>
-          <details>
-            <summary>配置调试环境失败？</summary>
-            <p>
-              点卡片里的失败步骤看日志。常见原因是网络中断或工具链下载失败，点「重新检查」或再点一次「配置调试环境」。Windows 上装 C++ / Rust
-              工具链会比较久，请等它走完。
-            </p>
-          </details>
-          <details>
-            <summary>编译成功了，手机上没有脚本？</summary>
-            <p>
-              在构建列表里对该版本点「分享」或「发布」，再用手机端扫码 / 打开链接订阅。分享是这一版自己的链接，换版本链接也换；发布全项目只有一条链接，始终对应你设成发布的那个版本。
-            </p>
-          </details>
-          <details>
-            <summary>AI 只回文字，不改我的文件？</summary>
-            <p>
-              对话模式多半还停在 Ask / 聊天。改成 Agent（Trae 常叫 Builder，Windsurf 叫 Cascade）。同时还要打开{' '}
-              <code>remotepro-toolkit</code>，否则它查不了文档，更容易空聊。
-            </p>
-          </details>
-          <details>
-            <summary>AI 让我先开启 MCP / remotepro-toolkit？</summary>
-            <p>
-              正常。到编辑器设置里找「MCP」或「工具」，打开名字以 <code>remotepro-toolkit</code>{' '}
-              开头的那一项。要先装好远控Pro扩展并打开项目，这项才会出现。找不到就重载窗口再看一次。
-            </p>
-          </details>
-          <details>
-            <summary>VS Code 能用 AI Agent 吗？</summary>
-            <p>
-              可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、Windsurf 或 Kiro，打开就能对话写代码。
-            </p>
-          </details>
+        <div className="faq-wrap">
+          <Collapse
+            items={GUIDE_FAQ}
+            bordered={false}
+            expandIconPosition="end"
+            defaultActiveKey={GUIDE_FAQ.map((item) => item.key)}
+          />
         </div>
       </section>
 

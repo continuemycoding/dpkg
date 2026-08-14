@@ -87,7 +87,12 @@ export function FAQ() {
         <p>使用前的常见疑问解答</p>
       </div>
       <div className="faq-wrap">
-        <Collapse accordion items={items} bordered={false} expandIconPosition="end" />
+        <Collapse
+          items={items}
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={items.map((item) => item.key)}
+        />
       </div>
     </section>
   );

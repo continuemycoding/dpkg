@@ -738,6 +738,29 @@ a {
   padding: 16px 20px !important;
 }
 
+.faq-wrap .ant-collapse-content {
+  background: transparent !important;
+  border-top: none !important;
+  color: var(--muted);
+}
+
+.faq-wrap .ant-collapse-content-box {
+  padding: 0 20px 18px !important;
+}
+
+.faq-wrap .ant-collapse-content-box p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.faq-wrap code {
+  padding: 0 5px;
+  border-radius: 6px;
+  background: #1e293b;
+  font-size: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
 .site-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 40px 0 52px;
@@ -1291,27 +1314,6 @@ a {
   line-height: 1.5;
 }
 
-.guide-faq details {
-  padding: 16px 18px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  background: var(--glass);
-  margin-bottom: 10px;
-}
-
-.guide-faq summary {
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.guide-faq p {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.guide-faq code,
 .guide-alert code {
   padding: 0 5px;
   border-radius: 6px;
