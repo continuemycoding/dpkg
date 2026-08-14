@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Button, Tabs } from 'antd';
 import {
+  ApiOutlined,
   BookOutlined,
   CheckCircleOutlined,
   CodeOutlined,
   DesktopOutlined,
   DownloadOutlined,
   FolderOpenOutlined,
+  MessageOutlined,
   MobileOutlined,
   PlayCircleOutlined,
+  RobotOutlined,
   ToolOutlined,
 } from '@ant-design/icons';
 import type { PlatformState } from '../api/releases';
@@ -64,6 +67,57 @@ const TOOLS = [
   { title: '目标检测', desc: '用模型识别屏幕上的物体，适合更复杂的场景。' },
   { title: '接口日志', desc: '查看脚本调用了哪些设备接口，排查问题时很有用。' },
 ];
+
+const AGENT_IDEAS = [
+  {
+    icon: <MessageOutlined />,
+    title: '对话窗口',
+    desc: '编辑器右边（有的在底部）有一个聊天框。你用中文说话，AI 用中文回你。',
+  },
+  {
+    icon: <RobotOutlined />,
+    title: 'Agent 模式',
+    desc: 'Ask / 聊天只能回答问题。Agent（有的叫 Builder、Cascade）才能改文件、查文档、看手机。写脚本一定要选这种。',
+  },
+  {
+    icon: <ApiOutlined />,
+    title: 'MCP 工具箱',
+    desc: '装好远控Pro扩展后，会出现 remotepro-toolkit。打开它，AI 才能查接口文档、检查调试环境、看到已连接的手机。',
+  },
+];
+
+const AGENT_STEPS = [
+  {
+    title: '用带 AI 的编辑器',
+    desc: 'Cursor、Trae、Qoder、Windsurf、Kiro 都自带 Agent。VS Code 本身没有，需要另装 Cline 或 Claude Code，或直接换上面其中一款。这些软件一般要登录账号，免费额度够练手。',
+  },
+  {
+    title: '先把项目和手机准备好',
+    desc: '按上面步骤：新建项目、连上手机、调试环境就绪。AI 写完才能在真机上跑。',
+  },
+  {
+    title: '打开对话，选 Agent',
+    desc: '常见快捷键是 Ctrl+L（Mac 用 ⌘L）。把模式改成 Agent。Trae 里常叫 Builder，Windsurf 里叫 Cascade，意思一样。',
+  },
+  {
+    title: '打开 remotepro-toolkit',
+    desc: '到编辑器的 MCP / 工具 设置里，找到名字以 remotepro-toolkit 开头的项，打开开关。有的软件第一次默认关着，不打开 AI 就查不了文档、也看不到手机。',
+  },
+  {
+    title: '用中文把需求说清楚',
+    desc: '写清 App 名字、从哪一页开始、要点哪些按钮。一次做一个功能，跑通再加。下面有一段可直接复制。',
+  },
+];
+
+const AGENT_CAN = [
+  { title: '查接口文档', desc: '点击、滑动、找控件、识别文字，AI 会自己翻文档再写，不用你记接口名字。' },
+  { title: '检查调试环境', desc: '缺插件或工具链时，AI 可以检测，并在你同意后帮你装。' },
+  { title: '看已连接手机', desc: '确认扩展里已经连上设备，避免对着空设备写脚本。' },
+  { title: '按步骤改代码', desc: '把流程告诉它，它会改项目里的主文件，并尽量让代码能编过。' },
+];
+
+const AGENT_PROMPT = `我用远控Pro写自动化脚本。
+请帮我写：打开「微信」，点搜索，输入「文件传输助手」，点进去，发送「你好」。`;
 
 function Kbd({ children }: { children: string }) {
   return <code className="kbd">{children}</code>;
@@ -177,11 +231,14 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         </h1>
         <p className="guide-lead">
           这个扩展装在电脑上的代码编辑器里，用来写自动化脚本、连越狱 iPhone、边写边调试，再编译发布到手机。
-          下面按「先准备 → 选编辑器安装 → 跟着点」的顺序来，不需要会编程也能走完第一遍。
+          下面按「先准备 → 选编辑器安装 → 跟着点」的顺序来。不会写代码也没关系：装好后可以用 AI Agent，用中文描述需求，让它帮你写。
         </p>
         <div className="guide-hero-actions">
           <a className="hero-cta" href="#install">
             开始安装
+          </a>
+          <a className="hero-cta-ghost" href="#agent">
+            不会写代码？用 AI
           </a>
           <a className="hero-cta-ghost" href={vsixHref || '/#download'}>
             下载 .vsix 扩展
@@ -216,7 +273,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <CodeOutlined />
             <h3>一个支持的编辑器</h3>
             <p>
-              VS Code、Cursor、Trae、Qoder、Windsurf、Kiro 都可以。选一个你已经在用的；没有的话，VS Code 最适合入门。
+              VS Code、Cursor、Trae、Qoder、Windsurf、Kiro 都可以。想自己写代码用 VS Code；想让 AI 帮写，选 Cursor 或 Trae 更省事。
             </p>
           </article>
         </div>
@@ -274,6 +331,68 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
               </li>
               <li>
                 按 F5 没反应：先点「配置调试环境」等到「已就绪」。Swift / Objective-C 的本地调试只支持 Mac。
+              </li>
+            </ul>
+          }
+        />
+      </section>
+
+      <section className="guide-section" id="agent">
+        <div className="section-head">
+          <p className="section-kicker">不会写代码也行</p>
+          <h2>用 AI Agent 帮你写脚本</h2>
+          <p>大多数同学没接触过。一句话：你用中文说要做什么，AI 自己查文档、改文件、检查有没有连上手机</p>
+        </div>
+
+        <div className="guide-prep">
+          {AGENT_IDEAS.map((item) => (
+            <article className="guide-card" key={item.title}>
+              {item.icon}
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="guide-flow guide-flow-follow">
+          {AGENT_STEPS.map((step, index) => (
+            <article className="guide-flow-item" key={step.title}>
+              <div className="guide-flow-index">{index + 1}</div>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <h3 className="guide-subhead">第一次不知道说什么，复制这段</h3>
+        <p className="guide-sublead">贴到对话窗口，把「微信」和后面的步骤改成你自己的 App 和流程即可。</p>
+        <pre className="guide-prompt">{AGENT_PROMPT}</pre>
+
+        <h3 className="guide-subhead">打开工具箱之后，AI 能帮你干什么</h3>
+        <div className="guide-tool-grid guide-agent-can">
+          {AGENT_CAN.map((item) => (
+            <div key={item.title}>
+              <strong>{item.title}</strong>
+              <span>{item.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <Alert
+          className="guide-alert"
+          type="info"
+          showIcon
+          message="跟 AI 说话的几个习惯"
+          description={
+            <ul>
+              <li>一次只做一个功能，跑通再加下一步，比一次丢一整份需求更稳。</li>
+              <li>说清 App 名字、从哪一页开始、要点哪个字或哪个按钮。越具体，点错的越少。</li>
+              <li>AI 改完你先看一眼主文件，再按 F5。它偶尔会写偏，盯一眼比事后排查省事。</li>
+              <li>
+                新建项目时已经带了给 AI 看的说明（<code>AGENTS.md</code>
+                ），不用自己配。你只要打开 Agent，并打开 remotepro-toolkit。
               </li>
             </ul>
           }
@@ -340,7 +459,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <div className="section-head">
           <p className="section-kicker">写脚本</p>
           <h2>可以选哪些语言</h2>
-          <p>新建项目时会让你选。不确定就先用 Python</p>
+          <p>新建项目时会让你选。不确定就先用 Python；也可以让 AI Agent 按当前语言来写</p>
         </div>
         <div className="guide-lang-grid">
           {LANGUAGES.map((lang) => (
@@ -390,6 +509,26 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
               在构建列表里对该版本点「分享」或「发布」，再用手机端扫码 / 打开链接订阅。分享是这一版自己的链接，换版本链接也换；发布全项目只有一条链接，始终对应你设成发布的那个版本。
             </p>
           </details>
+          <details>
+            <summary>AI 只回文字，不改我的文件？</summary>
+            <p>
+              对话模式多半还停在 Ask / 聊天。改成 Agent（Trae 常叫 Builder，Windsurf 叫 Cascade）。同时还要打开{' '}
+              <code>remotepro-toolkit</code>，否则它查不了文档，更容易空聊。
+            </p>
+          </details>
+          <details>
+            <summary>AI 让我先开启 MCP / remotepro-toolkit？</summary>
+            <p>
+              正常。到编辑器设置里找「MCP」或「工具」，打开名字以 <code>remotepro-toolkit</code>{' '}
+              开头的那一项。要先装好远控Pro扩展并打开项目，这项才会出现。找不到就重载窗口再看一次。
+            </p>
+          </details>
+          <details>
+            <summary>VS Code 能用 AI Agent 吗？</summary>
+            <p>
+              可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、Windsurf 或 Kiro，打开就能对话写代码。
+            </p>
+          </details>
         </div>
       </section>
 
@@ -397,11 +536,18 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <CheckCircleOutlined />
         <div>
           <h2>跑通之后做什么</h2>
-          <p>查点击、滑动、截图、找控件等接口，对照文档写你的第一条真正业务脚本。</p>
+          <p>
+            对照文档写第一条真正业务脚本；也可以打开{' '}
+            <a href="#agent">AI Agent</a>
+            ，用中文描述流程让它写。
+          </p>
         </div>
         <div className="guide-next-actions">
           <Button type="primary" size="large" href={DOCS_URL} target="_blank" icon={<BookOutlined />}>
             打开 API 文档
+          </Button>
+          <Button size="large" href="#agent" icon={<RobotOutlined />}>
+            用 AI 写脚本
           </Button>
           <Button size="large" href="/#download" icon={<PlayCircleOutlined />}>
             返回下载页

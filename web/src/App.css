@@ -1161,6 +1161,40 @@ a {
   gap: 12px;
 }
 
+.guide-flow-follow {
+  margin-top: 18px;
+}
+
+.guide-subhead {
+  margin: 28px 0 8px;
+  font-size: 16px;
+}
+
+.guide-sublead {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.guide-prompt {
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px dashed rgba(139, 92, 246, 0.42);
+  background: rgba(15, 23, 42, 0.65);
+  color: #e2e8f0;
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.guide-agent-can {
+  margin-top: 12px;
+}
+
 .guide-flow-item {
   display: flex;
   gap: 16px;
@@ -1277,6 +1311,15 @@ a {
   line-height: 1.7;
 }
 
+.guide-faq code,
+.guide-alert code {
+  padding: 0 5px;
+  border-radius: 6px;
+  background: #1e293b;
+  font-size: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
 .guide-next {
   margin-top: 56px;
   padding: 28px 24px;
@@ -1302,6 +1345,10 @@ a {
 .guide-next p {
   margin: 0;
   color: var(--muted);
+}
+
+.guide-next a {
+  color: #93c5fd;
 }
 
 .guide-next-actions {
