@@ -6,6 +6,7 @@ WORKDIR /usr/share/caddy
 
 COPY index.html ./
 COPY assets ./assets
+COPY docs ./docs
 
 COPY favicon.ico Release* Packages* CydiaIcon* ./
 # COPY debs ./debs

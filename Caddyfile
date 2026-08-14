@@ -67,3 +67,16 @@ aj.remotepro.cn {
     
     file_server
 }
+
+docs.remotepro.cn {
+    root * /usr/share/caddy/docs
+    encode gzip zstd
+
+    @hashed path /assets/*
+    header @hashed Cache-Control "public, max-age=31536000, immutable"
+
+    @uncached not path /assets/*
+    header @uncached Cache-Control "no-cache"
+
+    file_server
+}
