@@ -3,19 +3,20 @@ import { Button, Drawer } from 'antd';
 import { DesktopOutlined, DownloadOutlined, MenuOutlined } from '@ant-design/icons';
 
 const links = [
-  { href: '#', label: '首页' },
-  { href: '#features', label: '核心功能' },
-  { href: '#faq', label: '常见问题' },
+  { href: '/', label: '首页', page: 'home' as const },
+  { href: '/#features', label: '核心功能' },
+  { href: '/guide', label: '使用教程', page: 'guide' as const },
+  { href: '/#faq', label: '常见问题' },
   { href: 'https://docs.remotepro.cn/', label: 'API文档', external: true },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ page }: { page: 'home' | 'guide' }) {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="site-header">
       <div className="container">
-        <a className="brand" href="#">
+        <a className="brand" href="/">
           <span className="brand-mark">
             <DesktopOutlined />
           </span>
@@ -27,6 +28,7 @@ export function SiteHeader() {
             <a
               key={link.label}
               href={link.href}
+              className={link.page && link.page === page ? 'active' : undefined}
               {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               {link.label}
@@ -35,7 +37,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <Button className="header-cta" type="primary" href="#download" icon={<DownloadOutlined />}>
+          <Button className="header-cta" type="primary" href="/#download" icon={<DownloadOutlined />}>
             立即下载
           </Button>
           <Button
@@ -54,13 +56,14 @@ export function SiteHeader() {
             <a
               key={link.label}
               href={link.href}
+              className={link.page && link.page === page ? 'active' : undefined}
               onClick={() => setOpen(false)}
               {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
             >
               {link.label}
             </a>
           ))}
-          <a className="drawer-cta" href="#download" onClick={() => setOpen(false)}>
+          <a className="drawer-cta" href="/#download" onClick={() => setOpen(false)}>
             立即下载
           </a>
         </nav>

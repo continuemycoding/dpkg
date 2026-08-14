@@ -52,6 +52,26 @@ const items = [
       </p>
     ),
   },
+  {
+    key: 'vsix',
+    label: (
+      <span>
+        <QuestionCircleOutlined style={{ color: '#60a5fa', marginRight: 10 }} />
+        脚本开发扩展怎么用？
+      </span>
+    ),
+    children: (
+      <p>
+        从本站下载 <span style={{ color: '#c4b5fd', fontWeight: 600 }}>.vsix</span> 文件，在 VS Code、Cursor、Trae、Qoder、Windsurf 或 Kiro 里用「从 VSIX 安装」。
+        <br />
+        详细逐步说明见{' '}
+        <a href="/guide" style={{ color: '#93c5fd', fontWeight: 600 }}>
+          使用教程
+        </a>
+        。
+      </p>
+    ),
+  },
 ];
 
 export function FAQ() {

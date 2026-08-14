@@ -21,6 +21,9 @@ export function SiteFooter({ onOpenLegal }: SiteFooterProps) {
           </div>
         </div>
         <div className="footer-links">
+          <Button type="text" href="/guide">
+            使用教程
+          </Button>
           <Button type="text" href="https://docs.remotepro.cn/" target="_blank" rel="noopener noreferrer">
             API文档
           </Button>

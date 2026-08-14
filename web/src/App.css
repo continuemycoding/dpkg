@@ -513,7 +513,20 @@ a {
 
 .vsix-wrap {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.vsix-guide-link {
+  color: #c4b5fd;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.vsix-guide-link:hover {
+  color: #ede9fe;
 }
 
 .history-row {
@@ -840,7 +853,8 @@ a {
   border-radius: 10px;
 }
 
-.drawer-links a:hover {
+.drawer-links a:hover,
+.drawer-links a.active {
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -975,5 +989,356 @@ a {
   .gradient-text,
   .hero-badge-dot {
     animation: none;
+  }
+}
+
+.guide {
+  padding: 56px 0 80px;
+}
+
+.guide-hero {
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+
+.guide-hero h1 {
+  margin: 12px 0 16px;
+  font-size: clamp(32px, 4.6vw, 52px);
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -0.038em;
+}
+
+.guide-lead {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.guide-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.guide-section {
+  margin-top: 56px;
+}
+
+.guide-prep,
+.guide-split {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.guide-split {
+  grid-template-columns: 1fr 1fr;
+}
+
+.guide-card {
+  padding: 22px 20px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+}
+
+.guide-card .anticon {
+  font-size: 22px;
+  color: #93c5fd;
+  margin-bottom: 12px;
+}
+
+.guide-card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.guide-card p,
+.guide-card li {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.guide-card a {
+  color: #93c5fd;
+}
+
+.guide-ide-tabs {
+  margin-top: 8px;
+}
+
+.guide-ide-tabs .ant-tabs-nav {
+  margin-bottom: 18px;
+}
+
+.guide-ide-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+  padding: 2px 0;
+}
+
+.guide-ide-tab small {
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 11px;
+}
+
+.guide-ide {
+  padding: 8px 2px 4px;
+}
+
+.guide-ide h3 {
+  margin: 22px 0 10px;
+  font-size: 16px;
+}
+
+.guide-ide p,
+.guide-ide li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.guide-ide-blurb {
+  margin: 0 0 12px;
+  color: #e2e8f0;
+  font-size: 16px;
+}
+
+.guide-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guide-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.guide-steps p {
+  margin: 4px 0 0;
+}
+
+.guide-step-index {
+  flex: 0 0 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.18);
+  color: #93c5fd;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.guide-bullets {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guide-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guide-flow-item {
+  display: flex;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+}
+
+.guide-flow-index {
+  flex: 0 0 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-weight: 800;
+}
+
+.guide-flow-item h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.guide-flow-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.guide-alert {
+  margin-top: 18px;
+  border-radius: 16px !important;
+}
+
+.guide-alert ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.guide-alert li + li {
+  margin-top: 6px;
+}
+
+.guide-tool-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.guide-tool-grid div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.guide-tool-grid strong {
+  font-size: 13px;
+}
+
+.guide-tool-grid span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.guide-lang-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.guide-lang {
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+}
+
+.guide-lang strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.guide-lang span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.guide-faq details {
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--glass);
+  margin-bottom: 10px;
+}
+
+.guide-faq summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.guide-faq p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.guide-next {
+  margin-top: 56px;
+  padding: 28px 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.16), rgba(15, 23, 42, 0.4));
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.guide-next .anticon {
+  font-size: 28px;
+  color: #86efac;
+}
+
+.guide-next h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+
+.guide-next p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.guide-next-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .guide-prep,
+  .guide-split,
+  .guide-lang-grid,
+  .guide-next {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-tool-grid,
+  .guide-lang-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .guide {
+    padding-top: 28px;
+  }
+
+  .guide-hero-actions {
+    justify-content: stretch;
+  }
+
+  .guide-hero-actions a {
+    flex: 1;
+  }
+
+  .guide-tool-grid,
+  .guide-lang-grid {
+    grid-template-columns: 1fr;
   }
 }

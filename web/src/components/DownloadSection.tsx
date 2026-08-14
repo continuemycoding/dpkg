@@ -60,15 +60,18 @@ export function VsixZone({ state }: { state: PlatformState }) {
         <span className="zone-tag">
           <CodeOutlined /> 脚本开发扩展
         </span>
-        <p>在 VS Code 或 Cursor 中安装，用于编写、调试与部署自动化脚本。</p>
+        <p>在 VS Code、Cursor、Trae、Qoder、Windsurf、Kiro 中安装，用于编写、调试与部署自动化脚本。</p>
       </div>
       <div className="vsix-wrap">
         <DownloadButton
           state={state}
           icon={<CodeOutlined />}
-          subtitle="VS Code / Cursor · 扩展"
+          subtitle="VS Code 及兼容编辑器 · 扩展"
           className="btn-vsix"
         />
+        <a className="vsix-guide-link" href="/guide">
+          不会装？看小白教程 →
+        </a>
       </div>
     </section>
   );

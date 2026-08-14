@@ -1,0 +1,413 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Alert, Button, Tabs } from 'antd';
+import {
+  BookOutlined,
+  CheckCircleOutlined,
+  CodeOutlined,
+  DesktopOutlined,
+  DownloadOutlined,
+  FolderOpenOutlined,
+  MobileOutlined,
+  PlayCircleOutlined,
+  ToolOutlined,
+} from '@ant-design/icons';
+import type { PlatformState } from '../api/releases';
+import { IDES, isIdeId, type IdeId } from '../guide/ides';
+
+const DOCS_URL = 'https://docs.remotepro.cn/';
+
+const LANGUAGES = [
+  { name: 'Python', hint: '最适合入门，语法简单' },
+  { name: 'JavaScript', hint: '改完就能跑，适合自用' },
+  { name: 'TypeScript', hint: '有类型提示，更好维护' },
+  { name: 'Lua', hint: '轻量，写自动化很快' },
+  { name: 'C#', hint: '推荐对外分发' },
+  { name: 'C++', hint: '性能高，推荐对外分发' },
+  { name: 'Rust', hint: '安全且难逆向' },
+  { name: 'Go', hint: '语法简洁，适合分发' },
+  { name: 'Swift', hint: 'iOS 原生；本地调试仅 macOS' },
+  { name: 'Objective-C', hint: 'iOS 原生；本地调试仅 macOS' },
+];
+
+const FIRST_STEPS = [
+  {
+    title: '打开「远控Pro」侧栏',
+    desc: '看编辑器最左边那一列图标（活动栏），点「远控Pro」。侧栏顶部有两个页签：编译部署、设备管理。',
+  },
+  {
+    title: '新建一个项目',
+    desc: '在「编译部署」里点「新建项目」，先选语言。小白建议选 Python 或 JavaScript。接着选模板、填项目名、选保存文件夹。编辑器会打开这个新文件夹。',
+  },
+  {
+    title: '连上你的手机',
+    desc: '切到「设备管理」，点「扫描局域网」。出现设备后点「连接」。电脑和手机要在同一 Wi‑Fi；手机上需要安装「远控Pro」被控端。',
+  },
+  {
+    title: '配置调试环境',
+    desc: '回到「编译部署」，展开「调试环境」，点「配置调试环境」。扩展会自动安装该语言需要的插件和工具。弹窗让你重载窗口时，选重载。变成「已就绪」就可以了。',
+  },
+  {
+    title: '按 F5 在本地跑起来',
+    desc: '打开项目里的主文件（例如 Python 的 src/main.py），按F5，脚本会连到手机执行，并可断点调试。',
+  },
+  {
+    title: '远程编译并发布到手机',
+    desc: '在「编译」卡片点「开始编译」。完成后打开「构建列表」：分享是某个版本自己的链接，每个版本各有一条；发布全项目只有一条链接，始终指向你设成发布的那个版本。手机端扫码订阅即可使用。',
+  },
+];
+
+const TOOLS = [
+  { title: '实时控制', desc: '在编辑器里看手机画面，并直接点击、滑动。' },
+  { title: '元素查找', desc: '查看界面控件树，复制控件信息，方便脚本定位按钮。' },
+  { title: '文字识别', desc: '把屏幕上的字认出来，适合找「登录」「确定」这类文字。' },
+  { title: '找图找色', desc: '按图片或颜色找位置，适合没有现成控件的界面。' },
+  { title: '目标检测', desc: '用模型识别屏幕上的物体，适合更复杂的场景。' },
+  { title: '接口日志', desc: '查看脚本调用了哪些设备接口，排查问题时很有用。' },
+];
+
+function Kbd({ children }: { children: string }) {
+  return <code className="kbd">{children}</code>;
+}
+
+function StepList({ steps }: { steps: { title: string; body: string }[] }) {
+  return (
+    <ol className="guide-steps">
+      {steps.map((step, index) => (
+        <li key={step.title}>
+          <span className="guide-step-index">{index + 1}</span>
+          <div>
+            <strong>{step.title}</strong>
+            <p>{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function IdePanel({
+  ide,
+  vsixHref,
+}: {
+  ide: (typeof IDES)[number];
+  vsixHref?: string;
+}) {
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/i.test(navigator.platform);
+  const mod = isMac ? '⌘' : 'Ctrl';
+  const shift = isMac ? '⇧' : 'Shift';
+
+  return (
+    <div className="guide-ide">
+      <p className="guide-ide-blurb">{ide.blurb}</p>
+
+      <h3>1. 安装 {ide.name}</h3>
+      <p>
+        打开官网下载并安装：{' '}
+        <a href={ide.downloadUrl} target="_blank" rel="noopener noreferrer">
+          {ide.downloadLabel}
+        </a>
+        。装好后从开始菜单或启动台打开它。
+      </p>
+
+      <h3>2. 下载远控Pro扩展</h3>
+      <p>
+        点下面按钮下载 <code>.vsix</code> 文件。它不是安装包，下一步要把它装进 {ide.name}。
+      </p>
+      <p>
+        <Button type="primary" href={vsixHref || '/#download'} icon={<DownloadOutlined />}>
+          {vsixHref ? '下载远控Pro扩展 (.vsix)' : '去首页下载扩展'}
+        </Button>
+      </p>
+
+      <h3>3. 装进 {ide.name}</h3>
+      <StepList
+        steps={[
+          {
+            title: '打开扩展视图',
+            body: `按 ${mod}+${shift}+X，或点左侧活动栏里像四块拼图的图标。`,
+          },
+          {
+            title: '打开更多菜单',
+            body: '看扩展视图顶部标题右侧的 ···（三个点），点开。',
+          },
+          {
+            title: '选择从 VSIX 安装',
+            body: '菜单里点「从 VSIX 安装...」或 Install from VSIX...，选出刚才下载的 .vsix 文件。',
+          },
+          {
+            title: '看到远控Pro图标就成功了',
+            body: '若提示「重新加载」，点它。左侧活动栏出现「远控Pro」图标后，就可以往下跟着做了。',
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
+export function GuidePage({ vsix }: { vsix: PlatformState }) {
+  const vsixHref = vsix.latest?.url;
+  const initialIde = useMemo(() => {
+    const value = new URLSearchParams(window.location.search).get('ide');
+    return isIdeId(value) ? value : 'vscode';
+  }, []);
+  const [ide, setIde] = useState<IdeId>(initialIde);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('ide', ide);
+    window.history.replaceState({}, '', `${url.pathname}?${url.searchParams.toString()}${url.hash}`);
+  }, [ide]);
+
+  useEffect(() => {
+    const id = window.location.hash.replace(/^#/, '');
+    if (!id) return;
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }, []);
+
+  return (
+    <article className="guide">
+      <header className="guide-hero">
+        <p className="section-kicker">写给第一次用的同学</p>
+        <h1>
+          远控Pro脚本扩展
+          <br />
+          <span className="gradient-text">从小白到跑通</span>
+        </h1>
+        <p className="guide-lead">
+          这个扩展装在电脑上的代码编辑器里，用来写自动化脚本、连越狱 iPhone、边写边调试，再编译发布到手机。
+          下面按「先准备 → 选编辑器安装 → 跟着点」的顺序来，不需要会编程也能走完第一遍。
+        </p>
+        <div className="guide-hero-actions">
+          <a className="hero-cta" href="#install">
+            开始安装
+          </a>
+          <a className="hero-cta-ghost" href={vsixHref || '/#download'}>
+            下载 .vsix 扩展
+          </a>
+        </div>
+      </header>
+
+      <section className="guide-section" id="prep">
+        <div className="section-head">
+          <p className="section-kicker">开始之前</p>
+          <h2>先准备这 3 样</h2>
+          <p>缺一样都连不上手机，建议先勾完再装扩展</p>
+        </div>
+        <div className="guide-prep">
+          <article className="guide-card">
+            <MobileOutlined />
+            <h3>越狱 iPhone + 被控端</h3>
+            <p>
+              手机已越狱，并用 Sileo / Cydia 添加{' '}
+              <a href="/#zone-client">远控Pro软件源</a>
+              ，装好被控端。手机保持亮屏、被控端在运行。
+            </p>
+          </article>
+          <article className="guide-card">
+            <DesktopOutlined />
+            <h3>电脑和手机在一起</h3>
+            <p>
+              同一局域网（同一个 Wi‑Fi）点击扫描局域网最省事，也支持广域网并填设备上的授权码远程连。
+            </p>
+          </article>
+          <article className="guide-card">
+            <CodeOutlined />
+            <h3>一个支持的编辑器</h3>
+            <p>
+              VS Code、Cursor、Trae、Qoder、Windsurf、Kiro 都可以。选一个你已经在用的；没有的话，VS Code 最适合入门。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section className="guide-section" id="install">
+        <div className="section-head">
+          <p className="section-kicker">按编辑器安装</p>
+          <h2>把扩展装进你的 IDE</h2>
+          <p>点下面的名字，只看你正在用的那一款。步骤都是「下载编辑器 → 下载 vsix → 从 VSIX 安装」</p>
+        </div>
+        <Tabs
+          className="guide-ide-tabs"
+          activeKey={ide}
+          onChange={(key) => setIde(key as IdeId)}
+          items={IDES.map((item) => ({
+            key: item.id,
+            label: (
+              <span className="guide-ide-tab">
+                {item.name}
+                <small>{item.tag}</small>
+              </span>
+            ),
+            children: <IdePanel ide={item} vsixHref={vsixHref} />,
+          }))}
+        />
+      </section>
+
+      <section className="guide-section" id="first-run">
+        <div className="section-head">
+          <p className="section-kicker">装好之后</p>
+          <h2>跟着做一遍，跑通第一条脚本</h2>
+          <p>下面这些操作在所有编辑器里都一样</p>
+        </div>
+        <div className="guide-flow">
+          {FIRST_STEPS.map((step, index) => (
+            <article className="guide-flow-item" key={step.title}>
+              <div className="guide-flow-index">{index + 1}</div>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <Alert
+          className="guide-alert"
+          type="info"
+          showIcon
+          message="容易漏的两点"
+          description={
+            <ul>
+              <li>
+                扫描不到设备：确认手机和电脑同一 Wi‑Fi，关闭电脑 VPN 再试。
+              </li>
+              <li>
+                按 F5 没反应：先点「配置调试环境」等到「已就绪」。Swift / Objective-C 的本地调试只支持 Mac。
+              </li>
+            </ul>
+          }
+        />
+      </section>
+
+      <section className="guide-section" id="panels">
+        <div className="section-head">
+          <p className="section-kicker">侧栏说明</p>
+          <h2>两个页签都干什么</h2>
+        </div>
+        <div className="guide-split">
+          <article className="guide-card">
+            <FolderOpenOutlined />
+            <h3>编译部署</h3>
+            <ul className="guide-bullets">
+              <li>
+                <strong>新建项目 / 重置项目</strong>：从模板生成工程；重置会回到模板默认内容。
+              </li>
+              <li>
+                <strong>文档</strong>：打开 API 文档，查点击、滑动、截图等接口。
+              </li>
+              <li>
+                <strong>登录</strong>：可选。登录后项目和构建能在多台电脑间同步。
+              </li>
+              <li>
+                <strong>调试环境</strong>：一键安装 F5 调试需要的扩展和系统工具。
+              </li>
+              <li>
+                <strong>开始编译</strong>：把代码交到云端编译，供手机使用。可勾选自动递增版本号、编译后自动发布。
+              </li>
+              <li>
+                <strong>构建列表</strong>：历史版本。分享对应具体某一版，每版一条固定链接；发布全项目只有一条链接，指向你当前设的版本。
+              </li>
+            </ul>
+          </article>
+          <article className="guide-card">
+            <ToolOutlined />
+            <h3>设备管理</h3>
+            <ul className="guide-bullets">
+              <li>
+                <strong>扫描局域网 / 刷新状态</strong>：找附近的被控端。
+              </li>
+              <li>
+                <strong>手动添加</strong>：填 IP、端口；远程控制勾选「广域网」并填写手机「远程调试」页里的授权码。
+              </li>
+              <li>
+                <strong>连接 / 断开</strong>：连上之后才能调试和用下面这些工具。
+              </li>
+            </ul>
+            <div className="guide-tool-grid">
+              {TOOLS.map((tool) => (
+                <div key={tool.title}>
+                  <strong>{tool.title}</strong>
+                  <span>{tool.desc}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="guide-section" id="langs">
+        <div className="section-head">
+          <p className="section-kicker">写脚本</p>
+          <h2>可以选哪些语言</h2>
+          <p>新建项目时会让你选。不确定就先用 Python</p>
+        </div>
+        <div className="guide-lang-grid">
+          {LANGUAGES.map((lang) => (
+            <div className="guide-lang" key={lang.name}>
+              <strong>{lang.name}</strong>
+              <span>{lang.hint}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="guide-section" id="troubleshoot">
+        <div className="section-head">
+          <p className="section-kicker">卡住了</p>
+          <h2>常见问题</h2>
+        </div>
+        <div className="guide-faq">
+          <details open>
+            <summary>扩展视图里搜不到「远控Pro」？</summary>
+            <p>
+              正常。它目前通过 .vsix 文件安装，不会出现在 VS Code / Cursor 等扩展市场里。请用扩展视图右上角 ··· →
+              「从 VSIX 安装」。
+            </p>
+          </details>
+          <details>
+            <summary>装完左侧没有远控Pro图标？</summary>
+            <p>
+              打开命令面板（<Kbd>Ctrl+Shift+P</Kbd> 或 Mac <Kbd>⌘⇧P</Kbd>），输入 Reload Window 并回车。
+            </p>
+          </details>
+          <details>
+            <summary>扫描不到手机？</summary>
+            <p>
+              手机已装被控端且在运行；电脑关掉 VPN；双方同一 Wi‑Fi。仍不行就手动添加 IP，端口填 65322。广域网需要在手机的远程调试页面打开，并填写授权码。
+            </p>
+          </details>
+          <details>
+            <summary>配置调试环境失败？</summary>
+            <p>
+              点卡片里的失败步骤看日志。常见原因是网络中断或工具链下载失败，点「重新检查」或再点一次「配置调试环境」。Windows 上装 C++ / Rust
+              工具链会比较久，请等它走完。
+            </p>
+          </details>
+          <details>
+            <summary>编译成功了，手机上没有脚本？</summary>
+            <p>
+              在构建列表里对该版本点「分享」或「发布」，再用手机端扫码 / 打开链接订阅。分享是这一版自己的链接，换版本链接也换；发布全项目只有一条链接，始终对应你设成发布的那个版本。
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section className="guide-next">
+        <CheckCircleOutlined />
+        <div>
+          <h2>跑通之后做什么</h2>
+          <p>查点击、滑动、截图、找控件等接口，对照文档写你的第一条真正业务脚本。</p>
+        </div>
+        <div className="guide-next-actions">
+          <Button type="primary" size="large" href={DOCS_URL} target="_blank" icon={<BookOutlined />}>
+            打开 API 文档
+          </Button>
+          <Button size="large" href="/#download" icon={<PlayCircleOutlined />}>
+            返回下载页
+          </Button>
+        </div>
+      </section>
+    </article>
+  );
+}

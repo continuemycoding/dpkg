@@ -27,7 +27,7 @@
 
     handle {
         @should_redirect {
-            not path / /favicon.ico /Release* /Packages* /CydiaIcon* /assets/*
+            not path / /guide /guide/* /favicon.ico /Release* /Packages* /CydiaIcon* /assets/*
         }
 
         # 这里的 {uri} 会保留原始目录结构
@@ -37,6 +37,11 @@
 
 remotepro.cn {
     root * /usr/share/caddy
+
+    handle /guide* {
+        rewrite * /index.html
+        file_server
+    }
 
     import cdn_redir
 
