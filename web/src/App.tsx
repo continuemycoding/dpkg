@@ -24,7 +24,7 @@ function HomePage() {
       <div className="page-inner">
         <SiteHeader />
         <main className="container">
-          <Hero />
+          <Hero vsix={releases.vsix} />
           <DownloadSection releases={releases} onOpenHistory={() => setHistoryOpen(true)} />
           <Features />
           <FAQ />

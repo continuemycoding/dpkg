@@ -1,4 +1,5 @@
 import { Button } from 'antd';
+import { DesktopOutlined } from '@ant-design/icons';
 
 export type LegalType = 'about' | 'terms' | 'privacy';
 
@@ -10,6 +11,15 @@ export function SiteFooter({ onOpenLegal }: SiteFooterProps) {
   return (
     <footer className="site-footer">
       <div className="container">
+        <div className="footer-brand">
+          <span className="brand-mark">
+            <DesktopOutlined />
+          </span>
+          <div>
+            <strong>远控Pro</strong>
+            <p>专业级 iOS 设备批量投屏与群控</p>
+          </div>
+        </div>
         <div className="footer-links">
           <Button type="text" onClick={() => onOpenLegal('about')}>
             关于我们

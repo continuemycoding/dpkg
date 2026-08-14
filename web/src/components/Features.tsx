@@ -68,6 +68,7 @@ export function Features() {
     <>
       <section className="section">
         <div className="section-head">
+          <p className="section-kicker">快速上手</p>
           <h2>三步开始使用</h2>
           <p>从安装到连接，流程清晰直观</p>
         </div>
@@ -82,8 +83,9 @@ export function Features() {
         </div>
       </section>
 
-      <section className="section" id="features" style={{ paddingTop: 12 }}>
+      <section className="section" id="features">
         <div className="section-head">
+          <p className="section-kicker">产品能力</p>
           <h2>核心功能亮点</h2>
           <p>摒弃繁杂，专注于稳定连接与高效操作</p>
         </div>

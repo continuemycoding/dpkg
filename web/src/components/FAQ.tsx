@@ -58,6 +58,7 @@ export function FAQ() {
   return (
     <section className="section" id="faq">
       <div className="section-head">
+        <p className="section-kicker">使用须知</p>
         <h2>常见问题</h2>
         <p>使用前的常见疑问解答</p>
       </div>

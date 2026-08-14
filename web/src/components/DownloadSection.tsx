@@ -53,6 +53,27 @@ function DownloadButton({
   );
 }
 
+export function VsixZone({ state }: { state: PlatformState }) {
+  return (
+    <section className="zone zone-dev hero-vsix" id="zone-vsix">
+      <div className="zone-head">
+        <span className="zone-tag">
+          <CodeOutlined /> 脚本开发扩展
+        </span>
+        <p>在 VS Code 或 Cursor 中安装，用于编写、调试与部署自动化脚本。</p>
+      </div>
+      <div className="vsix-wrap">
+        <DownloadButton
+          state={state}
+          icon={<CodeOutlined />}
+          subtitle="VS Code / Cursor · 扩展"
+          className="btn-vsix"
+        />
+      </div>
+    </section>
+  );
+}
+
 function SourceRepo() {
   const { message } = App.useApp();
 
@@ -120,7 +141,7 @@ function SourceRepo() {
 
 export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProps) {
   return (
-    <div className="zones">
+    <div className="zones" id="download">
       <section className="zone zone-control" id="zone-control">
         <div className="zone-head">
           <span className="zone-tag">
@@ -165,34 +186,15 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
         </p>
       </div>
 
-      <div className="sub-zones">
-        <section className="zone zone-dev" id="zone-vsix">
-          <div className="zone-head">
-            <span className="zone-tag">
-              <CodeOutlined /> 脚本开发扩展
-            </span>
-            <p>在 VS Code 或 Cursor 中安装，用于编写、调试与部署自动化脚本。</p>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <DownloadButton
-              state={releases.vsix}
-              icon={<CodeOutlined />}
-              subtitle="VS Code / Cursor · 扩展"
-              className="btn-vsix"
-            />
-          </div>
-        </section>
-
-        <section className="zone zone-client" id="zone-client">
-          <div className="zone-head">
-            <span className="zone-tag">
-              <MobileOutlined /> 被控端
-            </span>
-            <p>在被控的越狱 iPhone 上使用 Sileo 或 Cydia 添加源，安装被控端软件。</p>
-          </div>
-          <SourceRepo />
-        </section>
-      </div>
+      <section className="zone zone-client" id="zone-client">
+        <div className="zone-head">
+          <span className="zone-tag">
+            <MobileOutlined /> 被控端
+          </span>
+          <p>在被控的越狱 iPhone 上使用 Sileo 或 Cydia 添加源，安装被控端软件。</p>
+        </div>
+        <SourceRepo />
+      </section>
     </div>
   );
 }

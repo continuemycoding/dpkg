@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
-import { DesktopOutlined, MenuOutlined } from '@ant-design/icons';
+import { DesktopOutlined, DownloadOutlined, MenuOutlined } from '@ant-design/icons';
 
 const links = [
   { href: '#', label: '首页' },
@@ -29,13 +29,18 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Button
-          className="menu-btn"
-          type="text"
-          aria-label="打开菜单"
-          icon={<MenuOutlined />}
-          onClick={() => setOpen(true)}
-        />
+        <div className="header-actions">
+          <Button className="header-cta" type="primary" href="#download" icon={<DownloadOutlined />}>
+            立即下载
+          </Button>
+          <Button
+            className="menu-btn"
+            type="text"
+            aria-label="打开菜单"
+            icon={<MenuOutlined />}
+            onClick={() => setOpen(true)}
+          />
+        </div>
       </div>
 
       <Drawer title="远控Pro" placement="right" open={open} onClose={() => setOpen(false)} width={280}>
@@ -45,6 +50,9 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
+          <a className="drawer-cta" href="#download" onClick={() => setOpen(false)}>
+            立即下载
+          </a>
         </nav>
       </Drawer>
     </header>
