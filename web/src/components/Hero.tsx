@@ -22,8 +22,8 @@ export function Hero({ vsix }: { vsix: PlatformState }) {
           <a className="hero-cta" href="#download">
             立即下载
           </a>
-          <a className="hero-cta-ghost" href="#features">
-            了解功能
+          <a className="hero-cta-ghost" href="https://docs.remotepro.cn/" target="_blank" rel="noopener noreferrer">
+            API文档
           </a>
         </div>
         <div className="hero-stats">

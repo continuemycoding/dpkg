@@ -6,6 +6,7 @@ const links = [
   { href: '#', label: '首页' },
   { href: '#features', label: '核心功能' },
   { href: '#faq', label: '常见问题' },
+  { href: 'https://docs.remotepro.cn/', label: 'API文档', external: true },
 ];
 
 export function SiteHeader() {
@@ -23,7 +24,11 @@ export function SiteHeader() {
 
         <nav className="nav-links">
           {links.map((link) => (
-            <a key={link.label} href={link.href}>
+            <a
+              key={link.label}
+              href={link.href}
+              {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
               {link.label}
             </a>
           ))}
@@ -46,7 +51,12 @@ export function SiteHeader() {
       <Drawer title="远控Pro" placement="right" open={open} onClose={() => setOpen(false)} width={280}>
         <nav className="drawer-links">
           {links.map((link) => (
-            <a key={link.label} href={link.href} onClick={() => setOpen(false)}>
+            <a
+              key={link.label}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
               {link.label}
             </a>
           ))}
