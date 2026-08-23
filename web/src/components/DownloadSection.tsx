@@ -118,13 +118,13 @@ function SourceRepo() {
     }
   };
 
-  const panel = (openHref: string, qrValue: string, hint: string, openLabel: string) => (
+  const panel = (openHref: string, qrValue: string, openLabel: string) => (
     <div>
       <div className="repo-qr">
         <QRCode value={qrValue} size={168} bordered={false} />
       </div>
       <Typography.Text className="repo-hint" type="secondary" style={{ display: 'block', textAlign: 'center', marginBottom: 8 }}>
-        {hint}
+        可用手机相机扫码，或不方便扫码时手动输入软件源地址：
       </Typography.Text>
       <Typography.Link className="repo-url" onClick={copyUrl}>
         {SITE_REPO_URL}
@@ -149,12 +149,12 @@ function SourceRepo() {
         {
           key: 'sileo',
           label: 'Sileo',
-          children: panel(SILEO_SOURCE_URL, SILEO_SOURCE_URL, '可用手机相机 APP 扫码，软件源地址：', '用 Sileo 打开'),
+          children: panel(SILEO_SOURCE_URL, SILEO_SOURCE_URL, '用 Sileo 打开'),
         },
         {
           key: 'cydia',
           label: 'Cydia',
-          children: panel(CYDIA_SOURCE_URL, CYDIA_SOURCE_URL, '如不方便扫码，请手动输入软件源地址：', '用 Cydia 打开'),
+          children: panel(CYDIA_SOURCE_URL, CYDIA_SOURCE_URL, '用 Cydia 打开'),
         },
       ]}
     />
