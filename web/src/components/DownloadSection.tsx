@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { App, Button, QRCode, Tabs, Typography } from 'antd';
 import {
   AndroidOutlined,
@@ -19,6 +19,13 @@ import { latestLabel, type PlatformState, type ReleasesMap } from '../api/releas
 const SITE_REPO_URL = 'https://remotepro.cn';
 const SILEO_SOURCE_URL = `sileo://source/${SITE_REPO_URL}`;
 const CYDIA_SOURCE_URL = `cydia://url/https://cydia.saurik.com/api/share#?source=${SITE_REPO_URL}`;
+
+function canOpenJailbreakStore() {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return true;
+  return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+}
 
 interface DownloadSectionProps {
   releases: ReleasesMap;
@@ -88,6 +95,7 @@ export function VsixZone({ state }: { state: PlatformState }) {
 
 function SourceRepo() {
   const { message } = App.useApp();
+  const showOpenButton = useMemo(() => canOpenJailbreakStore(), []);
 
   const copyUrl = async () => {
     try {
@@ -125,9 +133,11 @@ function SourceRepo() {
         <Button icon={<CopyOutlined />} onClick={copyUrl}>
           复制软件源地址
         </Button>
-        <Button href={openHref} icon={<ExportOutlined />}>
-          {openLabel}
-        </Button>
+        {showOpenButton ? (
+          <Button href={openHref} icon={<ExportOutlined />}>
+            {openLabel}
+          </Button>
+        ) : null}
       </div>
     </div>
   );

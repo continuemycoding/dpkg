@@ -254,7 +254,7 @@ a {
   text-decoration: none;
   font-weight: 700;
   letter-spacing: 0.01em;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .hero-cta .anticon,
@@ -262,7 +262,10 @@ a {
   font-size: 15px;
 }
 
-.hero-cta {
+.hero-cta,
+.hero-cta:hover,
+.hero-cta:focus,
+.hero-cta:active {
   color: #fff;
   background: linear-gradient(180deg, #4f8ef7 0%, #2563eb 52%, #1d4ed8 100%);
   border: 1px solid rgba(147, 197, 253, 0.38);
@@ -278,7 +281,10 @@ a {
     inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
-.hero-cta-ghost {
+.hero-cta-ghost,
+.hero-cta-ghost:hover,
+.hero-cta-ghost:focus,
+.hero-cta-ghost:active {
   color: #e2e8f0;
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -287,7 +293,6 @@ a {
 
 .hero-cta-ghost:hover {
   transform: translateY(-2px);
-  color: #fff;
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.24);
 }
@@ -497,6 +502,15 @@ a {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
+.dl-card,
+.dl-card:hover,
+.dl-card:focus,
+.dl-card:active,
+.dl-card:visited {
+  color: var(--text);
+  text-decoration: none;
+}
+
 .dl-card::before {
   content: '';
   position: absolute;
@@ -559,6 +573,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--text);
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -568,6 +583,24 @@ a {
   color: #a8b4c8;
   font-size: 12px;
   font-weight: 500;
+}
+
+.dl-card:hover .dl-card-copy strong,
+.dl-card:focus .dl-card-copy strong,
+.dl-card:active .dl-card-copy strong {
+  color: var(--text);
+}
+
+.dl-card:hover .dl-card-copy small,
+.dl-card:focus .dl-card-copy small,
+.dl-card:active .dl-card-copy small {
+  color: #a8b4c8;
+}
+
+.dl-card:hover .dl-card-icon,
+.dl-card:focus .dl-card-icon,
+.dl-card:active .dl-card-icon {
+  color: var(--dl-accent);
 }
 
 .dl-card-go {
