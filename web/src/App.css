@@ -246,30 +246,56 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-width: 132px;
   height: 48px;
   padding: 0 22px;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 700;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.hero-cta .anticon,
+.hero-cta-ghost .anticon {
+  font-size: 15px;
 }
 
 .hero-cta {
   color: #fff;
-  background: linear-gradient(180deg, #60a5fa, #2563eb);
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.38);
+  background: linear-gradient(180deg, #4f8ef7 0%, #2563eb 52%, #1d4ed8 100%);
+  border: 1px solid rgba(147, 197, 253, 0.38);
+  box-shadow:
+    0 12px 28px rgba(37, 99, 235, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
 }
 
-.hero-cta:hover,
-.hero-cta-ghost:hover {
+.hero-cta:hover {
   transform: translateY(-2px);
+  box-shadow:
+    0 16px 32px rgba(37, 99, 235, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
 .hero-cta-ghost {
   color: #e2e8f0;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.hero-cta-ghost:hover {
+  transform: translateY(-2px);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.hero-cta:focus-visible,
+.hero-cta-ghost:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 3px;
 }
 
 .hero-stats {
@@ -325,7 +351,7 @@ a {
   animation: rise 0.9s ease 0.08s both;
 }
 
-.hero-vsix .btn-vsix {
+.hero-vsix .dl-card {
   min-width: 0;
   width: 100%;
 }
@@ -440,85 +466,167 @@ a {
 .download-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
-.download-btn {
-  display: flex !important;
+.download-grid .dl-card-go {
+  display: none;
+}
+
+.dl-card {
+  --dl-accent: #60a5fa;
+  --dl-glow: rgba(59, 130, 246, 0.28);
+  position: relative;
+  display: flex;
   align-items: center;
-  justify-content: flex-start !important;
-  gap: 12px;
-  height: auto !important;
-  min-height: 76px;
-  padding: 14px 16px !important;
-  border-radius: 18px !important;
+  gap: 14px;
+  min-height: 82px;
+  padding: 16px 16px 16px 18px;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
   text-align: left;
-  white-space: normal !important;
-  box-shadow: none !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease !important;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--dl-accent) 28%, rgba(255, 255, 255, 0.08));
+  background: rgba(12, 18, 34, 0.72);
+  background-image:
+    radial-gradient(160px 100px at 0% 0%, color-mix(in srgb, var(--dl-accent) 22%, transparent), transparent 68%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
-.download-btn:not(:disabled):hover {
-  transform: translateY(-3px);
-  filter: brightness(1.06);
+.dl-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  bottom: 14px;
+  width: 3px;
+  border-radius: 0 999px 999px 0;
+  background: var(--dl-accent);
+  box-shadow: 0 0 12px var(--dl-glow);
 }
 
-.download-btn .anticon {
-  font-size: 26px;
+.dl-card:hover:not(.is-disabled),
+.dl-card:focus-visible:not(.is-disabled) {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--dl-accent) 55%, rgba(255, 255, 255, 0.12));
+  box-shadow:
+    0 18px 36px -18px var(--dl-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.download-btn-copy {
+.dl-card:focus-visible {
+  outline: 2px solid var(--dl-accent);
+  outline-offset: 3px;
+}
+
+.dl-card.is-disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.dl-card-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  color: var(--dl-accent);
+  font-size: 22px;
+  background: color-mix(in srgb, var(--dl-accent) 20%, rgba(8, 13, 24, 0.65));
+  border: 1px solid color-mix(in srgb, var(--dl-accent) 42%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 8px 16px -12px var(--dl-glow);
+}
+
+.dl-card-copy {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
   line-height: 1.25;
 }
 
-.download-btn-copy small {
-  opacity: 0.75;
+.dl-card-copy strong {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dl-card-copy small {
+  color: #a8b4c8;
   font-size: 12px;
   font-weight: 500;
 }
 
-.download-btn-copy strong {
-  font-size: 15px;
-  font-weight: 700;
+.dl-card-go {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  color: var(--dl-accent);
+  font-size: 13px;
+  background: color-mix(in srgb, var(--dl-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--dl-accent) 28%, transparent);
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-.btn-win {
-  background: linear-gradient(180deg, #3b82f6, #1d4ed8) !important;
-  border-color: transparent !important;
-  box-shadow: 0 12px 24px -10px rgba(37, 99, 235, 0.7) !important;
+.dl-card:hover:not(.is-disabled) .dl-card-go {
+  opacity: 1;
+  background: color-mix(in srgb, var(--dl-accent) 22%, transparent);
 }
 
-.btn-mac,
-.btn-iphone {
-  background: linear-gradient(180deg, #334155, #1e293b) !important;
-  border: 1px solid rgba(148, 163, 184, 0.28) !important;
-  color: #fff !important;
+.dl-win {
+  --dl-accent: #60a5fa;
+  --dl-glow: rgba(59, 130, 246, 0.34);
 }
 
-.btn-android {
-  background: linear-gradient(180deg, #10b981, #047857) !important;
-  border-color: transparent !important;
-  box-shadow: 0 12px 24px -10px rgba(4, 120, 87, 0.65) !important;
+.dl-mac {
+  --dl-accent: #e2e8f0;
+  --dl-glow: rgba(226, 232, 240, 0.2);
 }
 
-.btn-vsix {
-  background: linear-gradient(180deg, #8b5cf6, #6d28d9) !important;
-  border-color: transparent !important;
+.dl-android {
+  --dl-accent: #4ade80;
+  --dl-glow: rgba(74, 222, 128, 0.28);
+}
+
+.dl-iphone {
+  --dl-accent: #22d3ee;
+  --dl-glow: rgba(34, 211, 238, 0.28);
+}
+
+.dl-vsix {
+  --dl-accent: #a78bfa;
+  --dl-glow: rgba(167, 139, 250, 0.34);
   min-width: 280px;
-  box-shadow: 0 12px 24px -10px rgba(109, 40, 217, 0.65) !important;
+  min-height: 88px;
 }
 
 .vsix-wrap {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 12px;
+  width: 100%;
 }
 
 .vsix-guide-link {
+  align-self: center;
   color: #c4b5fd;
   font-size: 13px;
   font-weight: 600;
@@ -954,6 +1062,10 @@ a {
     grid-template-columns: 1fr 1fr;
   }
 
+  .download-grid .dl-card-go {
+    display: grid;
+  }
+
   .steps,
   .feature-grid {
     grid-template-columns: 1fr;
@@ -995,7 +1107,7 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .btn-vsix {
+  .dl-vsix {
     min-width: 0;
     width: 100%;
   }
@@ -1012,6 +1124,18 @@ a {
   .gradient-text,
   .hero-badge-dot {
     animation: none;
+  }
+
+  .hero-cta,
+  .hero-cta-ghost,
+  .dl-card {
+    transition: none;
+  }
+
+  .hero-cta:hover,
+  .hero-cta-ghost:hover,
+  .dl-card:hover:not(.is-disabled) {
+    transform: none;
   }
 }
 

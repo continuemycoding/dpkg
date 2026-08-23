@@ -1,4 +1,4 @@
-import { DesktopOutlined, ThunderboltOutlined, WifiOutlined } from '@ant-design/icons';
+import { ApiOutlined, DesktopOutlined, DownloadOutlined, ThunderboltOutlined, WifiOutlined } from '@ant-design/icons';
 import type { PlatformState } from '../api/releases';
 import { VsixZone } from './DownloadSection';
 
@@ -20,6 +20,7 @@ export function Hero({ vsix }: { vsix: PlatformState }) {
         </p>
         <div className="hero-actions">
           <a className="hero-cta" href="#download">
+            <DownloadOutlined />
             立即下载
           </a>
           <a
@@ -28,6 +29,7 @@ export function Hero({ vsix }: { vsix: PlatformState }) {
             target="_blank"
             rel="noopener noreferrer"
           >
+            <ApiOutlined />
             API文档
           </a>
         </div>

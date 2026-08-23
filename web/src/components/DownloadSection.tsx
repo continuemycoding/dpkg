@@ -7,6 +7,7 @@ import {
   CodeOutlined,
   CopyOutlined,
   DesktopOutlined,
+  DownloadOutlined,
   ExportOutlined,
   HistoryOutlined,
   MobileOutlined,
@@ -27,29 +28,37 @@ interface DownloadSectionProps {
 function DownloadButton({
   state,
   icon,
-  subtitle,
-  className,
+  title,
+  variant,
 }: {
   state: PlatformState;
   icon: ReactNode;
-  subtitle: string;
-  className: string;
+  title: string;
+  variant: 'win' | 'mac' | 'android' | 'iphone' | 'vsix';
 }) {
   const href = state.latest?.url;
-  return (
-    <Button
-      className={`download-btn ${className}`}
-      type="primary"
-      size="large"
-      href={href || undefined}
-      disabled={!href}
-      icon={icon}
-    >
-      <span className="download-btn-copy">
-        <small>{subtitle}</small>
-        <strong>{latestLabel(state)}</strong>
+  const className = `dl-card dl-${variant}${href ? '' : ' is-disabled'}`;
+  const inner = (
+    <>
+      <span className="dl-card-icon">{icon}</span>
+      <span className="dl-card-copy">
+        <strong>{title}</strong>
+        <small>{latestLabel(state)}</small>
       </span>
-    </Button>
+      <span className="dl-card-go" aria-hidden>
+        <DownloadOutlined />
+      </span>
+    </>
+  );
+
+  if (!href) {
+    return <span className={className}>{inner}</span>;
+  }
+
+  return (
+    <a className={className} href={href}>
+      {inner}
+    </a>
   );
 }
 
@@ -66,8 +75,8 @@ export function VsixZone({ state }: { state: PlatformState }) {
         <DownloadButton
           state={state}
           icon={<CodeOutlined />}
-          subtitle="VS Code 及兼容编辑器 · 扩展"
-          className="btn-vsix"
+          title="VS Code 及兼容编辑器"
+          variant="vsix"
         />
         <a className="vsix-guide-link" href="/guide">
           不会装？看小白教程 →
@@ -156,26 +165,26 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
           <DownloadButton
             state={releases.win}
             icon={<WindowsOutlined />}
-            subtitle="Windows · 控制端"
-            className="btn-win"
+            title="Windows · 控制端"
+            variant="win"
           />
           <DownloadButton
             state={releases.mac}
             icon={<AppleOutlined />}
-            subtitle="macOS · 控制端"
-            className="btn-mac"
+            title="macOS · 控制端"
+            variant="mac"
           />
           <DownloadButton
             state={releases.android}
             icon={<AndroidOutlined />}
-            subtitle="Android · 控制端"
-            className="btn-android"
+            title="Android · 控制端"
+            variant="android"
           />
           <DownloadButton
             state={releases.iphone}
             icon={<AppstoreOutlined />}
-            subtitle="iPhone · 控制端"
-            className="btn-iphone"
+            title="iPhone · 控制端"
+            variant="iphone"
           />
         </div>
       </section>
