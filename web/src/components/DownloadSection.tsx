@@ -79,7 +79,7 @@ export function VsixZone({ state }: { state: PlatformState }) {
           variant="vsix"
         />
         <a className="vsix-guide-link" href="/guide">
-          不会装？看小白教程 →
+          不会用？看小白教程 →
         </a>
       </div>
     </section>
