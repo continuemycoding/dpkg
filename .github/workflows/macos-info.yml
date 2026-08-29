@@ -1,0 +1,229 @@
+name: macOS Runner Hardware Info
+
+on:
+  workflow_dispatch:
+
+jobs:
+  system-info:
+    runs-on: macos-latest
+
+    steps:
+      - name: Basic system information
+        run: |
+          echo "=============================="
+          echo "Basic System Information"
+          echo "=============================="
+
+          echo "Hostname:"
+          hostname
+
+          echo
+          echo "OS:"
+          sw_vers
+
+          echo
+          echo "Kernel:"
+          uname -a
+
+          echo
+          echo "Architecture:"
+          uname -m
+
+          echo
+          echo "macOS:"
+          system_profiler SPSoftwareDataType
+
+      - name: Hardware information
+        run: |
+          echo "=============================="
+          echo "Hardware Information"
+          echo "=============================="
+
+          echo "Hardware:"
+          system_profiler SPHardwareDataType
+
+      - name: CPU information
+        run: |
+          echo "=============================="
+          echo "CPU Information"
+          echo "=============================="
+
+          sysctl -n machdep.cpu.brand_string 2>/dev/null || true
+
+          echo
+          echo "CPU cores:"
+          sysctl -n hw.ncpu
+
+          echo
+          echo "Physical CPU cores:"
+          sysctl -n hw.physicalcpu
+
+          echo
+          echo "Logical CPU cores:"
+          sysctl -n hw.logicalcpu
+
+          echo
+          echo "CPU architecture:"
+          sysctl -n hw.machine
+
+      - name: Memory information
+        run: |
+          echo "=============================="
+          echo "Memory Information"
+          echo "=============================="
+
+          echo "Physical memory:"
+          sysctl -n hw.memsize | awk '{printf "%.2f GB\n", $1/1024/1024/1024}'
+
+          echo
+          echo "VM statistics:"
+          vm_stat
+
+      - name: GPU information
+        run: |
+          echo "=============================="
+          echo "GPU Information"
+          echo "=============================="
+
+          system_profiler SPDisplaysDataType
+
+      - name: Disk information
+        run: |
+          echo "=============================="
+          echo "Disk Information"
+          echo "=============================="
+
+          df -h /
+
+          echo
+          echo "All disks:"
+          diskutil list
+
+      - name: Developer tools
+        run: |
+          echo "=============================="
+          echo "Developer Tools"
+          echo "=============================="
+
+          echo "Xcode:"
+          xcodebuild -version || true
+
+          echo
+          echo "Swift:"
+          swift --version || true
+
+          echo
+          echo "Clang:"
+          clang --version || true
+
+      - name: Python / Node / package managers
+        run: |
+          echo "=============================="
+          echo "Development Runtime"
+          echo "=============================="
+
+          echo "Python:"
+          python3 --version || true
+
+          echo
+          echo "Node:"
+          node --version || true
+
+          echo
+          echo "Yarn:"
+          yarn --version || true
+
+          echo
+          echo "Homebrew:"
+          brew --version || true
+
+      - name: ML environment
+        run: |
+          echo "=============================="
+          echo "ML Environment"
+          echo "=============================="
+
+          echo "Python executable:"
+          which python3 || true
+
+          echo
+          echo "pip:"
+          python3 -m pip --version || true
+
+          echo
+          echo "PyTorch:"
+          python3 - <<'PY'
+          try:
+              import torch
+              print("PyTorch:", torch.__version__)
+              print("MPS available:", torch.backends.mps.is_available())
+              print("MPS built:", torch.backends.mps.is_built())
+          except Exception as e:
+              print("PyTorch not installed:", e)
+          PY
+
+          echo
+          echo "MLX:"
+          python3 - <<'PY'
+          try:
+              import mlx
+              print("MLX:", mlx.__version__)
+          except Exception as e:
+              print("MLX not installed:", e)
+          PY
+
+      - name: Metal information
+        run: |
+          echo "=============================="
+          echo "Metal Information"
+          echo "=============================="
+
+          system_profiler SPDisplaysDataType | grep -E \
+            "Chipset Model|Chip|Total Number of Cores|Metal" \
+            || true
+
+      - name: Environment variables
+        run: |
+          echo "=============================="
+          echo "Selected GitHub Environment"
+          echo "=============================="
+
+          echo "RUNNER_OS=$RUNNER_OS"
+          echo "RUNNER_ARCH=$RUNNER_ARCH"
+          echo "RUNNER_NAME=$RUNNER_NAME"
+          echo "RUNNER_LABELS=$RUNNER_LABELS"
+          echo "ImageOS=$ImageOS"
+          echo "ImageVersion=$ImageVersion"
+
+      - name: Full summary
+        run: |
+          echo "=============================="
+          echo "GitHub Runner Summary"
+          echo "=============================="
+
+          echo "Runner:"
+          echo "$RUNNER_NAME"
+
+          echo
+          echo "OS:"
+          sw_vers -productName
+          sw_vers -productVersion
+          sw_vers -buildVersion
+
+          echo
+          echo "Architecture:"
+          uname -m
+
+          echo
+          echo "CPU:"
+          sysctl -n hw.ncpu
+
+          echo
+          echo "Memory:"
+          sysctl -n hw.memsize | awk '{printf "%.2f GB\n", $1/1024/1024/1024}'
+
+          echo
+          echo "GPU:"
+          system_profiler SPDisplaysDataType | grep -E \
+            "Chipset Model|Chip|Metal" \
+            || true
