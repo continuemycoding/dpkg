@@ -32,8 +32,8 @@ export const IDES: IdeGuide[] = [
     id: 'trae',
     name: 'Trae',
     tag: '字节跳动',
-    downloadUrl: 'https://www.trae.ai/download',
-    downloadLabel: 'trae.ai/download',
+    downloadUrl: 'https://www.trae.cn/download',
+    downloadLabel: 'trae.cn/download',
     blurb: '字节跳动（ByteDance）出品，国内用的人比较多。界面和快捷键跟 VS Code 同一套，把 .vsix 装进去就能用远控Pro。',
   },
   {
