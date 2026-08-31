@@ -40,7 +40,7 @@ function HomePage() {
       <div className="page-inner">
         <SiteHeader page="home" />
         <main className="container">
-          <Hero vsix={releases.vsix} />
+          <Hero />
           <DownloadSection releases={releases} onOpenHistory={() => setHistoryOpen(true)} />
           <Features />
           <FAQ />

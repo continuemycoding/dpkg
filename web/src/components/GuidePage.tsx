@@ -127,7 +127,7 @@ function Kbd({ children }: { children: string }) {
 function faqLabel(text: string) {
   return (
     <span>
-      <QuestionCircleOutlined style={{ color: '#60a5fa', marginRight: 10 }} />
+      <QuestionCircleOutlined style={{ color: '#c6b08a', marginRight: 10 }} />
       {text}
     </span>
   );
@@ -316,7 +316,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <h1>
           远控Pro脚本扩展
           <br />
-          <span className="gradient-text">从小白到跑通</span>
+          <em>从小白到跑通</em>
         </h1>
         <p className="guide-lead">
           这个扩展装在电脑上的代码编辑器里，用来写自动化脚本、连越狱 iPhone、边写边调试，再编译发布到手机。

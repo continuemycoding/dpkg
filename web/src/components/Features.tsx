@@ -10,15 +10,11 @@ import {
 const features = [
   {
     icon: <ThunderboltOutlined />,
-    color: '#a78bfa',
-    bg: 'rgba(167, 139, 250, 0.12)',
     title: '低延迟实时投屏',
     desc: '优化底层传输协议，支持 USB 直连、局域网 Wi‑Fi 与广域网远程连接，画面清晰流畅，操作响应毫秒级。',
   },
   {
     icon: <FontSizeOutlined />,
-    color: '#c084fc',
-    bg: 'rgba(192, 132, 252, 0.12)',
     title: '多语言输入体验',
     desc: (
       <>
@@ -29,29 +25,21 @@ const features = [
   },
   {
     icon: <FolderOpenOutlined />,
-    color: '#2dd4bf',
-    bg: 'rgba(45, 212, 191, 0.12)',
     title: '全能文件管理',
     desc: '像管理电脑文件一样管理手机，上传下载等常用操作尽有尽有。',
   },
   {
     icon: <SwapOutlined />,
-    color: '#4ade80',
-    bg: 'rgba(74, 222, 128, 0.12)',
     title: '同步输入与粘贴',
     desc: '在电脑和手机间双向复制粘贴文本和图片，可一键同步粘贴到所有选中设备。',
   },
   {
     icon: <AppstoreOutlined />,
-    color: '#f472b6',
-    bg: 'rgba(244, 114, 182, 0.12)',
     title: '应用安装与卸载',
     desc: '拖入 IPA 文件即可批量安装应用，亦可一键卸载指定 App，极速部署业务环境。',
   },
   {
     icon: <RocketOutlined />,
-    color: '#60a5fa',
-    bg: 'rgba(96, 165, 250, 0.12)',
     title: '轻量省资源，多开也不卡',
     desc: '针对多连接场景优化系统开销，长时间投屏或同时管控多台设备体验都很丝滑。',
   },
@@ -92,9 +80,7 @@ export function Features() {
         <div className="feature-grid">
           {features.map((item) => (
             <article className="feature-card" key={item.title}>
-              <div className="feature-icon" style={{ color: item.color, background: item.bg }}>
-                {item.icon}
-              </div>
+              <div className="feature-icon">{item.icon}</div>
               <h3>{item.title}</h3>
               <p>{item.desc}</p>
             </article>
