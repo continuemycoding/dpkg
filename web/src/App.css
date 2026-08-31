@@ -1278,7 +1278,7 @@ a {
 .guide-next-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 @media (max-width: 960px) {
@@ -1332,7 +1332,8 @@ a {
   }
 
   .hero-actions a,
-  .guide-hero-actions a {
+  .guide-hero-actions a,
+  .guide-hero-actions .ant-btn {
     flex: 1;
   }
 

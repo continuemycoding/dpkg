@@ -323,15 +323,15 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
           下面按「先准备 → 选编辑器安装 → 跟着点」的顺序来。不会写代码也没关系：装好后可以用 AI Agent，用中文描述需求，让它帮你写。
         </p>
         <div className="guide-hero-actions">
-          <a className="hero-cta" href="#install">
+          <Button type="primary" size="large" href="#install">
             开始安装
-          </a>
-          <a className="hero-cta-ghost" href="#agent">
+          </Button>
+          <Button size="large" href="#agent" icon={<RobotOutlined />}>
             不会写代码？用 AI
-          </a>
-          <a className="hero-cta-ghost" href={vsixHref || '/#download'}>
+          </Button>
+          <Button size="large" href={vsixHref || '/#download'} icon={<DownloadOutlined />}>
             下载 .vsix 扩展
-          </a>
+          </Button>
         </div>
       </header>
 
