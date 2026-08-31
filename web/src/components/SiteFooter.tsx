@@ -17,7 +17,8 @@ export function SiteFooter({ onOpenLegal }: SiteFooterProps) {
             </span>
             <span className="brand-name">远控Pro</span>
           </a>
-          <p>专业级 iOS 设备批量投屏与群控。在电脑、手机与编辑器里，把每台已越狱的 iPhone 握在手里。</p>
+          <p className="footer-tagline">让每一台设备，都清晰可控</p>
+          <p>集中管理远程连接、投屏操作与设备任务，让团队协作更高效。</p>
         </div>
 
         <div className="footer-col">

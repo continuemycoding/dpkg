@@ -94,7 +94,7 @@ const AGENT_STEPS = [
   },
   {
     title: '先把项目和手机准备好',
-    desc: '按上面步骤：新建项目、连上手机、调试环境就绪。AI 写完才能在真机上跑。',
+    desc: '按本页后面的步骤：新建项目、连上手机、调试环境就绪。AI 写完才能在真机上跑。',
   },
   {
     title: '打开对话，选 Agent',
@@ -351,6 +351,68 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         </div>
       </section>
 
+      <section className="guide-section" id="agent">
+        <div className="section-head">
+          <p className="section-kicker">不会写代码也行</p>
+          <h2>用 AI Agent 帮你写脚本</h2>
+          <p>大多数同学没接触过。一句话：你用中文说要做什么，AI 自己查文档、改文件、检查有没有连上手机</p>
+        </div>
+
+        <div className="guide-prep">
+          {AGENT_IDEAS.map((item) => (
+            <article className="guide-card" key={item.title}>
+              {item.icon}
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="guide-flow guide-flow-follow">
+          {AGENT_STEPS.map((step, index) => (
+            <article className="guide-flow-item" key={step.title}>
+              <div className="guide-flow-index">{index + 1}</div>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <h3 className="guide-subhead">第一次不知道说什么，复制这段</h3>
+        <p className="guide-sublead">贴到对话窗口，把「微信」和后面的步骤改成你自己的 App 和流程即可。</p>
+        <pre className="guide-prompt">{AGENT_PROMPT}</pre>
+
+        <h3 className="guide-subhead">打开工具箱之后，AI 能帮你干什么</h3>
+        <div className="guide-tool-grid guide-agent-can">
+          {AGENT_CAN.map((item) => (
+            <div key={item.title}>
+              <strong>{item.title}</strong>
+              <span>{item.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <Alert
+          className="guide-alert"
+          type="info"
+          showIcon
+          message="跟 AI 说话的几个习惯"
+          description={
+            <ul>
+              <li>一次只做一个功能，跑通再加下一步，比一次丢一整份需求更稳。</li>
+              <li>说清 App 名字、从哪一页开始、要点哪个字或哪个按钮。越具体，点错的越少。</li>
+              <li>AI 改完你先看一眼主文件，再按 F5。它偶尔会写偏，盯一眼比事后排查省事。</li>
+              <li>
+                新建项目时已经带了给 AI 看的说明（<code>AGENTS.md</code>
+                ），不用自己配。你只要打开 Agent，并打开 remotepro-toolkit。
+              </li>
+            </ul>
+          }
+        />
+      </section>
+
       <section className="guide-section" id="prep">
         <div className="section-head">
           <p className="section-kicker">开始之前</p>
@@ -378,7 +440,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <CodeOutlined />
             <h3>一个支持的编辑器</h3>
             <p>
-              VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都可以。想自己写代码用 VS Code；想让 AI 帮写，选 Cursor 或 Trae 更省事。
+              VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都可以。自己写代码用 VS Code 即可；想让 AI 帮写，国产的 Trae、Qoder、CodeBuddy 最省事，Cursor 使用体验最好。
             </p>
           </article>
         </div>
@@ -436,68 +498,6 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
               </li>
               <li>
                 按 F5 没反应：先点「配置调试环境」等到「已就绪」。Swift / Objective-C 的本地调试只支持 Mac。
-              </li>
-            </ul>
-          }
-        />
-      </section>
-
-      <section className="guide-section" id="agent">
-        <div className="section-head">
-          <p className="section-kicker">不会写代码也行</p>
-          <h2>用 AI Agent 帮你写脚本</h2>
-          <p>大多数同学没接触过。一句话：你用中文说要做什么，AI 自己查文档、改文件、检查有没有连上手机</p>
-        </div>
-
-        <div className="guide-prep">
-          {AGENT_IDEAS.map((item) => (
-            <article className="guide-card" key={item.title}>
-              {item.icon}
-              <h3>{item.title}</h3>
-              <p>{item.desc}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="guide-flow guide-flow-follow">
-          {AGENT_STEPS.map((step, index) => (
-            <article className="guide-flow-item" key={step.title}>
-              <div className="guide-flow-index">{index + 1}</div>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.desc}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <h3 className="guide-subhead">第一次不知道说什么，复制这段</h3>
-        <p className="guide-sublead">贴到对话窗口，把「微信」和后面的步骤改成你自己的 App 和流程即可。</p>
-        <pre className="guide-prompt">{AGENT_PROMPT}</pre>
-
-        <h3 className="guide-subhead">打开工具箱之后，AI 能帮你干什么</h3>
-        <div className="guide-tool-grid guide-agent-can">
-          {AGENT_CAN.map((item) => (
-            <div key={item.title}>
-              <strong>{item.title}</strong>
-              <span>{item.desc}</span>
-            </div>
-          ))}
-        </div>
-
-        <Alert
-          className="guide-alert"
-          type="info"
-          showIcon
-          message="跟 AI 说话的几个习惯"
-          description={
-            <ul>
-              <li>一次只做一个功能，跑通再加下一步，比一次丢一整份需求更稳。</li>
-              <li>说清 App 名字、从哪一页开始、要点哪个字或哪个按钮。越具体，点错的越少。</li>
-              <li>AI 改完你先看一眼主文件，再按 F5。它偶尔会写偏，盯一眼比事后排查省事。</li>
-              <li>
-                新建项目时已经带了给 AI 看的说明（<code>AGENTS.md</code>
-                ），不用自己配。你只要打开 Agent，并打开 remotepro-toolkit。
               </li>
             </ul>
           }
@@ -576,7 +576,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
       </section>
 
       <section className="guide-next">
-        <CheckCircleOutlined />
+        <CheckCircleOutlined className="guide-next-check" />
         <div>
           <h2>跑通之后做什么</h2>
           <p>

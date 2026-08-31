@@ -4,8 +4,11 @@ import { theme } from 'antd';
 export const appTheme: ThemeConfig = {
   algorithm: theme.darkAlgorithm,
   token: {
-    colorPrimary: '#c6b08a',
-    colorInfo: '#c6b08a',
+    colorPrimary: '#ffffff',
+    colorPrimaryHover: '#f4f4f5',
+    colorPrimaryActive: '#e4e4e7',
+    colorTextLightSolid: '#111111',
+    colorInfo: '#8ea0b8',
     colorSuccess: '#8fbf9a',
     colorWarning: '#d4a574',
     colorBgBase: '#0c0c0b',
@@ -16,7 +19,7 @@ export const appTheme: ThemeConfig = {
     colorBorderSecondary: 'rgba(243, 239, 230, 0.08)',
     colorText: '#f3efe6',
     colorTextSecondary: '#9a9488',
-    borderRadius: 14,
+    borderRadius: 10,
     fontFamily:
       '"DM Sans", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif',
     fontSize: 15,
@@ -31,6 +34,9 @@ export const appTheme: ThemeConfig = {
     Button: {
       controlHeightLG: 48,
       fontWeight: 600,
+      primaryColor: '#111111',
+      borderRadius: 10,
+      primaryShadow: 'none',
     },
     Card: {
       colorBgContainer: 'rgba(22, 21, 19, 0.86)',

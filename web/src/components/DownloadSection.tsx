@@ -32,25 +32,6 @@ interface DownloadSectionProps {
   onOpenHistory: () => void;
 }
 
-function VersionPill({
-  state,
-  label,
-}: {
-  state: PlatformState;
-  label: string;
-}) {
-  const href = state.latest?.url;
-  const text = state.latest ? `${label} ${state.latest.version}` : label;
-  if (!href) {
-    return <span className="version-pill is-disabled">{text}</span>;
-  }
-  return (
-    <a className="version-pill" href={href}>
-      {text}
-    </a>
-  );
-}
-
 function PlatformChip({
   state,
   icon,
@@ -80,73 +61,6 @@ function PlatformChip({
     <a className={className} href={href}>
       {inner}
     </a>
-  );
-}
-
-function ControlVisual() {
-  return (
-    <div className="product-visual is-control" aria-hidden>
-      <div className="mock-window">
-        <div className="mock-window-bar">
-          <span />
-          <span />
-          <span />
-        </div>
-        <div className="mock-phones">
-          <i />
-          <i />
-          <i />
-          <i />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function EditorVisual() {
-  return (
-    <div className="product-visual is-dev" aria-hidden>
-      <div className="mock-editor">
-        <div className="mock-gutter" />
-        <div className="mock-code">
-          <b />
-          <b />
-          <b />
-          <b />
-          <b />
-          <b />
-          <b />
-          <b />
-        </div>
-        <div className="mock-chat">
-          <span className="mock-bubble" />
-          <span className="mock-bubble is-user" />
-          <span className="mock-bubble" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DocsVisual() {
-  return (
-    <div className="product-visual is-guide" aria-hidden>
-      <div className="mock-docs">
-        <div className="mock-sheet">
-          <b />
-          <b />
-          <b />
-          <b />
-        </div>
-        <div className="mock-sheet is-front">
-          <b />
-          <b />
-          <b />
-          <b />
-          <b />
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -181,53 +95,53 @@ function ClientCard() {
 
   return (
     <article className="product-card" id="zone-client">
-      <div className="product-visual is-client">
-        <div className="product-qr-frame">
-          <QRCode value={qrValue} size={148} bordered={false} />
-        </div>
-      </div>
       <div className="product-body">
         <p className="product-label">
           <MobileOutlined /> 被控端
         </p>
         <h3>越狱设备软件源</h3>
         <p>在被控的越狱 iPhone 上使用 Sileo 或 Cydia 添加源，安装被控端软件。</p>
-        <div className="store-switch" role="tablist" aria-label="软件源类型">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={store === 'sileo'}
-            className={store === 'sileo' ? 'is-active' : ''}
-            onClick={() => setStore('sileo')}
-          >
-            Sileo
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={store === 'cydia'}
-            className={store === 'cydia' ? 'is-active' : ''}
-            onClick={() => setStore('cydia')}
-          >
-            Cydia
-          </button>
-        </div>
-        <div className="command-bar">
-          <code>{SITE_REPO_URL}</code>
-          <button type="button" onClick={copyUrl} aria-label="复制软件源地址">
-            <CopyOutlined />
-            复制
-          </button>
-        </div>
-        <div className="product-actions">
-          {showOpenButton ? (
-            <a className="product-btn" href={openHref}>
-              <ExportOutlined />
-              {openLabel}
-            </a>
-          ) : (
-            <p className="product-hint">可用手机相机扫码，或不方便扫码时手动输入软件源地址。</p>
-          )}
+        <div className="client-source">
+          <div className="product-qr-frame">
+            <QRCode value={qrValue} size={112} bordered={false} />
+          </div>
+          <div className="client-source-controls">
+            <div className="store-switch" role="tablist" aria-label="软件源类型">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={store === 'sileo'}
+                className={store === 'sileo' ? 'is-active' : ''}
+                onClick={() => setStore('sileo')}
+              >
+                Sileo
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={store === 'cydia'}
+                className={store === 'cydia' ? 'is-active' : ''}
+                onClick={() => setStore('cydia')}
+              >
+                Cydia
+              </button>
+            </div>
+            <div className="command-bar">
+              <code>{SITE_REPO_URL}</code>
+              <button type="button" onClick={copyUrl} aria-label="复制软件源地址">
+                <CopyOutlined />
+                复制
+              </button>
+            </div>
+            {showOpenButton ? (
+              <a className="product-btn" href={openHref}>
+                <ExportOutlined />
+                {openLabel}
+              </a>
+            ) : (
+              <p className="product-hint">手机相机扫码即可添加；不方便扫码时，复制地址手动输入。</p>
+            )}
+          </div>
         </div>
       </div>
     </article>
@@ -241,7 +155,6 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
     <>
       <div className="products" id="download">
         <article className="product-card" id="zone-control">
-          <ControlVisual />
           <div className="product-body">
             <p className="product-label">
               <DesktopOutlined /> 控制端
@@ -258,7 +171,6 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
         </article>
 
         <article className="product-card" id="zone-vsix">
-          <EditorVisual />
           <div className="product-body">
             <p className="product-label">
               <CodeOutlined /> 脚本扩展
@@ -286,7 +198,6 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
         <ClientCard />
 
         <article className="product-card">
-          <DocsVisual />
           <div className="product-body">
             <p className="product-label">
               <BookOutlined /> 教程
@@ -304,30 +215,6 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
           </div>
         </article>
       </div>
-
-      <section className="version-board" aria-label="最新版本">
-        <details open>
-          <summary>
-            <span className="version-name">控制端</span>
-            <span className="version-badge">最新</span>
-          </summary>
-          <div className="version-pills">
-            <VersionPill state={releases.win} label="Windows" />
-            <VersionPill state={releases.mac} label="macOS" />
-            <VersionPill state={releases.android} label="Android" />
-            <VersionPill state={releases.iphone} label="iPhone" />
-          </div>
-        </details>
-        <details open>
-          <summary>
-            <span className="version-name">脚本扩展</span>
-            <span className="version-badge">最新</span>
-          </summary>
-          <div className="version-pills">
-            <VersionPill state={releases.vsix} label="VS Code / Cursor / Kiro" />
-          </div>
-        </details>
-      </section>
 
       <div className="history-row">
         <Button type="link" icon={<HistoryOutlined />} onClick={onOpenHistory}>
