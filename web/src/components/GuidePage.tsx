@@ -16,7 +16,7 @@ import {
   ToolOutlined,
 } from '@ant-design/icons';
 import type { PlatformState } from '../api/releases';
-import { IDES, isIdeId, type IdeId } from '../guide/ides';
+import { IDES, parseIdeId, type IdeId } from '../guide/ides';
 
 const DOCS_URL = 'https://docs.remotepro.cn/';
 
@@ -78,7 +78,7 @@ const AGENT_IDEAS = [
   {
     icon: <RobotOutlined />,
     title: 'Agent 模式',
-    desc: 'Ask / 聊天只能回答问题。Agent（有的叫 Builder、Cascade）才能改文件、查文档、看手机。写脚本一定要选这种。',
+    desc: 'Ask / Chat 只能回答问题，不会改文件。写脚本要选能动手的那种：Cursor、Trae、Qoder 叫 Agent；CodeBuddy 叫 Craft（复杂任务用 Plan）；Devin Desktop 选 Devin Local；Kiro 打开对话就能改。',
   },
   {
     icon: <ApiOutlined />,
@@ -90,7 +90,7 @@ const AGENT_IDEAS = [
 const AGENT_STEPS = [
   {
     title: '用带 AI 的编辑器',
-    desc: 'Cursor、Trae、Qoder、CodeBuddy、Windsurf、Kiro 都自带 Agent。VS Code 本身没有，需要另装 Cline 或 Claude Code，或直接换上面其中一款。这些软件一般要登录账号，免费额度够练手。',
+    desc: 'Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都自带 Agent。VS Code 本身没有，需要另装 Cline 或 Claude Code，或直接换上面其中一款。这些软件一般要登录账号，免费额度够练手。',
   },
   {
     title: '先把项目和手机准备好',
@@ -98,7 +98,7 @@ const AGENT_STEPS = [
   },
   {
     title: '打开对话，选 Agent',
-    desc: '常见快捷键是 Ctrl+L（Mac 用 ⌘L）。把模式改成 Agent。Trae 里常叫 Builder，Windsurf 里叫 Cascade，意思一样。',
+    desc: '打开右侧对话（快捷键因软件而异，常见是 Ctrl+L、Ctrl+U 或 Ctrl+I）。不要停在 Ask / Chat。Cursor、Trae、Qoder 选 Agent；CodeBuddy 选 Craft 或 Plan；Devin Desktop 右下角选 Devin Local，模式用 Normal；Kiro 直接说需求即可。',
   },
   {
     title: '打开 remotepro-toolkit',
@@ -186,7 +186,7 @@ const GUIDE_FAQ = [
     label: faqLabel('AI 只回文字，不改我的文件？'),
     children: (
       <p>
-        对话模式多半还停在 Ask / 聊天。改成 Agent（Trae 常叫 Builder，Windsurf 叫 Cascade）。同时还要打开{' '}
+        对话多半还停在 Ask / Chat，那只回答、不改文件。Cursor、Trae、Qoder 改成 Agent；CodeBuddy 改成 Craft 或 Plan；Devin Desktop 选 Devin Local 且不要用 Ask。同时还要打开{' '}
         <code>remotepro-toolkit</code>，否则它查不了文档，更容易空聊。
       </p>
     ),
@@ -206,7 +206,7 @@ const GUIDE_FAQ = [
     label: faqLabel('VS Code 能用 AI Agent 吗？'),
     children: (
       <p>
-        可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、CodeBuddy、Windsurf 或 Kiro，打开就能对话写代码。
+        可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、CodeBuddy、Devin Desktop 或 Kiro，打开就能对话写代码。
       </p>
     ),
   },
@@ -291,7 +291,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
   const vsixHref = vsix.latest?.url;
   const initialIde = useMemo(() => {
     const value = new URLSearchParams(window.location.search).get('ide');
-    return isIdeId(value) ? value : 'vscode';
+    return parseIdeId(value) ?? 'vscode';
   }, []);
   const [ide, setIde] = useState<IdeId>(initialIde);
 
@@ -378,7 +378,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <CodeOutlined />
             <h3>一个支持的编辑器</h3>
             <p>
-              VS Code、Cursor、Trae、Qoder、CodeBuddy、Windsurf、Kiro 都可以。想自己写代码用 VS Code；想让 AI 帮写，选 Cursor 或 Trae 更省事。
+              VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都可以。想自己写代码用 VS Code；想让 AI 帮写，选 Cursor 或 Trae 更省事。
             </p>
           </article>
         </div>

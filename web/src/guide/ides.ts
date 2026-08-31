@@ -32,33 +32,33 @@ export const IDES: IdeGuide[] = [
     id: 'trae',
     name: 'Trae',
     tag: '字节跳动',
-    downloadUrl: 'https://www.trae.cn/download',
-    downloadLabel: 'trae.cn/download',
-    blurb: '字节跳动（ByteDance）出品，国内用的人比较多。界面和快捷键跟 VS Code 同一套，把 .vsix 装进去就能用远控Pro。',
+    downloadUrl: 'https://www.trae.cn/',
+    downloadLabel: 'trae.cn',
+    blurb: '字节跳动出品。官网上请下「TraeCode」（AI 开发工程师），不要下「TraeWork」（办公平台）。界面和快捷键跟 VS Code 同一套，把 .vsix 装进去就能用远控Pro。',
   },
   {
     id: 'qoder',
     name: 'Qoder',
     tag: '阿里云',
-    downloadUrl: 'https://qoder.com.cn/download',
-    downloadLabel: 'qoder.com.cn/download',
-    blurb: '阿里云出品的国内版（Qoder CN）。打开下载页后请选「Qoder CN IDE」，兼容 VS Code 扩展；不要用国际站 qoder.com，也不要下同页的 Qoder CN 工作台。',
+    downloadUrl: 'https://qoder.com.cn/',
+    downloadLabel: 'qoder.com.cn',
+    blurb: '阿里云出品的国内版（Qoder CN）。官网上请选「Qoder CN IDE」，兼容 VS Code 扩展；不要用国际站 qoder.com，也不要下同页的 Qoder CN 工作台。',
   },
   {
     id: 'codebuddy',
     name: 'CodeBuddy',
     tag: '腾讯云',
-    downloadUrl: 'https://www.codebuddy.cn/ide/',
-    downloadLabel: 'codebuddy.cn/ide',
-    blurb: '腾讯云出品的 AI 代码编辑器，对话写代码开箱即用。兼容 VS Code 扩展，把 .vsix 装进去就能用远控Pro。',
+    downloadUrl: 'https://www.codebuddy.cn/',
+    downloadLabel: 'codebuddy.cn',
+    blurb: '腾讯云出品。官网上请点「下载 CodeBuddy IDE」。兼容 VS Code 扩展，把 .vsix 装进去就能用远控Pro。',
   },
   {
     id: 'windsurf',
-    name: 'Windsurf',
-    tag: 'Cognition',
-    downloadUrl: 'https://devin.ai/download',
-    downloadLabel: 'devin.ai/download',
-    blurb: 'Cognition 出品，现名 Devin Desktop，以前叫 Windsurf（Codeium）。下载页或桌面图标可能写 Windsurf 或 Devin，其实是同一款，可以装 .vsix。',
+    name: 'Devin Desktop',
+    tag: '原 Windsurf',
+    downloadUrl: 'https://devin.ai/desktop',
+    downloadLabel: 'devin.ai/desktop',
+    blurb: 'Cognition 出品。官方 FAQ 写明：Devin Desktop 就是原来的 Windsurf，内置完整 IDE，兼容 VS Code 扩展。请打开这一页下载桌面编辑器；devin.ai 首页是云端 Devin 工程师，不是这个软件。',
   },
   {
     id: 'kiro',
@@ -70,6 +70,16 @@ export const IDES: IdeGuide[] = [
   },
 ];
 
+const IDE_ALIASES: Record<string, IdeId> = {
+  devin: 'windsurf',
+};
+
+export function parseIdeId(value: string | null): IdeId | null {
+  if (!value) return null;
+  if ((IDE_IDS as readonly string[]).includes(value)) return value as IdeId;
+  return IDE_ALIASES[value] ?? null;
+}
+
 export function isIdeId(value: string | null): value is IdeId {
-  return !!value && (IDE_IDS as readonly string[]).includes(value);
+  return parseIdeId(value) !== null;
 }
