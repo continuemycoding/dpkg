@@ -40,7 +40,7 @@ const FIRST_STEPS = [
   },
   {
     title: '新建一个项目',
-    desc: '在「编译部署」里点「新建项目」，先选语言。小白建议选 Python 或 JavaScript。接着选模板、填项目名、选保存文件夹。编辑器会打开这个新文件夹。',
+    desc: '在「编译部署」里点「新建项目」，先选语言。不确定就选 Python 或 JavaScript。接着选模板、填项目名、选保存文件夹。编辑器会打开这个新文件夹。',
   },
   {
     title: '连上你的手机',
@@ -78,7 +78,7 @@ const AGENT_IDEAS = [
   {
     icon: <RobotOutlined />,
     title: 'Agent 模式',
-    desc: 'Ask / Chat 只能回答问题，不会改文件。写脚本要选能动手的那种：Cursor、Trae、Qoder 叫 Agent；CodeBuddy 叫 Craft（复杂任务用 Plan）；Devin Desktop 选 Devin Local；Kiro 打开对话就能改。',
+    desc: 'Ask / Chat 只能回答问题，不会改文件。写脚本要选能动手的那种：VS Code 的 Copilot、以及 Cursor、Trae、Qoder 都选 Agent；CodeBuddy 叫 Craft（复杂任务用 Plan）；Devin Desktop 选 Devin Local；Kiro 打开对话就能改。',
   },
   {
     icon: <ApiOutlined />,
@@ -89,16 +89,12 @@ const AGENT_IDEAS = [
 
 const AGENT_STEPS = [
   {
-    title: '用带 AI 的编辑器',
-    desc: 'Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都自带 Agent。VS Code 本身没有，需要另装 Cline 或 Claude Code，或直接换上面其中一款。这些软件一般要登录账号，免费额度够练手。',
-  },
-  {
     title: '先把项目和手机准备好',
-    desc: '按本页后面的步骤：新建项目、连上手机、调试环境就绪。AI 写完才能在真机上跑。',
+    desc: '确认已经新建项目、连上手机、调试环境是「已就绪」。就是上面「跑通脚本」里做过的那些；没做完先回去做完，AI 写完才能在真机上跑。',
   },
   {
     title: '打开对话，选 Agent',
-    desc: '打开右侧对话（快捷键因软件而异，常见是 Ctrl+L、Ctrl+U 或 Ctrl+I）。不要停在 Ask / Chat。Cursor、Trae、Qoder 选 Agent；CodeBuddy 选 Craft 或 Plan；Devin Desktop 右下角选 Devin Local，模式用 Normal；Kiro 直接说需求即可。',
+    desc: '打开右侧对话（快捷键因软件而异，常见是 Ctrl+L、Ctrl+U 或 Ctrl+I）。不要停在 Ask / Chat。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 都选 Agent；CodeBuddy 选 Craft 或 Plan；Devin Desktop 右下角选 Devin Local，模式用 Normal；Kiro 直接说需求即可。',
   },
   {
     title: '打开 remotepro-toolkit',
@@ -186,7 +182,7 @@ const GUIDE_FAQ = [
     label: faqLabel('AI 只回文字，不改我的文件？'),
     children: (
       <p>
-        对话多半还停在 Ask / Chat，那只回答、不改文件。Cursor、Trae、Qoder 改成 Agent；CodeBuddy 改成 Craft 或 Plan；Devin Desktop 选 Devin Local 且不要用 Ask。同时还要打开{' '}
+        对话多半还停在 Ask / Chat，那只回答、不改文件。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 改成 Agent；CodeBuddy 改成 Craft 或 Plan；Devin Desktop 选 Devin Local 且不要用 Ask。同时还要打开{' '}
         <code>remotepro-toolkit</code>，否则它查不了文档，更容易空聊。
       </p>
     ),
@@ -206,7 +202,7 @@ const GUIDE_FAQ = [
     label: faqLabel('VS Code 能用 AI Agent 吗？'),
     children: (
       <p>
-        可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、CodeBuddy、Devin Desktop 或 Kiro，打开就能对话写代码。
+        可以。VS Code 自带 GitHub Copilot，对话里选 Agent 就能改文件。也可以另装 Cline 或 Claude Code。装好远控Pro扩展后，记得打开 remotepro-toolkit。
       </p>
     ),
   },
@@ -316,7 +312,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <h1>
           远控Pro脚本扩展
           <br />
-          <em>从小白到跑通</em>
+          <em>零基础也能写脚本</em>
         </h1>
         <p className="guide-lead">
           这个扩展装在电脑上的代码编辑器里，用来写自动化脚本、连越狱 iPhone、边写边调试，再编译发布到手机。
@@ -351,68 +347,6 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         </div>
       </section>
 
-      <section className="guide-section" id="agent">
-        <div className="section-head">
-          <p className="section-kicker">不会写代码也行</p>
-          <h2>用 AI Agent 帮你写脚本</h2>
-          <p>大多数同学没接触过。一句话：你用中文说要做什么，AI 自己查文档、改文件、检查有没有连上手机</p>
-        </div>
-
-        <div className="guide-prep">
-          {AGENT_IDEAS.map((item) => (
-            <article className="guide-card" key={item.title}>
-              {item.icon}
-              <h3>{item.title}</h3>
-              <p>{item.desc}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="guide-flow guide-flow-follow">
-          {AGENT_STEPS.map((step, index) => (
-            <article className="guide-flow-item" key={step.title}>
-              <div className="guide-flow-index">{index + 1}</div>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.desc}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <h3 className="guide-subhead">第一次不知道说什么，复制这段</h3>
-        <p className="guide-sublead">贴到对话窗口，把「微信」和后面的步骤改成你自己的 App 和流程即可。</p>
-        <pre className="guide-prompt">{AGENT_PROMPT}</pre>
-
-        <h3 className="guide-subhead">打开工具箱之后，AI 能帮你干什么</h3>
-        <div className="guide-tool-grid guide-agent-can">
-          {AGENT_CAN.map((item) => (
-            <div key={item.title}>
-              <strong>{item.title}</strong>
-              <span>{item.desc}</span>
-            </div>
-          ))}
-        </div>
-
-        <Alert
-          className="guide-alert"
-          type="info"
-          showIcon
-          message="跟 AI 说话的几个习惯"
-          description={
-            <ul>
-              <li>一次只做一个功能，跑通再加下一步，比一次丢一整份需求更稳。</li>
-              <li>说清 App 名字、从哪一页开始、要点哪个字或哪个按钮。越具体，点错的越少。</li>
-              <li>AI 改完你先看一眼主文件，再按 F5。它偶尔会写偏，盯一眼比事后排查省事。</li>
-              <li>
-                新建项目时已经带了给 AI 看的说明（<code>AGENTS.md</code>
-                ），不用自己配。你只要打开 Agent，并打开 remotepro-toolkit。
-              </li>
-            </ul>
-          }
-        />
-      </section>
-
       <section className="guide-section" id="prep">
         <div className="section-head">
           <p className="section-kicker">开始之前</p>
@@ -440,7 +374,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <CodeOutlined />
             <h3>一个支持的编辑器</h3>
             <p>
-              VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都可以。自己写代码用 VS Code 即可；想让 AI 帮写，国产的 Trae、Qoder、CodeBuddy 最省事，Cursor 使用体验最好。
+              VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都可以。VS Code 用 Copilot 即可；国产的 Trae、Qoder、CodeBuddy 最省事，Cursor 使用体验最好。
             </p>
           </article>
         </div>
@@ -498,6 +432,68 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
               </li>
               <li>
                 按 F5 没反应：先点「配置调试环境」等到「已就绪」。Swift / Objective-C 的本地调试只支持 Mac。
+              </li>
+            </ul>
+          }
+        />
+      </section>
+
+      <section className="guide-section" id="agent">
+        <div className="section-head">
+          <p className="section-kicker">不会写代码也行</p>
+          <h2>用 AI Agent 帮你写脚本</h2>
+          <p>模板已经能跑了。接下来用中文说要做什么，AI 自己查文档、改文件、检查有没有连上手机</p>
+        </div>
+
+        <div className="guide-prep">
+          {AGENT_IDEAS.map((item) => (
+            <article className="guide-card" key={item.title}>
+              {item.icon}
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="guide-flow guide-flow-follow">
+          {AGENT_STEPS.map((step, index) => (
+            <article className="guide-flow-item" key={step.title}>
+              <div className="guide-flow-index">{index + 1}</div>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <h3 className="guide-subhead">第一次不知道说什么，复制这段</h3>
+        <p className="guide-sublead">贴到对话窗口，把「微信」和后面的步骤改成你自己的 App 和流程即可。</p>
+        <pre className="guide-prompt">{AGENT_PROMPT}</pre>
+
+        <h3 className="guide-subhead">打开工具箱之后，AI 能帮你干什么</h3>
+        <div className="guide-tool-grid guide-agent-can">
+          {AGENT_CAN.map((item) => (
+            <div key={item.title}>
+              <strong>{item.title}</strong>
+              <span>{item.desc}</span>
+            </div>
+          ))}
+        </div>
+
+        <Alert
+          className="guide-alert"
+          type="info"
+          showIcon
+          message="跟 AI 说话的几个习惯"
+          description={
+            <ul>
+              <li>一次只做一个功能，跑通再加下一步，比一次丢一整份需求更稳。</li>
+              <li>说清 App 名字、从哪一页开始、要点哪个字或哪个按钮。越具体，点错的越少。</li>
+              <li>AI 改完你先看一眼主文件，再按 F5。它偶尔会写偏，盯一眼比事后排查省事。</li>
+              <li>
+                新建项目时已经带了给 AI 看的说明（<code>AGENTS.md</code>
+                ），不用自己配。你只要打开 Agent，并打开 remotepro-toolkit。
               </li>
             </ul>
           }

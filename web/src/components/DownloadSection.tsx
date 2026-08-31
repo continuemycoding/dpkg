@@ -202,7 +202,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
             <p className="product-label">
               <BookOutlined /> 教程
             </p>
-            <h3>从小白到跑通</h3>
+            <h3>零基础也能写脚本</h3>
             <p>按编辑器安装扩展，连上手机，再用 AI Agent 用中文写出第一条脚本。</p>
             <div className="product-actions">
               <a className="product-btn" href="/guide">

@@ -27,10 +27,10 @@ export const HOME_MODULES: PageModule[] = [
 
 export const GUIDE_MODULES: PageModule[] = [
   { id: 'langs', label: '支持语言' },
-  { id: 'agent', label: 'AI 写脚本' },
   { id: 'prep', label: '开始准备' },
   { id: 'install', label: '安装扩展' },
   { id: 'first-run', label: '跑通脚本' },
+  { id: 'agent', label: 'AI 写脚本' },
   { id: 'panels', label: '侧栏说明' },
   { id: 'troubleshoot', label: '常见问题' },
 ];
