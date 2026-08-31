@@ -12,6 +12,8 @@ import { SiteFooter, type LegalType } from './components/SiteFooter';
 import { HistoryModal } from './components/HistoryModal';
 import { LegalModals } from './components/LegalModals';
 import { GuidePage } from './components/GuidePage';
+import { ModuleNav } from './components/ModuleNav';
+import { GUIDE_MODULES, HOME_MODULES } from './nav/modules';
 import './App.css';
 
 const HOME_TITLE = '远控Pro - 专业iOS越狱群控系统 (Win/Mac)';
@@ -38,13 +40,16 @@ function HomePage() {
     <div className="page">
       <div className="page-bg" />
       <div className="page-inner">
-        <SiteHeader page="home" />
-        <main className="container">
-          <Hero />
-          <DownloadSection releases={releases} onOpenHistory={() => setHistoryOpen(true)} />
-          <Features />
-          <FAQ />
-        </main>
+        <SiteHeader page="home" modules={HOME_MODULES} />
+        <div className="page-shell">
+          <ModuleNav modules={HOME_MODULES} />
+          <main>
+            <Hero />
+            <DownloadSection releases={releases} onOpenHistory={() => setHistoryOpen(true)} />
+            <Features />
+            <FAQ />
+          </main>
+        </div>
         <SiteFooter onOpenLegal={setLegal} />
       </div>
       <HistoryModal open={historyOpen} onClose={() => setHistoryOpen(false)} releases={releases} />
@@ -61,10 +66,13 @@ function GuideRoute() {
     <div className="page">
       <div className="page-bg" />
       <div className="page-inner">
-        <SiteHeader page="guide" />
-        <main className="container">
-          <GuidePage vsix={releases.vsix} />
-        </main>
+        <SiteHeader page="guide" modules={GUIDE_MODULES} />
+        <div className="page-shell">
+          <ModuleNav modules={GUIDE_MODULES} />
+          <main>
+            <GuidePage vsix={releases.vsix} />
+          </main>
+        </div>
         <SiteFooter onOpenLegal={setLegal} />
       </div>
       <LegalModals type={legal} onClose={() => setLegal(null)} />

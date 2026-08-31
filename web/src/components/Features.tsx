@@ -54,7 +54,7 @@ const steps = [
 export function Features() {
   return (
     <>
-      <section className="section">
+      <section className="section" id="start">
         <div className="section-head">
           <p className="section-kicker">快速上手</p>
           <h2>三步开始使用</h2>

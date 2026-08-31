@@ -1,16 +1,9 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
-import { DesktopOutlined, DownloadOutlined, MenuOutlined } from '@ant-design/icons';
+import { DesktopOutlined, MenuOutlined } from '@ant-design/icons';
+import { PAGE_LINKS, type PageModule, type SitePage } from '../nav/modules';
 
-const links = [
-  { href: '/', label: '首页', page: 'home' as const },
-  { href: '/#features', label: '核心功能' },
-  { href: '/guide', label: '脚本教程', page: 'guide' as const },
-  { href: '/#faq', label: '常见问题' },
-  { href: 'https://docs.remotepro.cn/', label: 'API文档', external: true },
-];
-
-export function SiteHeader({ page }: { page: 'home' | 'guide' }) {
+export function SiteHeader({ page, modules }: { page: SitePage; modules: PageModule[] }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -24,7 +17,7 @@ export function SiteHeader({ page }: { page: 'home' | 'guide' }) {
         </a>
 
         <nav className="nav-links">
-          {links.map((link) => (
+          {PAGE_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -37,9 +30,6 @@ export function SiteHeader({ page }: { page: 'home' | 'guide' }) {
         </nav>
 
         <div className="header-actions">
-          <Button className="header-cta" type="primary" href="/#download" icon={<DownloadOutlined />}>
-            立即下载
-          </Button>
           <Button
             className="menu-btn"
             type="text"
@@ -52,7 +42,7 @@ export function SiteHeader({ page }: { page: 'home' | 'guide' }) {
 
       <Drawer title="远控Pro" placement="right" open={open} onClose={() => setOpen(false)} width={280}>
         <nav className="drawer-links">
-          {links.map((link) => (
+          {PAGE_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -63,9 +53,12 @@ export function SiteHeader({ page }: { page: 'home' | 'guide' }) {
               {link.label}
             </a>
           ))}
-          <a className="drawer-cta" href="/#download" onClick={() => setOpen(false)}>
-            立即下载
-          </a>
+          <p className="drawer-group">本页模块</p>
+          {modules.map((item) => (
+            <a key={item.id} href={`#${item.id}`} onClick={() => setOpen(false)}>
+              {item.label}
+            </a>
+          ))}
         </nav>
       </Drawer>
     </header>

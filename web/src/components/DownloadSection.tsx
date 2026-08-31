@@ -103,7 +103,7 @@ function ClientCard() {
         <p>在被控的越狱 iPhone 上使用 Sileo 或 Cydia 添加源，安装被控端软件。</p>
         <div className="client-source">
           <div className="product-qr-frame">
-            <QRCode value={qrValue} size={112} bordered={false} />
+            <QRCode value={qrValue} size={112} bordered={false} color="#111111" bgColor="#ffffff" />
           </div>
           <div className="client-source-controls">
             <div className="store-switch" role="tablist" aria-label="软件源类型">
