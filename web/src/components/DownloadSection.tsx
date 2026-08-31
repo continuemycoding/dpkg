@@ -76,7 +76,7 @@ export function VsixZone({ state }: { state: PlatformState }) {
         <span className="zone-tag">
           <CodeOutlined /> 脚本开发扩展
         </span>
-        <p>在 VS Code、Cursor、Trae、Qoder、Windsurf、Kiro 中安装，用于编写、调试与部署自动化脚本。</p>
+        <p>在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Windsurf、Kiro 中安装，用于编写、调试与部署自动化脚本。</p>
       </div>
       <div className="vsix-wrap">
         <DownloadButton

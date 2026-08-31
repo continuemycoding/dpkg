@@ -1,4 +1,4 @@
-export const IDE_IDS = ['vscode', 'cursor', 'trae', 'qoder', 'windsurf', 'kiro'] as const;
+export const IDE_IDS = ['vscode', 'cursor', 'trae', 'qoder', 'codebuddy', 'windsurf', 'kiro'] as const;
 
 export type IdeId = (typeof IDE_IDS)[number];
 
@@ -39,10 +39,18 @@ export const IDES: IdeGuide[] = [
   {
     id: 'qoder',
     name: 'Qoder',
-    tag: '阿里巴巴',
-    downloadUrl: 'https://qoder.com/download',
-    downloadLabel: 'qoder.com/download',
-    blurb: '阿里巴巴（Alibaba）出品的智能体编程 IDE，可以交给 AI 做一整段开发任务。兼容 VS Code 扩展，侧栏操作和其他编辑器一致。',
+    tag: '阿里云',
+    downloadUrl: 'https://qoder.com.cn/download',
+    downloadLabel: 'qoder.com.cn/download',
+    blurb: '阿里云出品的国内版（Qoder CN）。打开下载页后请选「Qoder CN IDE」，兼容 VS Code 扩展；不要用国际站 qoder.com，也不要下同页的 Qoder CN 工作台。',
+  },
+  {
+    id: 'codebuddy',
+    name: 'CodeBuddy',
+    tag: '腾讯云',
+    downloadUrl: 'https://www.codebuddy.cn/ide/',
+    downloadLabel: 'codebuddy.cn/ide',
+    blurb: '腾讯云出品的 AI 代码编辑器，对话写代码开箱即用。兼容 VS Code 扩展，把 .vsix 装进去就能用远控Pro。',
   },
   {
     id: 'windsurf',

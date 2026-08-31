@@ -90,7 +90,7 @@ const AGENT_IDEAS = [
 const AGENT_STEPS = [
   {
     title: '用带 AI 的编辑器',
-    desc: 'Cursor、Trae、Qoder、Windsurf、Kiro 都自带 Agent。VS Code 本身没有，需要另装 Cline 或 Claude Code，或直接换上面其中一款。这些软件一般要登录账号，免费额度够练手。',
+    desc: 'Cursor、Trae、Qoder、CodeBuddy、Windsurf、Kiro 都自带 Agent。VS Code 本身没有，需要另装 Cline 或 Claude Code，或直接换上面其中一款。这些软件一般要登录账号，免费额度够练手。',
   },
   {
     title: '先把项目和手机准备好',
@@ -206,7 +206,7 @@ const GUIDE_FAQ = [
     label: faqLabel('VS Code 能用 AI Agent 吗？'),
     children: (
       <p>
-        可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、Windsurf 或 Kiro，打开就能对话写代码。
+        可以，但要另装 Cline 或 Claude Code 这类插件；装好后扩展会把远控Pro工具箱写进它们的配置。嫌麻烦就直接用 Cursor、Trae、Qoder、CodeBuddy、Windsurf 或 Kiro，打开就能对话写代码。
       </p>
     ),
   },
@@ -378,7 +378,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <CodeOutlined />
             <h3>一个支持的编辑器</h3>
             <p>
-              VS Code、Cursor、Trae、Qoder、Windsurf、Kiro 都可以。想自己写代码用 VS Code；想让 AI 帮写，选 Cursor 或 Trae 更省事。
+              VS Code、Cursor、Trae、Qoder、CodeBuddy、Windsurf、Kiro 都可以。想自己写代码用 VS Code；想让 AI 帮写，选 Cursor 或 Trae 更省事。
             </p>
           </article>
         </div>
