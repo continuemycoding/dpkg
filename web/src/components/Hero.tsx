@@ -1,4 +1,5 @@
 import { ApiOutlined, DesktopOutlined, DownloadOutlined, ThunderboltOutlined, WifiOutlined } from '@ant-design/icons';
+import { brand } from '../brand';
 
 export function Hero() {
   return (
@@ -13,15 +14,12 @@ export function Hero() {
           <DownloadOutlined />
           立即下载
         </a>
-        <a
-          className="hero-cta-ghost"
-          href="https://docs.remotepro.cn/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <ApiOutlined />
-          API 文档
-        </a>
+        {brand.docsUrl ? (
+          <a className="hero-cta-ghost" href={brand.docsUrl} target="_blank" rel="noopener noreferrer">
+            <ApiOutlined />
+            API 文档
+          </a>
+        ) : null}
       </div>
       <div className="hero-stats">
         <div className="hero-stat">

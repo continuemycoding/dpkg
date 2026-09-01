@@ -1,3 +1,5 @@
+import { brand } from '../brand';
+
 export type SitePage = 'home' | 'guide';
 
 export interface PageLink {
@@ -14,8 +16,14 @@ export interface PageModule {
 
 export const PAGE_LINKS: PageLink[] = [
   { href: '/', label: '首页', page: 'home' },
-  { href: '/guide', label: '脚本教程', page: 'guide' },
-  { href: 'https://docs.remotepro.cn/', label: 'API文档', external: true },
+  ...(brand.showScripts
+    ? [
+        { href: '/guide', label: '脚本教程', page: 'guide' as const },
+        ...(brand.docsUrl
+          ? [{ href: brand.docsUrl, label: 'API文档', external: true }]
+          : []),
+      ]
+    : []),
 ];
 
 export const HOME_MODULES: PageModule[] = [

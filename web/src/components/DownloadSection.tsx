@@ -15,8 +15,9 @@ import {
   WindowsOutlined,
 } from '@ant-design/icons';
 import { latestLabel, type PlatformState, type ReleasesMap } from '../api/releases';
+import { brand } from '../brand';
 
-const SITE_REPO_URL = 'https://remotepro.cn';
+const SITE_REPO_URL = brand.siteUrl;
 const SILEO_SOURCE_URL = `sileo://source/${SITE_REPO_URL}`;
 const CYDIA_SOURCE_URL = `cydia://url/https://cydia.saurik.com/api/share#?source=${SITE_REPO_URL}`;
 
@@ -172,50 +173,54 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
           </div>
         </article>
 
-        <article className="product-card tone-dev" id="zone-vsix">
-          <div className="product-body">
-            <p className="product-label">
-              <CodeOutlined /> 脚本扩展
-            </p>
-            <h3>在编辑器里写自动化</h3>
-            <p>
-              在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 中安装，用于编写、调试与部署脚本。
-            </p>
-            <div className="product-actions">
-              {vsixHref ? (
-                <a className="product-btn" href={vsixHref}>
-                  下载 .vsix
+        {brand.showScripts ? (
+          <article className="product-card tone-dev" id="zone-vsix">
+            <div className="product-body">
+              <p className="product-label">
+                <CodeOutlined /> 脚本扩展
+              </p>
+              <h3>在编辑器里写自动化</h3>
+              <p>
+                在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 中安装，用于编写、调试与部署脚本。
+              </p>
+              <div className="product-actions">
+                {vsixHref ? (
+                  <a className="product-btn" href={vsixHref}>
+                    下载 .vsix
+                  </a>
+                ) : (
+                  <span className="product-btn is-disabled">下载 .vsix</span>
+                )}
+                <a className="product-btn-ghost" href="/guide">
+                  安装说明
                 </a>
-              ) : (
-                <span className="product-btn is-disabled">下载 .vsix</span>
-              )}
-              <a className="product-btn-ghost" href="/guide">
-                安装说明
-              </a>
+              </div>
+              <p className="product-hint">{latestLabel(releases.vsix)}</p>
             </div>
-            <p className="product-hint">{latestLabel(releases.vsix)}</p>
-          </div>
-        </article>
+          </article>
+        ) : null}
 
         <ClientCard />
 
-        <article className="product-card tone-guide">
-          <div className="product-body">
-            <p className="product-label">
-              <BookOutlined /> 教程
-            </p>
-            <h3>零基础也能写脚本</h3>
-            <p>按编辑器安装扩展，连上手机，再用 AI Agent 用中文写出第一条脚本。</p>
-            <div className="product-actions">
-              <a className="product-btn" href="/guide">
-                打开脚本教程
-              </a>
-              <a className="product-btn-ghost" href="/guide#agent">
-                用 AI 写脚本
-              </a>
+        {brand.showScripts ? (
+          <article className="product-card tone-guide">
+            <div className="product-body">
+              <p className="product-label">
+                <BookOutlined /> 教程
+              </p>
+              <h3>零基础也能写脚本</h3>
+              <p>按编辑器安装扩展，连上手机，再用 AI Agent 用中文写出第一条脚本。</p>
+              <div className="product-actions">
+                <a className="product-btn" href="/guide">
+                  打开脚本教程
+                </a>
+                <a className="product-btn-ghost" href="/guide#agent">
+                  用 AI 写脚本
+                </a>
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
+        ) : null}
       </div>
 
       <div className="history-row">

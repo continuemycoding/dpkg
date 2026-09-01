@@ -10,6 +10,7 @@ import {
   WindowsOutlined,
 } from '@ant-design/icons';
 import type { HistoryItem, Platform, ReleasesMap } from '../api/releases';
+import { brand } from '../brand';
 
 interface HistoryModalProps {
   open: boolean;
@@ -79,7 +80,7 @@ export function HistoryModal({ open, onClose, releases }: HistoryModalProps) {
         建议始终使用最新版本以获得最佳安全性和性能。
       </p>
       <Tabs
-        items={tabMeta.map((tab) => ({
+        items={(brand.showScripts ? tabMeta : tabMeta.filter((tab) => tab.key !== 'vsix')).map((tab) => ({
           key: tab.key,
           label: (
             <span>

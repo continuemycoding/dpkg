@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Modal } from 'antd';
 import { FileProtectOutlined, SafetyCertificateOutlined, TeamOutlined } from '@ant-design/icons';
 import type { LegalType } from './SiteFooter';
+import { brand } from '../brand';
 
 interface LegalModalsProps {
   type: LegalType | null;
@@ -19,7 +20,7 @@ const content: Record<
     body: (
       <>
         <p>
-          <strong>远控Pro</strong>是一支专注于移动设备自动化管理与群控技术的极客团队。我们致力于为应用测试、游戏工作室及设备运维人员提供最高效的 iOS 管理方案。
+          <strong>{brand.name}</strong>是一支专注于移动设备自动化管理与群控技术的极客团队。我们致力于为应用测试、游戏工作室及设备运维人员提供最高效的 iOS 管理方案。
         </p>
         <p>我们的愿景是打破 iOS 系统封闭性的限制，通过合法的越狱技术，让设备管理变得像操作电脑一样简单直观。</p>
       </>
@@ -31,7 +32,7 @@ const content: Record<
     okText: '我已阅读并同意',
     body: (
       <>
-        <p>欢迎使用远控Pro。请您仔细阅读以下条款，使用本软件即表示您同意受本协议约束。</p>
+        <p>欢迎使用{brand.name}。请您仔细阅读以下条款，使用本软件即表示您同意受本协议约束。</p>
         <h4>1. 授权范围</h4>
         <p>本软件授予您非排他性的、不可转让的许可，仅供您在个人或企业内部的合法设备上安装和使用。严禁对本软件进行反向工程、反编译或破解。</p>
         <h4>2. 合法使用承诺</h4>
@@ -53,7 +54,7 @@ const content: Record<
     okText: '理解并关闭',
     body: (
       <>
-        <p>远控Pro高度重视您的隐私安全。本软件以本地与点对点连接为主，我们在数据处理上遵循“本地优先、最小必要”原则。</p>
+        <p>{brand.name}高度重视您的隐私安全。本软件以本地与点对点连接为主，我们在数据处理上遵循“本地优先、最小必要”原则。</p>
         <h4>1. 数据传输机制</h4>
         <p>
           本软件的核心功能（投屏画面、触控指令、文件传输）可通过 <strong>USB、局域网 (LAN)</strong> 或您启用的{' '}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Drawer } from 'antd';
 import { DesktopOutlined, MenuOutlined } from '@ant-design/icons';
+import { brand } from '../brand';
 import { PAGE_LINKS, type PageModule, type SitePage } from '../nav/modules';
 
 export function SiteHeader({ page, modules }: { page: SitePage; modules: PageModule[] }) {
@@ -13,7 +14,7 @@ export function SiteHeader({ page, modules }: { page: SitePage; modules: PageMod
           <span className="brand-mark">
             <DesktopOutlined />
           </span>
-          <span className="brand-name">远控Pro</span>
+          <span className="brand-name">{brand.name}</span>
         </a>
 
         <nav className="nav-links">
@@ -40,7 +41,7 @@ export function SiteHeader({ page, modules }: { page: SitePage; modules: PageMod
         </div>
       </div>
 
-      <Drawer title="远控Pro" placement="right" open={open} onClose={() => setOpen(false)} width={280}>
+      <Drawer title={brand.name} placement="right" open={open} onClose={() => setOpen(false)} width={280}>
         <nav className="drawer-links">
           {PAGE_LINKS.map((link) => (
             <a

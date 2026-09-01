@@ -1,8 +1,9 @@
 .git
 .github
 .vscode
-debs
 web/node_modules
 web/dist
 node_modules
+repos
+data
 *.md

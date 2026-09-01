@@ -3,3 +3,8 @@ web/node_modules/
 /yarn.lock
 /dist/
 web/dist/
+/repos/
+/data/
+sources/wegoin/debs/*.deb
+
+

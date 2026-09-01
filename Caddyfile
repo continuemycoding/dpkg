@@ -1,51 +1,81 @@
+(spa) {
+	handle /guide* {
+		rewrite * /index.html
+		file_server
+	}
+}
+
+(apt_repo) {
+	handle /debs/* {
+		root * /usr/share/caddy/repos/{args[0]}
+		header Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+
+	handle /CydiaIcon* {
+		root * /usr/share/caddy/repos/{args[0]}
+		file_server
+	}
+
+	handle /Packages.bz2 {
+		@not_cydia {
+			not header User-Agent *Cydia*
+		}
+		respond @not_cydia "Not Found" 404
+		root * /usr/share/caddy/repos/{args[0]}
+		header Cache-Control "no-cache"
+		file_server
+	}
+
+	handle /Packages* {
+		root * /usr/share/caddy/repos/{args[0]}
+		header Cache-Control "no-cache"
+		file_server
+	}
+
+	handle /Release* {
+		root * /usr/share/caddy/repos/{args[0]}
+		header Cache-Control "no-cache"
+		file_server
+	}
+}
+
 (cdn_redir) {
-    vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
-    vars release_url https://gitcode.com/gcw_uHaLXrdK/Dopamine/releases/download/2.4.9
+	vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
+	vars release_url https://gitcode.com/gcw_uHaLXrdK/Dopamine/releases/download/2.4.9
 
-    redir /rootless /Dopamine.tipa 302
-    redir /roothide /Dopamine2.tipa 302
+	redir /rootless /Dopamine.tipa 302
+	redir /roothide /Dopamine2.tipa 302
 
-    handle /debs/*.deb {
-        # 定义正则匹配器，捕获文件名部分
-        @deb_capture path_regexp deb ^/debs/(.*\.deb)$
-        
-        redir @deb_capture {vars.cdn_url}/{re.deb.1} 302
-    }
+	@release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)[0-9]*\.zip|PersistenceHelper_Embedded|plumesign-.*)$
+	handle @release_assets {
+		redir {vars.release_url}/{re.assets.1} 302
+	}
 
-    handle /Packages.bz2 {
-        @not_cydia {
-            not header User-Agent *Cydia*
-        }
-        
-        respond @not_cydia "Not Found" 404
-    }
+	handle {
+		@should_redirect {
+			not path / /guide /guide/* /favicon.ico /Release* /Packages* /CydiaIcon* /assets/* /debs/*
+		}
 
-    @release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)[0-9]*\.zip|PersistenceHelper_Embedded|plumesign-.*)$
-    handle @release_assets {
-        redir {vars.release_url}/{re.assets.1} 302
-    }
-
-    handle {
-        @should_redirect {
-            not path / /guide /guide/* /favicon.ico /Release* /Packages* /CydiaIcon* /assets/*
-        }
-
-        # 这里的 {uri} 会保留原始目录结构
-        redir @should_redirect {vars.cdn_url}{uri} 302
-    }
+		redir @should_redirect {vars.cdn_url}{uri} 302
+	}
 }
 
 remotepro.cn {
-    root * /usr/share/caddy
+	root * /usr/share/caddy
+	encode gzip zstd
+	import spa
+	import apt_repo remotepro
+	import cdn_redir
+	file_server
+}
 
-    handle /guide* {
-        rewrite * /index.html
-        file_server
-    }
-
-    import cdn_redir
-
-    file_server
+wegoin.xyz, www.wegoin.xyz {
+	root * /usr/share/caddy
+	encode gzip zstd
+	import spa
+	import apt_repo wegoin
+	file_server
 }
 
 git.remotepro.cn {
@@ -57,14 +87,14 @@ test.remotepro.cn {
 }
 
 docs.remotepro.cn {
-    root * /usr/share/caddy/docs
-    encode gzip zstd
+	root * /usr/share/caddy/docs
+	encode gzip zstd
 
-    @hashed path /assets/*
-    header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@hashed path /assets/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
 
-    @uncached not path /assets/*
-    header @uncached Cache-Control "no-cache"
+	@uncached not path /assets/*
+	header @uncached Cache-Control "no-cache"
 
-    file_server
+	file_server
 }

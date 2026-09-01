@@ -16,9 +16,11 @@ import {
   ToolOutlined,
 } from '@ant-design/icons';
 import type { PlatformState } from '../api/releases';
+import { brand } from '../brand';
 import { IDES, parseIdeId, type IdeId } from '../guide/ides';
 
-const DOCS_URL = 'https://docs.remotepro.cn/';
+const DOCS_URL = brand.docsUrl ?? 'https://docs.remotepro.cn/';
+const productName = brand.name;
 
 const LANGUAGES = [
   { name: 'Python', hint: '最适合入门，语法简单' },
@@ -35,8 +37,8 @@ const LANGUAGES = [
 
 const FIRST_STEPS = [
   {
-    title: '打开「远控Pro」侧栏',
-    desc: '看编辑器最左边那一列图标（活动栏），点「远控Pro」。侧栏顶部有两个页签：编译部署、设备管理。',
+    title: `打开「${productName}」侧栏`,
+    desc: `看编辑器最左边那一列图标（活动栏），点「${productName}」。侧栏顶部有两个页签：编译部署、设备管理。`,
   },
   {
     title: '新建一个项目',
@@ -44,7 +46,7 @@ const FIRST_STEPS = [
   },
   {
     title: '连上你的手机',
-    desc: '切到「设备管理」，点「扫描局域网」。出现设备后点「连接」。电脑和手机要在同一 Wi‑Fi；手机上需要安装「远控Pro」被控端。',
+    desc: `切到「设备管理」，点「扫描局域网」。出现设备后点「连接」。电脑和手机要在同一 Wi‑Fi；手机上需要安装「${productName}」被控端。`,
   },
   {
     title: '配置调试环境',
@@ -83,7 +85,7 @@ const AGENT_IDEAS = [
   {
     icon: <ApiOutlined />,
     title: 'MCP 工具箱',
-    desc: '装好远控Pro扩展后，会出现 remotepro-toolkit。打开它，AI 才能查接口文档、检查调试环境、看到已连接的手机。',
+    desc: `装好${productName}扩展后，会出现 remotepro-toolkit。打开它，AI 才能查接口文档、检查调试环境、看到已连接的手机。`,
   },
 ];
 
@@ -113,7 +115,7 @@ const AGENT_CAN = [
   { title: '按步骤改代码', desc: '把流程告诉它，它会改项目里的主文件，并尽量让代码能编过。' },
 ];
 
-const AGENT_PROMPT = `我用远控Pro写自动化脚本。
+const AGENT_PROMPT = `我用${productName}写自动化脚本。
 请帮我写：打开「微信」，点搜索，输入「文件传输助手」，点进去，发送「你好」。`;
 
 function Kbd({ children }: { children: string }) {
@@ -132,7 +134,7 @@ function faqLabel(text: string) {
 const GUIDE_FAQ = [
   {
     key: 'vsix-market',
-    label: faqLabel('扩展视图里搜不到「远控Pro」？'),
+    label: faqLabel(`扩展视图里搜不到「${productName}」？`),
     children: (
       <p>
         正常。它目前通过 .vsix 文件安装，不会出现在 VS Code / Cursor 等扩展市场里。请用扩展视图右上角 ··· →
@@ -142,7 +144,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'no-icon',
-    label: faqLabel('装完左侧没有远控Pro图标？'),
+    label: faqLabel(`装完左侧没有${productName}图标？`),
     children: (
       <p>
         打开命令面板（<Kbd>Ctrl+Shift+P</Kbd> 或 Mac <Kbd>⌘⇧P</Kbd>），输入 Reload Window 并回车。
@@ -193,7 +195,7 @@ const GUIDE_FAQ = [
     children: (
       <p>
         正常。到编辑器设置里找「MCP」或「工具」，打开名字以 <code>remotepro-toolkit</code>{' '}
-        开头的那一项。要先装好远控Pro扩展并打开项目，这项才会出现。找不到就重载窗口再看一次。
+        开头的那一项。要先装好{productName}扩展并打开项目，这项才会出现。找不到就重载窗口再看一次。
       </p>
     ),
   },
@@ -202,7 +204,7 @@ const GUIDE_FAQ = [
     label: faqLabel('VS Code 能用 AI Agent 吗？'),
     children: (
       <p>
-        可以。VS Code 自带 GitHub Copilot，对话里选 Agent 就能改文件。也可以另装 Cline 或 Claude Code。装好远控Pro扩展后，记得打开 remotepro-toolkit。
+        可以。VS Code 自带 GitHub Copilot，对话里选 Agent 就能改文件。也可以另装 Cline 或 Claude Code。装好{productName}扩展后，记得打开 remotepro-toolkit。
       </p>
     ),
   },
@@ -248,13 +250,13 @@ function IdePanel({
         。装好后从开始菜单或启动台打开它。
       </p>
 
-      <h3>2. 下载远控Pro扩展</h3>
+      <h3>2. 下载{productName}扩展</h3>
       <p>
         点下面按钮下载 <code>.vsix</code> 文件。它不是安装包，下一步要把它装进 {ide.name}。
       </p>
       <p>
         <Button type="primary" href={vsixHref || '/#download'} icon={<DownloadOutlined />}>
-          {vsixHref ? '下载远控Pro扩展 (.vsix)' : '去首页下载扩展'}
+          {vsixHref ? `下载${productName}扩展 (.vsix)` : '去首页下载扩展'}
         </Button>
       </p>
 
@@ -274,8 +276,8 @@ function IdePanel({
             body: '菜单里点「从 VSIX 安装...」或 Install from VSIX...，选出刚才下载的 .vsix 文件。',
           },
           {
-            title: '看到远控Pro图标就成功了',
-            body: '若提示「重新加载」，点它。左侧活动栏出现「远控Pro」图标后，就可以往下跟着做了。',
+            title: `看到${productName}图标就成功了`,
+            body: `若提示「重新加载」，点它。左侧活动栏出现「${productName}」图标后，就可以往下跟着做了。`,
           },
         ]}
       />
@@ -311,7 +313,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <p className="section-kicker">写给第一次用的同学</p>
         <h1>零基础也能写脚本</h1>
         <p className="guide-lead">
-          把远控Pro扩展装进 VS Code、Cursor、Trae 等编辑器，连上越狱 iPhone，就可以写自动化、边写边调试，再发布到手机。
+          把{productName}扩展装进 VS Code、Cursor、Trae 等编辑器，连上越狱 iPhone，就可以写自动化、边写边调试，再发布到手机。
           不会写代码也没关系：装好后用中文描述需求，让 AI Agent 帮你写。
         </p>
         <div className="guide-hero-actions">
@@ -355,7 +357,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <h3>越狱 iPhone + 被控端</h3>
             <p>
               手机已越狱，并用 Sileo / Cydia 添加{' '}
-              <a href="/#zone-client">远控Pro软件源</a>
+              <a href="/#zone-client">{productName}软件源</a>
               ，装好被控端。手机保持亮屏、被控端在运行。
             </p>
           </article>

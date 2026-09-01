@@ -1,5 +1,6 @@
 import { Collapse } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import { brand } from '../brand';
 
 const items = [
   {
@@ -79,6 +80,8 @@ const items = [
 ];
 
 export function FAQ() {
+  const visibleItems = brand.showScripts ? items : items.filter((item) => item.key !== 'vsix');
+
   return (
     <section className="section" id="faq">
       <div className="section-head">
@@ -88,10 +91,10 @@ export function FAQ() {
       </div>
       <div className="faq-wrap">
         <Collapse
-          items={items}
+          items={visibleItems}
           bordered={false}
           expandIconPosition="end"
-          defaultActiveKey={items.map((item) => item.key)}
+          defaultActiveKey={visibleItems.map((item) => item.key)}
         />
       </div>
     </section>

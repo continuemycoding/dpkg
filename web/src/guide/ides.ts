@@ -1,3 +1,5 @@
+import { brand } from '../brand';
+
 export const IDE_IDS = ['vscode', 'cursor', 'trae', 'qoder', 'codebuddy', 'windsurf', 'kiro'] as const;
 
 export type IdeId = (typeof IDE_IDS)[number];
@@ -66,7 +68,7 @@ export const IDES: IdeGuide[] = [
     tag: '亚马逊 AWS',
     downloadUrl: 'https://kiro.dev/downloads/',
     downloadLabel: 'kiro.dev/downloads',
-    blurb: '亚马逊云科技（AWS）出品，强调先写需求规格再让 AI 动手。下载页请选 IDE，不要下 Crew 或 CLI。兼容 VS Code 扩展，装好远控Pro后用法和其他编辑器一样。',
+    blurb: `亚马逊云科技（AWS）出品，强调先写需求规格再让 AI 动手。下载页请选 IDE，不要下 Crew 或 CLI。兼容 VS Code 扩展，装好${brand.name}后用法和其他编辑器一样。`,
   },
 ];
 
