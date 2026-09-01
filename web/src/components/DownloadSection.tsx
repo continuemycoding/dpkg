@@ -36,13 +36,15 @@ function PlatformChip({
   state,
   icon,
   label,
+  variant,
 }: {
   state: PlatformState;
   icon: ReactNode;
   label: string;
+  variant: 'win' | 'mac' | 'android' | 'iphone';
 }) {
   const href = state.latest?.url;
-  const className = `platform-chip${href ? '' : ' is-disabled'}`;
+  const className = `platform-chip chip-${variant}${href ? '' : ' is-disabled'}`;
   const inner = (
     <>
       <span className="platform-chip-icon">{icon}</span>
@@ -94,7 +96,7 @@ function ClientCard() {
   };
 
   return (
-    <article className="product-card" id="zone-client">
+    <article className="product-card tone-client" id="zone-client">
       <div className="product-body">
         <p className="product-label">
           <MobileOutlined /> 被控端
@@ -154,7 +156,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
   return (
     <>
       <div className="products" id="download">
-        <article className="product-card" id="zone-control">
+        <article className="product-card tone-control" id="zone-control">
           <div className="product-body">
             <p className="product-label">
               <DesktopOutlined /> 控制端
@@ -162,15 +164,15 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
             <h3>连接并管理设备</h3>
             <p>在电脑或手机上安装，用于连接并管理已越狱的 iOS 设备。</p>
             <div className="platform-grid">
-              <PlatformChip state={releases.win} icon={<WindowsOutlined />} label="Windows" />
-              <PlatformChip state={releases.mac} icon={<AppleOutlined />} label="macOS" />
-              <PlatformChip state={releases.android} icon={<AndroidOutlined />} label="Android" />
-              <PlatformChip state={releases.iphone} icon={<AppstoreOutlined />} label="iPhone" />
+              <PlatformChip state={releases.win} icon={<WindowsOutlined />} label="Windows" variant="win" />
+              <PlatformChip state={releases.mac} icon={<AppleOutlined />} label="macOS" variant="mac" />
+              <PlatformChip state={releases.android} icon={<AndroidOutlined />} label="Android" variant="android" />
+              <PlatformChip state={releases.iphone} icon={<AppstoreOutlined />} label="iPhone" variant="iphone" />
             </div>
           </div>
         </article>
 
-        <article className="product-card" id="zone-vsix">
+        <article className="product-card tone-dev" id="zone-vsix">
           <div className="product-body">
             <p className="product-label">
               <CodeOutlined /> 脚本扩展
@@ -197,7 +199,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
 
         <ClientCard />
 
-        <article className="product-card">
+        <article className="product-card tone-guide">
           <div className="product-body">
             <p className="product-label">
               <BookOutlined /> 教程

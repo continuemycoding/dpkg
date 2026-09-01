@@ -123,7 +123,7 @@ function Kbd({ children }: { children: string }) {
 function faqLabel(text: string) {
   return (
     <span>
-      <QuestionCircleOutlined style={{ color: '#c6b08a', marginRight: 10 }} />
+      <QuestionCircleOutlined style={{ color: 'var(--accent)', marginRight: 10 }} />
       {text}
     </span>
   );
@@ -339,7 +339,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         </div>
         <div className="guide-lang-grid">
           {LANGUAGES.map((lang) => (
-            <div className="guide-lang" key={lang.name}>
+            <div className={`guide-lang${lang.name === 'Python' ? ' is-recommended' : ''}`} key={lang.name}>
               <strong>{lang.name}</strong>
               <span>{lang.hint}</span>
             </div>
