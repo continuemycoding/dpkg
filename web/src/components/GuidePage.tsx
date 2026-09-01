@@ -309,13 +309,10 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
     <article className="guide">
       <header className="guide-hero">
         <p className="section-kicker">写给第一次用的同学</p>
-        <h1>
-          远控Pro脚本扩展
-          <span className="hero-focus">零基础也能写脚本</span>
-        </h1>
+        <h1>零基础也能写脚本</h1>
         <p className="guide-lead">
-          这个扩展装在电脑上的代码编辑器里，用来写自动化脚本、连越狱 iPhone、边写边调试，再编译发布到手机。
-          下面按「先准备 → 选编辑器安装 → 跟着点」的顺序来。不会写代码也没关系：装好后可以用 AI Agent，用中文描述需求，让它帮你写。
+          把远控Pro扩展装进 VS Code、Cursor、Trae 等编辑器，连上越狱 iPhone，就可以写自动化、边写边调试，再发布到手机。
+          不会写代码也没关系：装好后用中文描述需求，让 AI Agent 帮你写。
         </p>
         <div className="guide-hero-actions">
           <Button type="primary" size="large" href="#install">

@@ -299,40 +299,33 @@ a {
 
 .hero-kicker {
   margin: 0 0 22px;
-  color: var(--accent);
+  color: var(--muted);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.12em;
 }
 
 .hero h1,
 .guide-hero h1 {
-  margin: 0 0 20px;
-  padding: 0.08em 0 0.12em;
+  margin: 0 auto 18px;
+  max-width: 16em;
+  padding: 0.08em 0;
   overflow: visible;
-  font-family: 'Noto Serif SC', 'Songti SC', serif;
-  font-size: clamp(40px, 6.2vw, 72px);
-  line-height: 1.35;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-
-.hero-focus,
-.guide-hero .hero-focus {
-  display: block;
-  margin-top: 0.08em;
-  font-style: normal;
-  font-weight: 500;
-  color: var(--accent);
+  font-family: 'DM Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: clamp(36px, 5.4vw, 56px);
+  line-height: 1.22;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text);
 }
 
 .hero-lead,
 .guide-lead {
-  margin: 0 auto 28px;
-  max-width: 560px;
+  margin: 0 auto 32px;
+  max-width: 520px;
   color: var(--muted);
-  font-size: 18px;
-  line-height: 1.75;
+  font-size: 17px;
+  line-height: 1.7;
 }
 
 .hero-actions,
