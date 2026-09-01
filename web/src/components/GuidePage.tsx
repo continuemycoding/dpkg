@@ -311,8 +311,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <p className="section-kicker">写给第一次用的同学</p>
         <h1>
           远控Pro脚本扩展
-          <br />
-          <em>零基础也能写脚本</em>
+          <span className="hero-focus">零基础也能写脚本</span>
         </h1>
         <p className="guide-lead">
           这个扩展装在电脑上的代码编辑器里，用来写自动化脚本、连越狱 iPhone、边写边调试，再编译发布到手机。

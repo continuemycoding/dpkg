@@ -6,8 +6,7 @@ export function Hero() {
       <p className="hero-kicker">支持 iOS 13 – 26.0.1 · 任意越狱方式</p>
       <h1>
         专业级 iOS 设备
-        <br />
-        <em>批量投屏与群控</em>
+        <span className="hero-focus">批量投屏与群控</span>
       </h1>
       <p className="hero-lead">
         通过 USB、局域网或广域网连接，实现低延迟、高帧率的 iPhone 批量控制。
