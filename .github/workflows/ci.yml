@@ -143,10 +143,11 @@ jobs:
 
           existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
           upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
-          files_to_upload = glob.glob('sources/remotepro/debs/*.deb')
+          files_to_upload = glob.glob('sources/remotepro/debs/*.deb') + glob.glob('sources/shared/debs/*.deb')
 
+          keep = set(files_to_upload)
           for filename in existing_assets:
-              if filename.endswith(".deb") and f'sources/remotepro/debs/{filename}' not in files_to_upload:
+              if filename.endswith(".deb") and f'sources/remotepro/debs/{filename}' not in keep and f'sources/shared/debs/{filename}' not in keep:
                   print(f"[删除] {filename}")
                   url = f"https://gitee.com/{repo}/releases/download/v1/{filename}"
                   response = requests.head(url, allow_redirects=False)

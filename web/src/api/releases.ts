@@ -263,6 +263,24 @@ export async function fetchAllReleases(): Promise<ReleasesMap> {
   return data;
 }
 
+export function staticReleases(
+  version: string,
+  files: { win: string; mac: string; android: string; iphone: string },
+): ReleasesMap {
+  const one = (file: string): PlatformState => ({
+    latest: { version, url: `/${file}` },
+    history: [],
+    status: 'ready',
+  });
+  return {
+    win: one(files.win),
+    mac: one(files.mac),
+    android: one(files.android),
+    iphone: one(files.iphone),
+    vsix: emptyState('empty'),
+  };
+}
+
 export function latestLabel(state: PlatformState): string {
   if (state.status === 'loading') return '检测中...';
   if (state.status === 'error') return '网络异常';

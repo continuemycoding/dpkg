@@ -4,13 +4,22 @@ import {
   initialReleases,
   isCacheFresh,
   loadCachedReleases,
+  staticReleases,
   type ReleasesMap,
 } from '../api/releases';
+import { brand } from '../brand';
+
+const LOCAL_RELEASES: ReleasesMap | null = brand.downloads
+  ? staticReleases(brand.downloads.version, brand.downloads.files)
+  : null;
 
 export function useReleases(): ReleasesMap {
-  const [releases, setReleases] = useState<ReleasesMap>(() => loadCachedReleases() ?? initialReleases());
+  const [releases, setReleases] = useState<ReleasesMap>(
+    () => LOCAL_RELEASES ?? loadCachedReleases() ?? initialReleases(),
+  );
 
   useEffect(() => {
+    if (LOCAL_RELEASES) return;
     if (isCacheFresh()) return;
 
     let cancelled = false;
@@ -25,5 +34,5 @@ export function useReleases(): ReleasesMap {
     };
   }, []);
 
-  return releases;
+  return LOCAL_RELEASES ?? releases;
 }

@@ -47,14 +47,19 @@ function HomePage() {
           <ModuleNav modules={HOME_MODULES} />
           <main>
             <Hero />
-            <DownloadSection releases={releases} onOpenHistory={() => setHistoryOpen(true)} />
+            <DownloadSection
+              releases={releases}
+              onOpenHistory={brand.showHistory ? () => setHistoryOpen(true) : () => undefined}
+            />
             <Features />
             <FAQ />
           </main>
         </div>
         <SiteFooter onOpenLegal={setLegal} />
       </div>
-      <HistoryModal open={historyOpen} onClose={() => setHistoryOpen(false)} releases={releases} />
+      {brand.showHistory ? (
+        <HistoryModal open={historyOpen} onClose={() => setHistoryOpen(false)} releases={releases} />
+      ) : null}
       <LegalModals type={legal} onClose={() => setLegal(null)} />
     </div>
   );

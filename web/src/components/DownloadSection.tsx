@@ -224,9 +224,11 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
       </div>
 
       <div className="history-row">
-        <Button type="link" icon={<HistoryOutlined />} onClick={onOpenHistory}>
-          查看历史版本下载
-        </Button>
+        {brand.showHistory ? (
+          <Button type="link" icon={<HistoryOutlined />} onClick={onOpenHistory}>
+            查看历史版本下载
+          </Button>
+        ) : null}
         <p className="trust-line">
           <SafetyCertificateOutlined /> 安全纯净无广告 · 持续更新维护
         </p>

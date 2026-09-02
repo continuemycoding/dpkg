@@ -5,13 +5,7 @@
 	}
 }
 
-(apt_repo) {
-	handle /debs/* {
-		root * /usr/share/caddy/repos/{args[0]}
-		header Cache-Control "public, max-age=31536000, immutable"
-		file_server
-	}
-
+(apt_index) {
 	handle /CydiaIcon* {
 		root * /usr/share/caddy/repos/{args[0]}
 		file_server
@@ -40,12 +34,41 @@
 	}
 }
 
+(apt_debs) {
+	handle /debs/* {
+		root * /usr/share/caddy/repos/{args[0]}
+		header Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+}
+
+(wegoin_files) {
+	@wegoin_file {
+		not path / /index.html /favicon.ico /guide /guide/* /assets/* /debs/* /Packages* /Release* /CydiaIcon*
+		file {
+			root /sources/wegoin/files
+			try_files {path}
+		}
+	}
+
+	handle @wegoin_file {
+		root * /sources/wegoin/files
+		header Cache-Control "public, max-age=3600"
+		file_server
+	}
+}
+
 (cdn_redir) {
 	vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
 	vars release_url https://gitcode.com/gcw_uHaLXrdK/Dopamine/releases/download/2.4.9
 
 	redir /rootless /Dopamine.tipa 302
 	redir /roothide /Dopamine2.tipa 302
+
+	handle /debs/*.deb {
+		@deb_capture path_regexp deb ^/debs/(.*\.deb)$
+		redir @deb_capture {vars.cdn_url}/{re.deb.1} 302
+	}
 
 	@release_assets path_regexp assets ^/(.*\.tipa|(node|python|lua)[0-9]*\.zip|PersistenceHelper_Embedded|plumesign-.*)$
 	handle @release_assets {
@@ -56,7 +79,6 @@
 		@should_redirect {
 			not path / /guide /guide/* /favicon.ico /Release* /Packages* /CydiaIcon* /assets/* /debs/*
 		}
-
 		redir @should_redirect {vars.cdn_url}{uri} 302
 	}
 }
@@ -65,7 +87,7 @@ remotepro.cn {
 	root * /usr/share/caddy
 	encode gzip zstd
 	import spa
-	import apt_repo remotepro
+	import apt_index remotepro
 	import cdn_redir
 	file_server
 }
@@ -74,7 +96,9 @@ wegoin.xyz, www.wegoin.xyz {
 	root * /usr/share/caddy
 	encode gzip zstd
 	import spa
-	import apt_repo wegoin
+	import apt_index wegoin
+	import apt_debs wegoin
+	import wegoin_files
 	file_server
 }
 
