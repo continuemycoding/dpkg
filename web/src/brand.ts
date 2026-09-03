@@ -43,10 +43,10 @@ function resolveBrand(): Brand {
       downloads: {
         version: '1.0.0',
         files: {
-          win: 'Wegoin-windows.exe',
-          mac: 'Wegoin-macos.dmg',
-          android: 'Wegoin-android.apk',
-          iphone: 'Wegoin-iphone.ipa',
+          win: 'Wegoin-windows.zip',
+          mac: 'Wegoin-macos.zip',
+          android: 'Wegoin.apk',
+          iphone: 'Wegoin.ipa',
         },
       },
     };

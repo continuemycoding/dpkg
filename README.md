@@ -9,10 +9,10 @@ data/wegoin/
   debs/                          # 软件源（Sileo / Cydia），启动时生成 Packages
     *.deb
   files/                         # 控制端安装包，对应网站根路径 https://wegoin.xyz/<文件名>
-    Wegoin-windows.exe
-    Wegoin-macos.dmg
-    Wegoin-android.apk
-    Wegoin-iphone.ipa
+    Wegoin-windows.zip
+    Wegoin-macos.zip
+    Wegoin.apk
+    Wegoin.ipa
 ```
 
 版本号写在 `web/src/brand.ts` 的 `downloads.version`（当前 `1.0.0`）。改版本或改文件名后要重新构建镜像。
