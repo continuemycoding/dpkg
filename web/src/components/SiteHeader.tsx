@@ -17,18 +17,20 @@ export function SiteHeader({ page, modules }: { page: SitePage; modules: PageMod
           <span className="brand-name">{brand.name}</span>
         </a>
 
-        <nav className="nav-links">
-          {PAGE_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className={link.page && link.page === page ? 'active' : undefined}
-              {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+        {PAGE_LINKS.length > 0 ? (
+          <nav className="nav-links">
+            {PAGE_LINKS.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className={link.page && link.page === page ? 'active' : undefined}
+                {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        ) : null}
 
         <div className="header-actions">
           <Button

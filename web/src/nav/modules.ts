@@ -14,17 +14,19 @@ export interface PageModule {
   label: string;
 }
 
-export const PAGE_LINKS: PageLink[] = [
-  { href: '/', label: '首页', page: 'home' },
-  ...(brand.showScripts
-    ? [
-        { href: '/guide', label: '脚本教程', page: 'guide' as const },
-        ...(brand.docsUrl
-          ? [{ href: brand.docsUrl, label: 'API文档', external: true }]
-          : []),
-      ]
-    : []),
-];
+const extraPageLinks: PageLink[] = brand.showScripts
+  ? [
+      { href: '/guide', label: '脚本教程', page: 'guide' },
+      ...(brand.docsUrl
+        ? [{ href: brand.docsUrl, label: 'API文档', external: true }]
+        : []),
+    ]
+  : [];
+
+/** 只有首页时不展示导航，避免和品牌入口重复 */
+export const PAGE_LINKS: PageLink[] = extraPageLinks.length
+  ? [{ href: '/', label: '首页', page: 'home' }, ...extraPageLinks]
+  : [];
 
 export const HOME_MODULES: PageModule[] = [
   { id: 'download', label: '立即下载' },
