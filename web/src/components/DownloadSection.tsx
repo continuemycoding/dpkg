@@ -191,7 +191,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
                 ) : (
                   <span className="product-btn is-disabled">下载 .vsix</span>
                 )}
-                <a className="product-btn-ghost" href="/guide">
+                <a className="product-btn-ghost" href="/guide?ide=vscode#install">
                   安装说明
                 </a>
               </div>
