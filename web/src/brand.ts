@@ -53,7 +53,7 @@ function resolveBrand(): Brand {
   }
 
   return {
-    name: '远控Pro',
+    name: 'Wegoin',
     showScripts: true,
     showHistory: true,
     siteUrl: 'https://remotepro.cn',
