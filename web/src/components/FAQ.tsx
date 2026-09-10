@@ -49,7 +49,7 @@ const items = [
         <br />
         Windows：Win10 (1809+) 或 Win11 系统。
         <br />
-        Mac：macOS 12 及以上版本，支持 Intel 和 M 系列芯片。
+        Mac：macOS 13 及以上版本，支持 Intel 和 M 系列芯片。
       </p>
     ),
   },
