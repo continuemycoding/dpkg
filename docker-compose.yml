@@ -1,0 +1,22 @@
+services:
+  caddy:
+    # image: caddy:alpine
+    image: remotepro/repo:latest
+    stop_grace_period: 1s
+    restart: always
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      # - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./data/wegoin/debs:/sources/wegoin/debs
+      - ./data/wegoin/files:/sources/wegoin/files
+
+volumes:
+  caddy_data:
+  caddy_config:

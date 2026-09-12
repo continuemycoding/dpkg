@@ -1,0 +1,187 @@
+name: Build APT Repository Index
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: write
+  contents: read
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete old workflow runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "Deleting old runs for repo: $REPO"
+          # 获取所有已完成的运行记录，保留最近 5 条，其他的删除
+          gh run list --repo $REPO --limit 100 --json databaseId --status completed \
+            | jq '.[5:] | .[].databaseId' \
+            | xargs -I {} gh run delete {} --repo $REPO
+          
+          echo "Cleanup complete."
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: remotepro
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            remotepro/repo:latest
+
+      - name: Install sing-box
+        run: |
+          set -e
+          VERSION=1.8.6
+          curl -L -o sing-box.tar.gz \
+            https://github.com/SagerNet/sing-box/releases/download/v${VERSION}/sing-box-${VERSION}-linux-amd64.tar.gz
+          tar -xzf sing-box.tar.gz
+          sudo mv sing-box-${VERSION}-linux-amd64/sing-box /usr/local/bin/sing-box
+          sing-box version
+
+      - name: Start trojan proxy
+        run: |
+          cat > config.json << 'EOF'
+          {
+            "log": {
+              "level": "info"
+            },
+            "inbounds": [
+              {
+                "type": "mixed", 
+                "tag": "mixed-in",
+                "listen": "127.0.0.1",
+                "listen_port": 1080
+              }
+            ],
+            "outbounds": [
+              {
+                "type": "trojan",
+                "tag": "trojan-out",
+                "server": "f533f9b2-c69a-4dd0-bc63-f2ab94dd5f53.f1eb10ae-1d82-4c6a-b4dd-bd9525520956.com",
+                "server_port": 10101,
+                "password": "${{ secrets.TROJAN_PASSWORD }}",
+                "tls": {
+                  "enabled": true,
+                  "server_name": "sni.eos-suzhou-4.cmecloud.cn",
+                  "utls": {
+                    "enabled": true,
+                    "fingerprint": "chrome"
+                  }
+                }
+              }
+            ],
+            "route": {
+              "rules": [
+                {
+                  "inbound": "mixed-in",
+                  "outbound": "trojan-out"
+                }
+              ]
+            }
+          }
+          EOF
+          
+          nohup sing-box run -c config.json > sing-box.log 2>&1 &
+          sleep 5
+
+          # 动态注入环境变量，对后续所有 step 生效
+          echo "ALL_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "HTTP_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
+          echo "HTTPS_PROXY=http://127.0.0.1:1080" >> $GITHUB_ENV
+
+      - name: 🚀 Upload Debian Packages to Gitee Release
+        shell: python
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_REPO: RemotePro/RemotePro
+          PYTHONIOENCODING: utf-8
+          PYTHONUNBUFFERED: 1
+        run: |
+          import os
+          import requests
+          import json
+          import glob
+          import sys
+          import time
+          import re
+
+          token = os.environ.get('GITEE_TOKEN')
+          repo = os.environ.get('GITEE_REPO')
+          tag_name = 'v1'
+
+          get_resp = requests.get(f"https://gitee.com/api/v5/repos/{repo}/releases/tags/{tag_name}", params={"access_token": token})
+
+          if get_resp.status_code != 200:
+              print(f"Failed to find release: {get_resp.text}")
+              sys.exit(1)
+
+          release_data = get_resp.json()
+          release_id = release_data['id']
+
+          existing_assets = {asset['name'] for asset in release_data.get('assets', [])}
+          upload_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files"
+          files_to_upload = glob.glob('sources/remotepro/debs/*.deb') + glob.glob('sources/shared/debs/*.deb')
+
+          keep = set(files_to_upload)
+          for filename in existing_assets:
+              if filename.endswith(".deb") and f'sources/remotepro/debs/{filename}' not in keep and f'sources/shared/debs/{filename}' not in keep:
+                  print(f"[删除] {filename}")
+                  url = f"https://gitee.com/{repo}/releases/download/v1/{filename}"
+                  response = requests.head(url, allow_redirects=False)
+                  target_url = response.headers.get('Location', '')
+                  print(f"跳转目标: {target_url}")
+                  match = re.search(r'/(\d+)/', target_url)
+                  asset_id = match.group(1)
+                  delete_url = f"https://gitee.com/api/v5/repos/{repo}/releases/{release_id}/attach_files/{asset_id}"
+                  print(delete_url)
+                  del_response = requests.delete(delete_url, params={"access_token": token})
+
+                  if del_response.status_code == 204:
+                      print(f"成功删除附件: {filename} (ID: {asset_id})")
+                  else:
+                      print(f"删除失败: {del_response.status_code}, {del_response.text}")
+
+          print(f"准备上传 {len(files_to_upload)} 个文件...")
+
+          for file_path in files_to_upload:
+              filename = os.path.basename(file_path)
+              
+              if filename in existing_assets:
+                  print(f"[跳过] {filename} 已存在")
+                  continue
+
+              print(f"[上传] {filename}...", end=" ")
+              
+              start_time = time.time()
+              
+              with open(file_path, 'rb') as f:
+                  files = {'file': (filename, f)}
+                  up_resp = requests.post(upload_url, params={'access_token': token}, files=files)
+              
+              duration = time.time() - start_time
+              
+              status_label = "成功" if up_resp.status_code == 201 else "失败"
+              print(f"[{status_label}] 耗时: {duration:.2f}s | 响应: {up_resp.text}")
+
+          print("处理完毕。")
