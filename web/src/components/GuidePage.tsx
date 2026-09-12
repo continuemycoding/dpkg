@@ -204,7 +204,7 @@ const GUIDE_FAQ = [
     label: faqLabel('VS Code 能用 AI Agent 吗？'),
     children: (
       <p>
-        可以。VS Code 自带 GitHub Copilot，对话里选 Agent 就能改文件。也可以另装 Cline 或 Claude Code。装好{productName}扩展后，记得打开 remotepro-toolkit。
+        可以。VS Code 自带 GitHub Copilot，对话里选 Agent 就能改文件。也可以另装 Codex 或 Claude Code。装好{productName}扩展后，记得打开 remotepro-toolkit。
       </p>
     ),
   },
