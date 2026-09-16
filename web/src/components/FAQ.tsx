@@ -63,7 +63,7 @@ const items = [
     ),
     children: (
       <p>
-        从本站下载 <span style={{ color: 'var(--accent)', fontWeight: 600 }}>.vsix</span> 文件，在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop 或 Kiro 里用「从 VSIX 安装」。
+        从本站下载 <span style={{ color: 'var(--accent)', fontWeight: 600 }}>.vsix</span> 文件，在 VS Code、Cursor、Trae、Qoder、CodeBuddy 或 Kiro 里用「从 VSIX 安装」。
         <br />
         详细逐步说明见{' '}
         <a href="/guide" style={{ color: 'var(--accent)', fontWeight: 600 }}>

@@ -181,7 +181,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
               </p>
               <h3>在编辑器里写自动化</h3>
               <p>
-                在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 中安装，用于编写、调试与部署脚本。
+                在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Kiro 中安装，用于编写、调试与部署脚本。
               </p>
               <div className="product-actions">
                 {vsixHref ? (

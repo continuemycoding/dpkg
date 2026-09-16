@@ -80,7 +80,7 @@ const AGENT_IDEAS = [
   {
     icon: <RobotOutlined />,
     title: 'Agent 模式',
-    desc: 'Ask / Chat 只能回答问题，不会改文件。写脚本要选能动手的那种：VS Code 的 Copilot、以及 Cursor、Trae、Qoder 都选 Agent；CodeBuddy 叫 Craft（复杂任务用 Plan）；Devin Desktop 选 Devin Local；Kiro 打开对话就能改。',
+    desc: 'Ask / Chat 只能回答问题，不会改文件。写脚本要选能动手的那种：VS Code 的 Copilot、以及 Cursor、Trae、Qoder 都选 Agent；CodeBuddy 叫 Craft（复杂任务用 Plan）；Kiro 打开对话就能改。',
   },
   {
     icon: <ApiOutlined />,
@@ -96,7 +96,7 @@ const AGENT_STEPS = [
   },
   {
     title: '打开对话，选 Agent',
-    desc: '打开右侧对话（快捷键因软件而异，常见是 Ctrl+L、Ctrl+U 或 Ctrl+I）。不要停在 Ask / Chat。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 都选 Agent；CodeBuddy 选 Craft 或 Plan；Devin Desktop 右下角选 Devin Local，模式用 Normal；Kiro 直接说需求即可。',
+    desc: '打开右侧对话（快捷键因软件而异，常见是 Ctrl+L、Ctrl+U 或 Ctrl+I）。不要停在 Ask / Chat。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 都选 Agent；CodeBuddy 选 Craft 或 Plan；Kiro 直接说需求即可。',
   },
   {
     title: '打开 remotepro-toolkit',
@@ -184,7 +184,7 @@ const GUIDE_FAQ = [
     label: faqLabel('AI 只回文字，不改我的文件？'),
     children: (
       <p>
-        对话多半还停在 Ask / Chat，那只回答、不改文件。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 改成 Agent；CodeBuddy 改成 Craft 或 Plan；Devin Desktop 选 Devin Local 且不要用 Ask。同时还要打开{' '}
+        对话多半还停在 Ask / Chat，那只回答、不改文件。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 改成 Agent；CodeBuddy 改成 Craft 或 Plan。同时还要打开{' '}
         <code>remotepro-toolkit</code>，否则它查不了文档，更容易空聊。
       </p>
     ),
@@ -372,7 +372,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <CodeOutlined />
             <h3>一个支持的编辑器</h3>
             <p>
-              VS Code、Cursor、Trae、Qoder、CodeBuddy、Devin Desktop、Kiro 都可以。VS Code 用 Copilot 即可；国产的 Trae、Qoder、CodeBuddy 最省事，Cursor 使用体验最好。
+              VS Code、Cursor、Trae、Qoder、CodeBuddy、Kiro 都可以。VS Code 用 Copilot 即可；国产的 Trae、Qoder、CodeBuddy 最省事，Cursor 使用体验最好。
             </p>
           </article>
         </div>

@@ -1,6 +1,6 @@
 import { brand } from '../brand';
 
-export const IDE_IDS = ['vscode', 'cursor', 'trae', 'qoder', 'codebuddy', 'windsurf', 'kiro'] as const;
+export const IDE_IDS = ['vscode', 'cursor', 'trae', 'qoder', 'codebuddy', 'kiro'] as const;
 
 export type IdeId = (typeof IDE_IDS)[number];
 
@@ -55,14 +55,6 @@ export const IDES: IdeGuide[] = [
     blurb: '腾讯云出品的 CodeBuddy IDE。这一页可以直接下编辑器安装包，兼容 VS Code 扩展；不要下同站的 WorkBuddy。',
   },
   {
-    id: 'windsurf',
-    name: 'Devin Desktop',
-    tag: '原 Windsurf',
-    downloadUrl: 'https://devin.ai/desktop',
-    downloadLabel: 'devin.ai/desktop',
-    blurb: 'Cognition 出品。官方 FAQ 写明：Devin Desktop 就是原来的 Windsurf，内置完整 IDE，兼容 VS Code 扩展。请打开这一页下载桌面编辑器；devin.ai 首页是云端 Devin 工程师，不是这个软件。',
-  },
-  {
     id: 'kiro',
     name: 'Kiro',
     tag: '亚马逊 AWS',
@@ -72,14 +64,10 @@ export const IDES: IdeGuide[] = [
   },
 ];
 
-const IDE_ALIASES: Record<string, IdeId> = {
-  devin: 'windsurf',
-};
-
 export function parseIdeId(value: string | null): IdeId | null {
   if (!value) return null;
   if ((IDE_IDS as readonly string[]).includes(value)) return value as IdeId;
-  return IDE_ALIASES[value] ?? null;
+  return null;
 }
 
 export function isIdeId(value: string | null): value is IdeId {
