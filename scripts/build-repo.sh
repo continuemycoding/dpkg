@@ -69,6 +69,32 @@ fi
 zstd -c19 Packages > Packages.zst
 xz -c9 Packages > Packages.xz
 
+# Also publish a standard Debian layout for Sileo versions that assign a suite
+# to a source instead of treating it as a flat repository.
+mkdir -p dists/stable/main
+for arch in iphoneos-arm iphoneos-arm64 iphoneos-arm64e; do
+  arch_dir="dists/stable/main/binary-${arch}"
+  mkdir -p "$arch_dir"
+  awk -v RS='' -v ORS='\n\n' -v arch="$arch" \
+    '$0 ~ ("(^|\n)Architecture: " arch "(\n|$)")' Packages \
+    | sed 's#^Filename: debs/#Filename: ../../../debs/#' \
+    > "$arch_dir/Packages"
+  zstd -c19 "$arch_dir/Packages" > "$arch_dir/Packages.zst"
+  xz -c9 "$arch_dir/Packages" > "$arch_dir/Packages.xz"
+done
+
+cat > dists/stable/apt-release.conf <<EOF
+APT::FTPArchive::Release::Origin "${ORIGIN}";
+APT::FTPArchive::Release::Label "${LABEL}";
+APT::FTPArchive::Release::Suite "stable";
+APT::FTPArchive::Release::Codename "ios";
+APT::FTPArchive::Release::Architectures "iphoneos-arm iphoneos-arm64 iphoneos-arm64e";
+APT::FTPArchive::Release::Components "main";
+APT::FTPArchive::Release::Description "${DESCRIPTION}";
+EOF
+(cd dists/stable && apt-ftparchive -c apt-release.conf release . > Release)
+rm -f dists/stable/apt-release.conf
+
 cydia_filter() {
   if [[ -n "${CYDIA_PACKAGE:-}" ]]; then
     awk -v RS='' -v ORS='\n\n' -v pkg="$CYDIA_PACKAGE" '
