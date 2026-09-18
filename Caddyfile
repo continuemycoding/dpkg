@@ -62,6 +62,30 @@
 	vars cdn_url https://gitee.com/RemotePro/RemotePro/releases/download/v1
 	vars release_url https://gitcode.com/gcw_uHaLXrdK/Dopamine/releases/download/2.4.9
 
+	@flat_release path_regexp flat_release ^/dists/[^/]+(?:/[^/]+)*/(Release|InRelease)$
+	handle @flat_release {
+		rewrite * /{re.flat_release.1}
+		root * /usr/share/caddy/repos/remotepro
+		header Cache-Control "no-cache"
+		file_server
+	}
+
+	@flat_packages path_regexp flat_packages ^/dists/[^/]+(?:/[^/]+)*/(Packages(?:\.(?:zst|xz|bz2|gz))?)$
+	handle @flat_packages {
+		rewrite * /{re.flat_packages.1}
+		root * /usr/share/caddy/repos/remotepro
+		header Cache-Control "no-cache"
+		file_server
+	}
+
+	@flat_suite path_regexp flat_suite ^/dists/[^/]+/?$
+	handle @flat_suite {
+		rewrite * /Release
+		root * /usr/share/caddy/repos/remotepro
+		header Cache-Control "no-cache"
+		file_server
+	}
+
 	redir /rootless /Dopamine.tipa 302
 	redir /roothide /Dopamine2.tipa 302
 
