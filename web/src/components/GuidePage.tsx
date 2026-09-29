@@ -313,7 +313,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
         <p className="section-kicker">写给第一次用的同学</p>
         <h1>零基础也能写脚本</h1>
         <p className="guide-lead">
-          把{productName}扩展装进 VS Code、Cursor、Trae 等编辑器，连上越狱 iPhone，就可以写自动化、边写边调试，再发布到手机。
+          把{productName}扩展装进 VS Code、Cursor、Trae 等编辑器，连上已安装被控端的越狱 iPhone，就可以写自动化、边写边调试，再发布到手机。
           不会写代码也没关系：装好后用中文描述需求，让 AI Agent 帮你写。
         </p>
         <div className="guide-hero-actions">
@@ -356,7 +356,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <MobileOutlined />
             <h3>越狱 iPhone + 被控端</h3>
             <p>
-              手机已越狱，并用 Sileo / Cydia 添加{' '}
+              写脚本需要被控端。手机已越狱，并用 Sileo / Cydia 添加{' '}
               <a href="/#zone-client">{productName}软件源</a>
               ，装好被控端。手机保持亮屏、被控端在运行。
             </p>
@@ -365,7 +365,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             <DesktopOutlined />
             <h3>电脑和手机在一起</h3>
             <p>
-              同一局域网（同一个 Wi‑Fi）点击扫描局域网最省事，也支持广域网并填设备上的授权码远程连。
+              越狱被控端在同一局域网（同一个 Wi‑Fi）点击扫描局域网最省事，也支持广域网并填设备上的授权码远程连。
             </p>
           </article>
           <article className="guide-card">

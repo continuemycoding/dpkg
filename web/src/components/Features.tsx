@@ -13,7 +13,7 @@ const features = [
     icon: <ThunderboltOutlined />,
     color: '#5ea8ff',
     title: '低延迟实时投屏',
-    desc: '优化底层传输协议，支持 USB 直连、局域网 Wi‑Fi 与广域网远程连接，画面清晰流畅，操作响应毫秒级。',
+    desc: '优化底层传输协议，画面清晰流畅，操作响应毫秒级。免越狱支持 USB 直连与同一局域网；越狱设备还可广域网远程连接。',
   },
   {
     icon: <FontSizeOutlined />,
@@ -54,8 +54,11 @@ const features = [
 
 const steps = [
   { title: '安装控制端', desc: '在 Windows / macOS / Android / iPhone 上下载并安装控制端。' },
-  { title: '添加被控端源', desc: '在越狱 iPhone 的 Sileo 或 Cydia 中添加软件源，安装被控端。' },
-  { title: '连接并群控', desc: '通过 USB、局域网或广域网连接设备，即可批量投屏与操作。' },
+  {
+    title: '准备手机',
+    desc: 'iOS 18 及以上免越狱，无需安装被控端，用电脑控制端直接连接。越狱设备在 Sileo 或 Cydia 中添加软件源，安装被控端。',
+  },
+  { title: '连接并群控', desc: '免越狱通过 USB 或同一局域网连接。越狱设备还可使用广域网，即可批量投屏与操作。' },
 ];
 
 export function Features() {

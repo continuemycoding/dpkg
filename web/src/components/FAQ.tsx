@@ -8,14 +8,16 @@ const items = [
     label: (
       <span>
         <QuestionCircleOutlined style={{ color: 'var(--accent)', marginRight: 10 }} />
-        被控端手机需要越狱吗？
+        手机需要越狱、需要装被控端吗？
       </span>
     ),
     children: (
       <p>
-        <strong style={{ color: 'var(--gold)' }}>是的，必须越狱。</strong>
+        <strong style={{ color: 'var(--gold)' }}>iOS 18 及以上可以免越狱，且不用装被控端。</strong>
         <br />
-        暂不支持免越狱控制，越狱设备的控制体验更佳，免越狱的支持还在计划中。
+        免越狱由电脑上的控制端直接连接，无需安装被控端，仅支持 USB 与同一局域网，不支持广域网。用数据线连上手机，信任电脑，并在「设置 → 隐私与安全性」中开启开发者模式；同一局域网下，也可在控制中心的「屏幕镜像」里选择这台电脑。
+        <br />
+        更低系统版本仍需越狱并安装被控端。越狱支持 iOS 13 – 26.0.1，任意越狱方式均可，并可使用广域网。
       </p>
     ),
   },
@@ -29,9 +31,11 @@ const items = [
     ),
     children: (
       <p>
-        已支持。除 <span style={{ color: 'var(--accent)', fontWeight: 600 }}>USB</span> 与{' '}
-        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>局域网</span> 外，亦可使用{' '}
-        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>广域网</span> 远程连接，跨网段、跨地域管理设备。
+        越狱设备已支持。除 <span style={{ color: 'var(--accent)', fontWeight: 600 }}>USB</span> 与{' '}
+        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>局域网</span> 外，可使用{' '}
+        <span style={{ color: 'var(--accent)', fontWeight: 600 }}>广域网</span> 跨网段、跨地域管理。
+        <br />
+        免越狱仅支持 USB 和同一局域网，不支持广域网。
       </p>
     ),
   },

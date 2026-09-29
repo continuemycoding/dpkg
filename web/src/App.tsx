@@ -17,9 +17,9 @@ import { GUIDE_MODULES, HOME_MODULES } from './nav/modules';
 import { brand } from './brand';
 import './App.css';
 
-const HOME_TITLE = `${brand.name} - 专业iOS越狱群控系统 (Win/Mac)`;
+const HOME_TITLE = `${brand.name} - 专业iOS群控系统 (Win/Mac)`;
 const GUIDE_TITLE = `脚本教程 - ${brand.name}脚本开发扩展`;
-const HOME_DESCRIPTION = `${brand.name}：专业级 iOS 越狱设备批量投屏与群控，支持 USB、局域网与广域网连接。`;
+const HOME_DESCRIPTION = `${brand.name}：专业级 iOS 设备批量投屏与群控。iOS 18 及以上免越狱，无需被控端，支持 USB 与局域网；越狱设备还可使用广域网。`;
 
 function isGuidePath(pathname: string): boolean {
   return pathname.replace(/\/+$/, '') === '/guide';

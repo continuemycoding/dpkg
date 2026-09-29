@@ -4,10 +4,10 @@ import { brand } from '../brand';
 export function Hero() {
   return (
     <section className="hero">
-      <p className="hero-kicker">支持 iOS 13 – 26.0.1 · 任意越狱方式</p>
+      <p className="hero-kicker">免越狱 iOS 18+ · 越狱 iOS 13 – 26.0.1</p>
       <h1>批量投屏与群控</h1>
       <p className="hero-lead">
-        专业级 iOS 设备控制。通过 USB、局域网或广域网连接，实现低延迟、高帧率的 iPhone 批量操作。
+        专业级 iOS 设备控制。iOS 18 及以上免越狱，电脑直接连接，无需被控端，支持 USB 与同一局域网。越狱设备安装被控端后，还可使用广域网远程控制。
       </p>
       <div className="hero-actions">
         <a className="hero-cta" href="#download">
@@ -25,7 +25,7 @@ export function Hero() {
         <div className="hero-stat">
           <WifiOutlined className="hero-stat-icon" />
           <strong>多种连接</strong>
-          <span>USB / Wi‑Fi / 广域网</span>
+          <span>USB / 局域网，越狱可广域网</span>
         </div>
         <div className="hero-stat">
           <ThunderboltOutlined className="hero-stat-icon" />

@@ -103,7 +103,7 @@ function ClientCard() {
           <MobileOutlined /> 被控端
         </p>
         <h3>越狱设备软件源</h3>
-        <p>在被控的越狱 iPhone 上使用 Sileo 或 Cydia 添加源，安装被控端软件。</p>
+        <p>仅越狱 iPhone 需要。使用 Sileo 或 Cydia 添加源，安装被控端。iOS 18 及以上免越狱由控制端直接连接，无需安装被控端。</p>
         <div className="client-source">
           <div className="product-qr-frame">
             <QRCode value={qrValue} size={112} bordered={false} color="#111111" bgColor="#ffffff" />
@@ -163,7 +163,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
               <DesktopOutlined /> 控制端
             </p>
             <h3>连接并管理设备</h3>
-            <p>在电脑或手机上安装，用于连接并管理已越狱的 iOS 设备。</p>
+            <p>在电脑或手机上安装。免越狱（iOS 18 及以上）由电脑控制端直接连接，无需被控端，仅 USB 与同一局域网。越狱设备需配合下方被控端，并可使用广域网。</p>
             <div className="platform-grid">
               <PlatformChip state={releases.win} icon={<WindowsOutlined />} label="Windows" variant="win" />
               <PlatformChip state={releases.mac} icon={<AppleOutlined />} label="macOS" variant="mac" />
