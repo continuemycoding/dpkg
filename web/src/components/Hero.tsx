@@ -7,7 +7,7 @@ export function Hero() {
       <p className="hero-kicker">免越狱 iOS 18+ · 越狱 iOS 13 – 26.0.1</p>
       <h1>批量投屏与群控</h1>
       <p className="hero-lead">
-        专业级 iOS 设备控制。iOS 18 及以上免越狱，电脑直接连接，无需被控端，支持 USB 与同一局域网。越狱设备安装被控端后，还可使用广域网远程控制。
+        USB 或局域网直连，无需安装被控端；越狱设备安装被控端后，可进行广域网远控。
       </p>
       <div className="hero-actions">
         <a className="hero-cta" href="#download">
