@@ -156,7 +156,7 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
 
   return (
     <>
-      <div className="products" id="download">
+      <div className={`products${brand.showScripts ? ' has-dev-card' : ''}`} id="download">
         <article className="product-card tone-control" id="zone-control">
           <div className="product-body">
             <p className="product-label">
@@ -173,50 +173,56 @@ export function DownloadSection({ releases, onOpenHistory }: DownloadSectionProp
           </div>
         </article>
 
-        {brand.showScripts ? (
-          <article className="product-card tone-dev" id="zone-vsix">
-            <div className="product-body">
-              <p className="product-label">
-                <CodeOutlined /> 脚本扩展
-              </p>
-              <h3>在编辑器里写自动化</h3>
-              <p>
-                在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Kiro 中安装，用于编写、调试与部署脚本。
-              </p>
-              <div className="product-actions">
-                {vsixHref ? (
-                  <a className="product-btn" href={vsixHref}>
-                    下载 .vsix
-                  </a>
-                ) : (
-                  <span className="product-btn is-disabled">下载 .vsix</span>
-                )}
-                <a className="product-btn-ghost" href="/guide?ide=vscode#install">
-                  安装说明
-                </a>
-              </div>
-              <p className="product-hint">{latestLabel(releases.vsix)}</p>
-            </div>
-          </article>
-        ) : null}
-
         <ClientCard />
 
         {brand.showScripts ? (
-          <article className="product-card tone-guide">
-            <div className="product-body">
+          <article className="product-card tone-dev product-card-dev" id="zone-vsix">
+            <div className="product-body product-dev-body">
               <p className="product-label">
-                <BookOutlined /> 教程
+                <CodeOutlined /> 脚本开发
               </p>
-              <h3>零基础也能写脚本</h3>
-              <p>按编辑器安装扩展，连上手机，再用 AI Agent 用中文写出第一条脚本。</p>
-              <div className="product-actions">
-                <a className="product-btn" href="/guide">
-                  打开脚本教程
-                </a>
-                <a className="product-btn-ghost" href="/guide#agent">
-                  用 AI 写脚本
-                </a>
+              <div className="product-dev-sections">
+                <section className="product-dev-step">
+                  <div className="product-dev-heading">
+                    <span className="product-dev-index">01</span>
+                    <div>
+                      <p className="product-dev-kicker">安装扩展</p>
+                      <h3>在编辑器里写自动化</h3>
+                    </div>
+                  </div>
+                  <p>在 VS Code、Cursor、Trae、Qoder、CodeBuddy、Kiro 中安装，用于编写、调试与部署脚本。</p>
+                  <div className="product-actions">
+                    {vsixHref ? (
+                      <a className="product-btn" href={vsixHref}>
+                        下载 .vsix
+                      </a>
+                    ) : (
+                      <span className="product-btn is-disabled">下载 .vsix</span>
+                    )}
+                    <a className="product-btn-ghost" href="/guide?ide=vscode#install">
+                      安装说明
+                    </a>
+                  </div>
+                  <p className="product-hint">{latestLabel(releases.vsix)}</p>
+                </section>
+                <section className="product-dev-step">
+                  <div className="product-dev-heading">
+                    <span className="product-dev-index">02</span>
+                    <div>
+                      <p className="product-dev-kicker">开始写脚本</p>
+                      <h3>零基础也能写脚本</h3>
+                    </div>
+                  </div>
+                  <p>按编辑器安装扩展，连上手机，再用 AI Agent 用中文写出第一条脚本。</p>
+                  <div className="product-actions">
+                    <a className="product-btn" href="/guide">
+                      <BookOutlined /> 打开脚本教程
+                    </a>
+                    <a className="product-btn-ghost" href="/guide#agent">
+                      用 AI 写脚本
+                    </a>
+                  </div>
+                </section>
               </div>
             </div>
           </article>
