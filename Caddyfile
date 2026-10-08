@@ -99,9 +99,15 @@
 		redir {vars.release_url}/{re.assets.1} 302
 	}
 
+	# /ddi/<版本>/<Personalized|Cryptex>/<文件> 对应 GitCode 附件 <版本>-<类型>-<文件>
+	@ddi path_regexp ddi ^/ddi/([^/]+)/(Personalized|Cryptex)/([^/]+)$
+	handle @ddi {
+		redir {vars.release_url}/{re.ddi.1}-{re.ddi.2}-{re.ddi.3} 302
+	}
+
 	handle {
 		@should_redirect {
-			not path / /guide /guide/* /favicon.ico /Release* /Packages* /CydiaIcon* /assets/* /debs/*
+			not path / /guide /guide/* /favicon.ico /Release* /Packages* /CydiaIcon* /assets/* /debs/* /ddi*
 		}
 		redir @should_redirect {vars.cdn_url}{uri} 302
 	}

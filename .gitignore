@@ -8,5 +8,6 @@ web/dist/
 sources/wegoin/debs/*.deb
 sources/wegoin/files/*
 !sources/wegoin/files/.gitkeep
+/ddi/
 
 
