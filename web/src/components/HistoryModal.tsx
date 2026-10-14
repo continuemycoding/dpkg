@@ -21,7 +21,7 @@ interface HistoryModalProps {
 function VersionList({ items, status }: { items: HistoryItem[]; status: ReleasesMap[Platform]['status'] }) {
   if (status === 'loading') {
     return (
-      <div style={{ textAlign: 'center', padding: '32px 0' }}>
+      <div className="history-loading">
         <Spin />
       </div>
     );
@@ -40,13 +40,13 @@ function VersionList({ items, status }: { items: HistoryItem[]; status: Releases
           <div className="history-item-top">
             <strong>{item.version}</strong>
             <time>
-              <ClockCircleOutlined style={{ marginRight: 6 }} />
+              <ClockCircleOutlined />
               {item.date}
             </time>
           </div>
           <p>{item.description}</p>
           <div>
-            <Button type="primary" ghost size="small" href={item.url} icon={<DownloadOutlined />}>
+            <Button size="small" href={item.url} icon={<DownloadOutlined />}>
               下载此版本
             </Button>
           </div>
@@ -61,6 +61,7 @@ const tabMeta: { key: Platform; label: string; icon: ReactNode }[] = [
   { key: 'mac', label: 'macOS', icon: <AppleOutlined /> },
   { key: 'android', label: 'Android', icon: <AndroidOutlined /> },
   { key: 'iphone', label: 'iPhone', icon: <AppstoreOutlined /> },
+  { key: 'androidClient', label: 'Android 被控端', icon: <AndroidOutlined /> },
   { key: 'vsix', label: '脚本开发扩展', icon: <CodeOutlined /> },
 ];
 
@@ -74,17 +75,17 @@ export function HistoryModal({ open, onClose, releases }: HistoryModalProps) {
         <Button onClick={onClose}>关闭</Button>
       }
       width={720}
+      className="history-modal"
       destroyOnClose
     >
-      <p style={{ color: '#94a3b8', marginTop: -4, marginBottom: 16 }}>
-        建议始终使用最新版本以获得最佳安全性和性能。
-      </p>
+      <p className="modal-sub">建议始终使用最新版本以获得最佳安全性和性能。</p>
       <Tabs
         items={(brand.showScripts ? tabMeta : tabMeta.filter((tab) => tab.key !== 'vsix')).map((tab) => ({
           key: tab.key,
           label: (
-            <span>
-              {tab.icon} {tab.label}
+            <span className="tab-label">
+              {tab.icon}
+              {tab.label}
             </span>
           ),
           children: <VersionList items={releases[tab.key].history} status={releases[tab.key].status} />,

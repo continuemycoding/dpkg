@@ -8,18 +8,19 @@ import { Hero } from './components/Hero';
 import { DownloadSection } from './components/DownloadSection';
 import { Features } from './components/Features';
 import { FAQ } from './components/FAQ';
+import { CtaBand } from './components/CtaBand';
 import { SiteFooter, type LegalType } from './components/SiteFooter';
 import { HistoryModal } from './components/HistoryModal';
 import { LegalModals } from './components/LegalModals';
 import { GuidePage } from './components/GuidePage';
 import { ModuleNav } from './components/ModuleNav';
-import { GUIDE_MODULES, HOME_MODULES } from './nav/modules';
+import { GUIDE_MODULES } from './nav/modules';
 import { brand } from './brand';
 import './App.css';
 
-const HOME_TITLE = `${brand.name} - 专业iOS群控系统 (Win/Mac)`;
+const HOME_TITLE = `${brand.name} - 专业 iOS / Android 群控系统 (Win/Mac)`;
 const GUIDE_TITLE = `脚本教程 - ${brand.name}脚本开发扩展`;
-const HOME_DESCRIPTION = `${brand.name}：专业级 iOS 设备批量投屏与群控。iOS 18 及以上免越狱，无需被控端，支持 USB 与局域网；越狱设备还可使用广域网。`;
+const HOME_DESCRIPTION = `${brand.name}：专业级 iOS 与 Android 设备批量投屏与群控。iOS 18 及以上免越狱，无需被控端，支持 USB 与局域网；安卓手机免 Root 安装被控端即可接入，安卓与越狱设备还可使用广域网。`;
 
 function isGuidePath(pathname: string): boolean {
   return pathname.replace(/\/+$/, '') === '/guide';
@@ -42,19 +43,17 @@ function HomePage() {
     <div className="page">
       <div className="page-bg" />
       <div className="page-inner">
-        <SiteHeader page="home" modules={HOME_MODULES} />
-        <div className="page-shell">
-          <ModuleNav modules={HOME_MODULES} />
-          <main>
-            <Hero />
-            <DownloadSection
-              releases={releases}
-              onOpenHistory={brand.showHistory ? () => setHistoryOpen(true) : () => undefined}
-            />
-            <Features />
-            <FAQ />
-          </main>
-        </div>
+        <SiteHeader page="home" />
+        <main>
+          <Hero releases={releases} />
+          <DownloadSection
+            releases={releases}
+            onOpenHistory={brand.showHistory ? () => setHistoryOpen(true) : () => undefined}
+          />
+          <Features />
+          <FAQ />
+          <CtaBand />
+        </main>
         <SiteFooter onOpenLegal={setLegal} />
       </div>
       {brand.showHistory ? (
@@ -74,7 +73,7 @@ function GuideRoute() {
       <div className="page-bg" />
       <div className="page-inner">
         <SiteHeader page="guide" modules={GUIDE_MODULES} />
-        <div className="page-shell">
+        <div className="container page-shell">
           <ModuleNav modules={GUIDE_MODULES} />
           <main>
             <GuidePage vsix={releases.vsix} />

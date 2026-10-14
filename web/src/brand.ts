@@ -5,6 +5,8 @@ export interface BrandDownloads {
     mac: string;
     android: string;
     iphone: string;
+    /** 安卓被控端 */
+    androidClient: string;
   };
 }
 
@@ -47,6 +49,7 @@ function resolveBrand(): Brand {
           mac: 'Wegoin-macos.zip',
           android: 'Wegoin.apk',
           iphone: 'Wegoin.ipa',
+          androidClient: 'Wegoin-android-client.apk',
         },
       },
     };

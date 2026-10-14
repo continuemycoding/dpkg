@@ -5,7 +5,10 @@ export type SitePage = 'home' | 'guide';
 export interface PageLink {
   href: string;
   label: string;
+  /** 指向某个页面时，在该页面高亮 */
   page?: SitePage;
+  /** 指向首页某个模块时，滚动到该模块高亮 */
+  section?: string;
   external?: boolean;
 }
 
@@ -14,26 +17,15 @@ export interface PageModule {
   label: string;
 }
 
-const extraPageLinks: PageLink[] = brand.showScripts
-  ? [
-      { href: '/guide', label: '脚本教程', page: 'guide' },
-      ...(brand.docsUrl
-        ? [{ href: brand.docsUrl, label: 'API文档', external: true }]
-        : []),
-    ]
-  : [];
-
-/** 只有首页时不展示导航，避免和品牌入口重复 */
-export const PAGE_LINKS: PageLink[] = extraPageLinks.length
-  ? [{ href: '/', label: '首页', page: 'home' }, ...extraPageLinks]
-  : [];
-
-export const HOME_MODULES: PageModule[] = [
-  { id: 'download', label: '立即下载' },
-  { id: 'start', label: '快速上手' },
-  { id: 'features', label: '核心功能' },
-  { id: 'faq', label: '常见问题' },
+export const HEADER_LINKS: PageLink[] = [
+  { href: '/#features', label: '产品功能', section: 'features' },
+  { href: '/#start', label: '快速上手', section: 'start' },
+  { href: '/#faq', label: '常见问题', section: 'faq' },
+  ...(brand.showScripts ? [{ href: '/guide', label: '脚本教程', page: 'guide' as const }] : []),
+  ...(brand.docsUrl ? [{ href: brand.docsUrl, label: 'API 文档', external: true }] : []),
 ];
+
+export const HOME_SECTIONS = ['download', 'features', 'start', 'faq'];
 
 export const GUIDE_MODULES: PageModule[] = [
   { id: 'langs', label: '支持语言' },

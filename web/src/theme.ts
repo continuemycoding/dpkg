@@ -1,54 +1,64 @@
 import type { ThemeConfig } from 'antd';
 import { theme } from 'antd';
 
+/** 与 App.css 中 :root 变量保持一致 */
+const ACCENT = '#3ddcb8';
+const ACCENT_INK = '#04241e';
+
+export const FONT_SANS =
+  '-apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif';
+
 export const appTheme: ThemeConfig = {
   algorithm: theme.darkAlgorithm,
   token: {
-    colorPrimary: '#ffffff',
-    colorPrimaryHover: '#f4f4f5',
-    colorPrimaryActive: '#e4e4e7',
-    colorTextLightSolid: '#111111',
-    colorInfo: '#3ee8c5',
-    colorSuccess: '#8fbf9a',
-    colorWarning: '#e8c36a',
-    colorBgBase: '#0c0c0b',
-    colorBgLayout: '#0c0c0b',
-    colorBgContainer: '#161513',
-    colorBgElevated: '#1c1a17',
-    colorBorder: 'rgba(243, 239, 230, 0.12)',
-    colorBorderSecondary: 'rgba(243, 239, 230, 0.08)',
-    colorText: '#f3efe6',
-    colorTextSecondary: '#9a9488',
+    colorPrimary: ACCENT,
+    colorInfo: ACCENT,
+    colorLink: ACCENT,
+    colorTextLightSolid: ACCENT_INK,
+    colorSuccess: '#5fd39a',
+    colorWarning: '#f0c35b',
+    colorBgBase: '#0b0c0c',
+    colorBgLayout: '#0b0c0c',
+    colorBgContainer: '#141616',
+    colorBgElevated: '#181a1a',
+    colorBorder: 'rgba(236, 240, 238, 0.12)',
+    colorBorderSecondary: 'rgba(236, 240, 238, 0.07)',
+    colorText: '#eceeed',
+    colorTextSecondary: '#a0a7a4',
+    colorTextTertiary: '#7c8380',
     borderRadius: 10,
-    fontFamily:
-      '"DM Sans", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif',
+    fontFamily: FONT_SANS,
     fontSize: 15,
+    motionDurationMid: '0.18s',
   },
   components: {
-    Layout: {
-      headerBg: 'transparent',
-      bodyBg: 'transparent',
-      footerBg: 'transparent',
-      headerPadding: '0 24px',
-    },
     Button: {
-      controlHeightLG: 48,
+      controlHeight: 38,
+      controlHeightLG: 46,
       fontWeight: 600,
-      primaryColor: '#111111',
-      borderRadius: 10,
       primaryShadow: 'none',
-    },
-    Card: {
-      colorBgContainer: 'rgba(22, 21, 19, 0.86)',
+      defaultShadow: 'none',
+      defaultBg: 'transparent',
+      defaultBorderColor: 'rgba(236, 240, 238, 0.16)',
+      defaultHoverBg: 'rgba(236, 240, 238, 0.06)',
+      defaultHoverBorderColor: 'rgba(236, 240, 238, 0.28)',
+      defaultHoverColor: '#ffffff',
     },
     Modal: {
-      contentBg: '#161513',
-      headerBg: '#161513',
-      footerBg: '#161513',
+      contentBg: '#141616',
+      headerBg: '#141616',
+      footerBg: '#141616',
     },
     Collapse: {
       colorBgContainer: 'transparent',
       headerBg: 'transparent',
+    },
+    Tabs: {
+      itemColor: '#a0a7a4',
+      itemHoverColor: '#eceeed',
+    },
+    Drawer: {
+      colorBgElevated: '#111313',
     },
   },
 };

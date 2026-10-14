@@ -1,23 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Button, Collapse, Tabs } from 'antd';
+import { Alert, App, Collapse, Tabs } from 'antd';
 import {
   ApiOutlined,
   BookOutlined,
   CheckCircleOutlined,
+  CheckOutlined,
   CodeOutlined,
+  CopyOutlined,
   DesktopOutlined,
   DownloadOutlined,
   FolderOpenOutlined,
   MessageOutlined,
   MobileOutlined,
   PlayCircleOutlined,
-  QuestionCircleOutlined,
   RobotOutlined,
   ToolOutlined,
 } from '@ant-design/icons';
 import type { PlatformState } from '../api/releases';
 import { brand } from '../brand';
 import { IDES, parseIdeId, type IdeId } from '../guide/ides';
+import { copyText } from '../platform';
+import { faqExpandIcon } from './FAQ';
 
 const DOCS_URL = brand.docsUrl ?? 'https://docs.remotepro.cn/';
 const productName = brand.name;
@@ -122,19 +125,39 @@ function Kbd({ children }: { children: string }) {
   return <code className="kbd">{children}</code>;
 }
 
-function faqLabel(text: string) {
+function PromptBlock({ text }: { text: string }) {
+  const { message } = App.useApp();
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await copyText(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+      message.success('已复制，粘贴到 AI 对话框即可');
+    } catch {
+      message.error('复制失败，请手动选择文字复制');
+    }
+  };
+
   return (
-    <span>
-      <QuestionCircleOutlined style={{ color: 'var(--accent)', marginRight: 10 }} />
-      {text}
-    </span>
+    <div className="guide-prompt">
+      <div className="guide-prompt-bar">
+        <span>提示词</span>
+        <button type="button" onClick={copy} className={copied ? 'is-done' : ''}>
+          {copied ? <CheckOutlined /> : <CopyOutlined />}
+          {copied ? '已复制' : '复制'}
+        </button>
+      </div>
+      <pre>{text}</pre>
+    </div>
   );
 }
 
 const GUIDE_FAQ = [
   {
     key: 'vsix-market',
-    label: faqLabel(`扩展视图里搜不到「${productName}」？`),
+    label: `扩展视图里搜不到「${productName}」？`,
     children: (
       <p>
         正常。它目前通过 .vsix 文件安装，不会出现在 VS Code / Cursor 等扩展市场里。请用扩展视图右上角 ··· →
@@ -144,7 +167,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'no-icon',
-    label: faqLabel(`装完左侧没有${productName}图标？`),
+    label: `装完左侧没有${productName}图标？`,
     children: (
       <p>
         打开命令面板（<Kbd>Ctrl+Shift+P</Kbd> 或 Mac <Kbd>⌘⇧P</Kbd>），输入 Reload Window 并回车。
@@ -153,7 +176,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'scan',
-    label: faqLabel('扫描不到手机？'),
+    label: '扫描不到手机？',
     children: (
       <p>
         手机已装被控端且在运行；电脑关掉 VPN；双方同一 Wi‑Fi。仍不行就手动添加 IP，端口填 65322。广域网需要在手机的远程调试页面打开，并填写授权码。
@@ -162,7 +185,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'debug-env',
-    label: faqLabel('配置调试环境失败？'),
+    label: '配置调试环境失败？',
     children: (
       <p>
         点卡片里的失败步骤看日志。常见原因是网络中断或工具链下载失败，点「重新检查」或再点一次「配置调试环境」。Windows 上装 C++ / Rust
@@ -172,7 +195,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'no-script',
-    label: faqLabel('编译成功了，手机上没有脚本？'),
+    label: '编译成功了，手机上没有脚本？',
     children: (
       <p>
         在构建列表里对该版本点「分享」或「发布」，再用手机端扫码 / 打开链接订阅。分享是这一版自己的链接，换版本链接也换；发布全项目只有一条链接，始终对应你设成发布的那个版本。
@@ -181,7 +204,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'ai-ask',
-    label: faqLabel('AI 只回文字，不改我的文件？'),
+    label: 'AI 只回文字，不改我的文件？',
     children: (
       <p>
         对话多半还停在 Ask / Chat，那只回答、不改文件。VS Code 的 Copilot、以及 Cursor、Trae、Qoder 改成 Agent；CodeBuddy 改成 Craft 或 Plan。同时还要打开{' '}
@@ -191,7 +214,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'mcp',
-    label: faqLabel('AI 让我先开启 MCP / remotepro-toolkit？'),
+    label: 'AI 让我先开启 MCP / remotepro-toolkit？',
     children: (
       <p>
         正常。到编辑器设置里找「MCP」或「工具」，打开名字以 <code>remotepro-toolkit</code>{' '}
@@ -201,7 +224,7 @@ const GUIDE_FAQ = [
   },
   {
     key: 'vscode-agent',
-    label: faqLabel('VS Code 能用 AI Agent 吗？'),
+    label: 'VS Code 能用 AI Agent 吗？',
     children: (
       <p>
         可以。VS Code 自带 GitHub Copilot，对话里选 Agent 就能改文件。也可以另装 Codex 或 Claude Code。装好{productName}扩展后，记得打开 remotepro-toolkit。
@@ -241,7 +264,9 @@ function IdePanel({
     <div className="guide-ide">
       <p className="guide-ide-blurb">{ide.blurb}</p>
 
-      <h3>1. 安装 {ide.name}</h3>
+      <h3>
+        <span className="guide-ide-num">1</span>安装 {ide.name}
+      </h3>
       <p>
         打开官网下载并安装：{' '}
         <a href={ide.downloadUrl} target="_blank" rel="noopener noreferrer">
@@ -250,17 +275,22 @@ function IdePanel({
         。装好后从开始菜单或启动台打开它。
       </p>
 
-      <h3>2. 下载{productName}扩展</h3>
+      <h3>
+        <span className="guide-ide-num">2</span>下载{productName}扩展
+      </h3>
       <p>
         点下面按钮下载 <code>.vsix</code> 文件。它不是安装包，下一步要把它装进 {ide.name}。
       </p>
       <p>
-        <Button type="primary" href={vsixHref || '/#download'} icon={<DownloadOutlined />}>
+        <a className="btn btn-primary" href={vsixHref || '/#download'}>
+          <DownloadOutlined />
           {vsixHref ? `下载${productName}扩展 (.vsix)` : '去首页下载扩展'}
-        </Button>
+        </a>
       </p>
 
-      <h3>3. 装进 {ide.name}</h3>
+      <h3>
+        <span className="guide-ide-num">3</span>装进 {ide.name}
+      </h3>
       <StepList
         steps={[
           {
@@ -317,15 +347,17 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
           不会写代码也没关系：装好后用中文描述需求，让 AI Agent 帮你写。
         </p>
         <div className="guide-hero-actions">
-          <Button type="primary" size="large" href="#install">
+          <a className="btn btn-primary btn-lg" href="#install">
             开始安装
-          </Button>
-          <Button size="large" href="#agent" icon={<RobotOutlined />}>
+          </a>
+          <a className="btn btn-ghost btn-lg" href="#agent">
+            <RobotOutlined />
             不会写代码？用 AI
-          </Button>
-          <Button size="large" href={vsixHref || '/#download'} icon={<DownloadOutlined />}>
+          </a>
+          <a className="btn btn-ghost btn-lg" href={vsixHref || '/#download'}>
+            <DownloadOutlined />
             下载 .vsix 扩展
-          </Button>
+          </a>
         </div>
       </header>
 
@@ -467,7 +499,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
 
         <h3 className="guide-subhead">第一次不知道说什么，复制这段</h3>
         <p className="guide-sublead">贴到对话窗口，把「微信」和后面的步骤改成你自己的 App 和流程即可。</p>
-        <pre className="guide-prompt">{AGENT_PROMPT}</pre>
+        <PromptBlock text={AGENT_PROMPT} />
 
         <h3 className="guide-subhead">打开工具箱之后，AI 能帮你干什么</h3>
         <div className="guide-tool-grid guide-agent-can">
@@ -564,7 +596,7 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
             items={GUIDE_FAQ}
             bordered={false}
             expandIconPosition="end"
-            defaultActiveKey={GUIDE_FAQ.map((item) => item.key)}
+            expandIcon={faqExpandIcon}
           />
         </div>
       </section>
@@ -580,15 +612,18 @@ export function GuidePage({ vsix }: { vsix: PlatformState }) {
           </p>
         </div>
         <div className="guide-next-actions">
-          <Button type="primary" size="large" href={DOCS_URL} target="_blank" icon={<BookOutlined />}>
+          <a className="btn btn-primary" href={DOCS_URL} target="_blank" rel="noopener noreferrer">
+            <BookOutlined />
             打开 API 文档
-          </Button>
-          <Button size="large" href="#agent" icon={<RobotOutlined />}>
+          </a>
+          <a className="btn btn-ghost" href="#agent">
+            <RobotOutlined />
             用 AI 写脚本
-          </Button>
-          <Button size="large" href="/#download" icon={<PlayCircleOutlined />}>
+          </a>
+          <a className="btn btn-ghost" href="/#download">
+            <PlayCircleOutlined />
             返回下载页
-          </Button>
+          </a>
         </div>
       </section>
     </article>

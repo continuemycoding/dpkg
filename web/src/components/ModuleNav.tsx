@@ -1,41 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useScrollSpy } from '../hooks/useScrollSpy';
 import type { PageModule } from '../nav/modules';
 
 export function ModuleNav({ modules }: { modules: PageModule[] }) {
-  const [active, setActive] = useState(modules[0]?.id ?? '');
+  const ids = useMemo(() => modules.map((item) => item.id), [modules]);
+  const active = useScrollSpy(ids) || ids[0];
+  const navRef = useRef<HTMLElement>(null);
 
+  // 移动端横向目录：让高亮项保持在可视区域
   useEffect(() => {
-    const ids = modules.map((item) => item.id);
-
-    const sync = () => {
-      const offset = 120;
-      let current = ids[0] ?? '';
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        if (el.getBoundingClientRect().top <= offset) current = id;
-      }
-      setActive(current);
-    };
-
-    sync();
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('hashchange', sync);
-    return () => {
-      window.removeEventListener('scroll', sync);
-      window.removeEventListener('hashchange', sync);
-    };
-  }, [modules]);
+    const nav = navRef.current;
+    const link = nav?.querySelector<HTMLElement>(`a[href="#${active}"]`);
+    if (!nav || !link || nav.scrollWidth <= nav.clientWidth) return;
+    nav.scrollTo({ left: link.offsetLeft - nav.clientWidth / 2 + link.clientWidth / 2, behavior: 'smooth' });
+  }, [active]);
 
   return (
-    <nav className="module-nav" aria-label="本页模块">
-      <p className="module-nav-label">导航</p>
+    <nav className="module-nav" aria-label="本页目录" ref={navRef}>
+      <p className="module-nav-label">本页目录</p>
       {modules.map((item) => (
         <a
           key={item.id}
           href={`#${item.id}`}
           className={active === item.id ? 'active' : undefined}
-          onClick={() => setActive(item.id)}
+          aria-current={active === item.id ? 'location' : undefined}
         >
           {item.label}
         </a>

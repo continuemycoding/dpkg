@@ -13,6 +13,7 @@ data/wegoin/
     Wegoin-macos.zip
     Wegoin.apk
     Wegoin.ipa
+    Wegoin-android-client.apk    # 安卓被控端
 ```
 
 版本号写在 `web/src/brand.ts` 的 `downloads.version`（当前 `1.0.0`）。改版本或改文件名后要重新构建镜像。

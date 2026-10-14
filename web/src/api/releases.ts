@@ -1,4 +1,5 @@
-export type Platform = 'win' | 'mac' | 'android' | 'iphone' | 'vsix';
+/** android 是安卓控制端；androidClient 是装在被控安卓手机上的被控端 */
+export type Platform = 'win' | 'mac' | 'android' | 'iphone' | 'androidClient' | 'vsix';
 
 export interface ReleaseAsset {
   name: string;
@@ -28,7 +29,7 @@ export interface PlatformState {
 export type ReleasesMap = Record<Platform, PlatformState>;
 
 const GITEE_OWNER = 'RemotePro';
-const CACHE_KEY = 'rp-releases-v2';
+const CACHE_KEY = 'rp-releases-v3';
 const CACHE_TTL_MS = 10 * 60 * 1000;
 
 const REPOS: Record<Platform, string> = {
@@ -36,6 +37,7 @@ const REPOS: Record<Platform, string> = {
   mac: 'RemotePro-macos',
   android: 'RemotePro-android',
   iphone: 'RemotePro-iphone',
+  androidClient: 'RemotePro-android-client',
   vsix: 'RemotePro-vsix',
 };
 
@@ -44,10 +46,11 @@ const EXT_MAP: Record<Platform, string[]> = {
   mac: ['.dmg', '.pkg', '.zip', '.tar.gz'],
   android: ['.apk', '.aab', '.xapk', '.zip'],
   iphone: ['.ipa', '.tipa', '.zip'],
+  androidClient: ['.apk', '.xapk', '.zip'],
   vsix: ['.vsix', '.zip'],
 };
 
-const PLATFORMS: Platform[] = ['win', 'mac', 'android', 'iphone', 'vsix'];
+const PLATFORMS: Platform[] = ['win', 'mac', 'android', 'iphone', 'androidClient', 'vsix'];
 
 function findAsset(assets: ReleaseAsset[] | undefined, platform: Platform): ReleaseAsset | undefined {
   if (!assets?.length) return undefined;
@@ -79,6 +82,7 @@ export const initialReleases = (): ReleasesMap => ({
   mac: emptyState('loading'),
   android: emptyState('loading'),
   iphone: emptyState('loading'),
+  androidClient: emptyState('loading'),
   vsix: emptyState('loading'),
 });
 
@@ -173,6 +177,8 @@ async function fetchFromApi(platform: Platform): Promise<PlatformState | null> {
   for (const url of urls) {
     try {
       const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      // 仓库还没建 / 没公开时按“即将上线”展示，而不是“网络异常”
+      if (res.status === 404) return emptyState('empty');
       if (!res.ok) continue;
       const data = await readJson(res);
       if (!Array.isArray(data)) continue;
@@ -192,6 +198,7 @@ async function fetchFromHtml(platform: Platform): Promise<PlatformState | null> 
   for (const url of urls) {
     try {
       const res = await fetch(url, { headers: { Accept: 'text/html' } });
+      if (res.status === 404) return emptyState('empty');
       if (!res.ok) continue;
       const html = await res.text();
       if (!html.includes('release-tag-item')) continue;
@@ -252,20 +259,14 @@ function saveCachedReleases(data: ReleasesMap) {
 
 export async function fetchAllReleases(): Promise<ReleasesMap> {
   const results = await Promise.all(PLATFORMS.map(fetchPlatform));
-  const data: ReleasesMap = {
-    win: results[0],
-    mac: results[1],
-    android: results[2],
-    iphone: results[3],
-    vsix: results[4],
-  };
+  const data = Object.fromEntries(PLATFORMS.map((platform, index) => [platform, results[index]])) as ReleasesMap;
   saveCachedReleases(data);
   return data;
 }
 
 export function staticReleases(
   version: string,
-  files: { win: string; mac: string; android: string; iphone: string },
+  files: { win: string; mac: string; android: string; iphone: string; androidClient: string },
 ): ReleasesMap {
   const one = (file: string): PlatformState => ({
     latest: { version, url: `/${file}` },
@@ -277,6 +278,7 @@ export function staticReleases(
     mac: one(files.mac),
     android: one(files.android),
     iphone: one(files.iphone),
+    androidClient: one(files.androidClient),
     vsix: emptyState('empty'),
   };
 }
